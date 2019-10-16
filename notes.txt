@@ -1,0 +1,58 @@
+TODO:
+Fix multiple react renders
+
+
+
+
+
+NODES:
+/*
+title: string
+pos: [x,y]
+size: [x,y]
+
+input|output: every connection
++  { name:string, type:string, pos: [x,y]=Optional, direction: "input"|"output", links: Array });
+
+general properties:
++ clip_area: if you render outside the node, it will be clipped
++ unsafe_execution: not allowed for safe execution
++ skip_repeated_outputs: when adding new outputs, it wont show if there is one already connected
++ resizable: if set to false it wont be resizable with the mouse
++ horizontal: slots are distributed horizontally
++ widgets_up: widgets start from the top of the node
+
+flags object:
++ collapsed: if it is collapsed
+
+supported callbacks:
++ onAdded: when added to graph (warning: this is called BEFORE the node is configured when loading)
++ onRemoved: when removed from graph
++ onStart:	when the graph starts playing
++ onStop:	when the graph stops playing
++ onDrawForeground: render the inside widgets inside the node
++ onDrawBackground: render the background area inside the node (only in edit mode)
++ onMouseDown
++ onMouseMove
++ onMouseUp
++ onMouseEnter
++ onMouseLeave
++ onExecute: execute the node
++ onPropertyChanged: when a property is changed in the panel (return true to skip default behaviour)
++ onGetInputs: returns an array of possible inputs
++ onGetOutputs: returns an array of possible outputs
++ onBounding: in case this node has a bigger bounding than the node itself (the callback receives the bounding as [x,y,w,h])
++ onDblClick: double clicked in the node
++ onInputDblClick: input slot double clicked (can be used to automatically create a node connected)
++ onOutputDblClick: output slot double clicked (can be used to automatically create a node connected)
++ onConfigure: called after the node has been configured
++ onSerialize: to add extra info when serializing (the callback receives the object that should be filled with the data)
++ onSelected
++ onDeselected
++ onDropItem : DOM item dropped over the node
++ onDropFile : file dropped over the node
++ onConnectInput : if returns false the incoming connection will be canceled
++ onConnectionsChange : a connection changed (new one or removed) (LiteGraph.INPUT or LiteGraph.OUTPUT, slot, true if connected, link_info, input_info )
++ onAction: action slot triggered
++ getExtraMenuOptions: to add option to context menu
+*/
