@@ -1,0 +1,77 @@
+import React from 'react';
+import ReactDOM from 'react-dom'
+import Blockies from 'react-blockies';
+
+import { Input, FilledInput } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+function Password() {
+  this.addInput("", 0);
+  this.addOutput("", "string");
+  this.properties =  {blockieSize: 50,placeholder:"password",title:"Password",value:null}
+  this.size = [300, 50];
+}
+
+Password.title = "Password";
+
+Password.prototype.onConnectionsChange = function(args){
+  console.log("onConnectionsChange",args)
+}
+
+Password.prototype.onExecute = function() {
+  let input = this.getInputData(0)
+  if (this.inputs[0] && typeof input != "undefined" && this.properties.value != input ) {
+    this.properties.value = this.getInputData(0);
+  }
+  this.setOutputData(0,this.properties.value);
+};
+
+Password.prototype.getTitle = function() {
+  if (this.flags.collapsed && this.properties.value) {
+    return this.properties.value
+  }
+  return this.title;
+};
+
+Password.prototype.handle = function(e) {
+    this.properties.value = e.target.value
+    this.setOutputData(0,this.properties.value);
+    this.onDrawBackground()
+}
+
+Password.prototype.onDrawBackground = function(ctx) {
+
+  if (this.flags.collapsed) {
+    /*this.render(
+      <div>
+
+      </div>
+    )*/
+    this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
+  }else{
+    this.render(
+      <div>
+        <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
+          <Input
+            style={{width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize}}
+            id="outlined-name"
+            label="Name"
+            placeholder={this.properties.placeholder}
+            value={this.properties.value}
+            type="password"
+            onChange={Password.prototype.handle.bind(this)}
+            margin="normal"
+            variant="outlined"
+          />
+        </form>
+      </div>
+    )
+  }
+
+
+};
+
+
+
+
+export default Password

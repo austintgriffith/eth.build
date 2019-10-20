@@ -1,7 +1,7 @@
 
 function SubString() {
   this.size = [60, 30];
-  this.addInput("string", "string");
+  this.addInput("string", 0);
   this.addInput("start", "number");
   this.addInput("length", "number");
   this.addOutput("output", "string");

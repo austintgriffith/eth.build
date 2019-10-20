@@ -6,8 +6,8 @@ import { Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Number() {
-  this.addInput("", 0, { label: "" });
-  this.addOutput("", 0, { label: "" });
+  this.addInput("", 0);
+  this.addOutput("", "number");
   this.properties =  {blockieSize: 50,placeholder:"#",title:"Number",value:null}
   this.size = [100, 50];
 }
@@ -21,9 +21,9 @@ Number.prototype.onConnectionsChange = function(args){
 Number.prototype.onExecute = function() {
   let input = this.getInputData(0)
   if (this.inputs[0] && typeof input != "undefined" && this.properties.value != input ) {
-    this.properties.value = this.getInputData(0);
+    this.properties.value = parseFloat(this.getInputData(0));
   }
-  this.setOutputData(0,this.properties.value);
+  this.setOutputData(0,parseFloat(this.properties.value));
 };
 
 Number.prototype.getTitle = function() {

@@ -5,7 +5,6 @@ function StringSplit() {
 }
 
 StringSplit.title = "Split";
-StringSplit.menu = "string/split";
 
 StringSplit.prototype.onExecute = function() {
   if (this.inputs[0] && this.getInputData(0) && typeof this.getInputData(0) == "string") {

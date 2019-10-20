@@ -7,8 +7,7 @@ function NetworkRequest() {
   this.properties = { url: "", debounce: 1000};
 }
 
-NetworkRequest.title = "Network Request";
-NetworkRequest.menu = "network/request";
+NetworkRequest.title = "Request";
 
 NetworkRequest.prototype.onAdded = function() {
   this.doRequest();
@@ -56,10 +55,12 @@ NetworkRequest.prototype.doRequest = async function() {
     }
   }
   this.lastRequestTime = Date.now()
-  let result = await axios.get(this.properties.url)
-  if(result && result.data){
-    this.value = result.data
-  }
+  try{
+    let result = await axios.get(this.properties.url)
+    if(result && result.data){
+      this.value = result.data
+    }
+  }catch(e){}
 };
 
 export default NetworkRequest

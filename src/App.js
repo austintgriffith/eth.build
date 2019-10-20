@@ -5,6 +5,10 @@ import 'litegraph.js/css/litegraph.css'
 import CustomNodes from './CustomNodes'
 import ICON from './icon.png'
 
+var codec = require('json-url')('lzw');
+
+
+
 function App() {
 
   const [live, setLive] = React.useState();
@@ -14,8 +18,15 @@ function App() {
   React.useEffect(()=>{
     console.log("MOUNT",LiteGraphJS)
 
-    global.LGraph = LiteGraphJS.LGraph
+    global.LiteGraphJS = LiteGraphJS
     var graph = new LiteGraphJS.LGraph();
+
+    //config
+    LiteGraphJS.LiteGraph.debug = true
+
+    console.log("can we set grid here?",LiteGraphJS.LiteGraph)
+
+
     var canvas = new LiteGraphJS.LGraphCanvas("#main", graph);
 
     window.addEventListener("resize", function() { canvas.resize(); } );
@@ -27,18 +38,42 @@ function App() {
     window.onbeforeunload = function(){
       var data = JSON.stringify( graph.serialize() );
       localStorage.setItem("litegraph", data );
+
     }
 
     CustomNodes(LiteGraphJS)
 
-    var data = localStorage.getItem("litegraph");
-    if(data) graph.configure( JSON.parse( data ) );
+    let url = window.location.pathname
+    if(url&&url.length>1){
+      url = url.substring(1)
+      console.log("decompressing",url)
+	     codec.decompress(url).then(json => {
+         console.log("configure graph with:",json)
+         graph.configure( json );
+         graph.start()
+         graph.canvas = canvas
 
-    graph.start()
-    graph.canvas = canvas
+         console.log("FINAL graph",graph.align_to_grid,graph)
+         graph.align_to_grid = false
 
-    setLiteGraph(graph)
-    setLiteGraphCanvas(canvas)
+         setLiteGraph(graph)
+         setLiteGraphCanvas(canvas)
+       })
+    }else{
+      var data = localStorage.getItem("litegraph");
+      if(data) graph.configure( JSON.parse( data ) );
+      graph.start()
+      graph.canvas = canvas
+
+      console.log("FINAL graph",graph.align_to_grid,graph)
+      graph.align_to_grid = false
+
+      setLiteGraph(graph)
+      setLiteGraphCanvas(canvas)
+    }
+
+
+
   },[])
 
 
@@ -95,6 +130,14 @@ function App() {
             }}>
           </input>
         </span>
+        <span onClick={async ()=>{
+          var data = JSON.stringify( liteGraph.serialize() );
+          console.log("data",data)
+          let compressed = await codec.compress(liteGraph.serialize())
+          window.location = "/"+compressed
+        }}>
+          LUINK
+        </span>
       </div>
 
       <div id="mainCanvas" style={{overflow:'hidden',background:"#222",width:Math.max(100,width),height:Math.max(100,height)}}>
@@ -104,6 +147,8 @@ function App() {
 
       <canvas id="chart" style={{outline: 'none', position:'absolute',left:-10000,top:-10000,zIndex:-1,width:320,height:240}}></canvas>
       <div id="clipboarddiv" style={{position:'absolute',left:-10000,top:-10000,zIndex:-1}}></div>
+
+      <div id="reactElements"></div>
     </div>
   );
 }

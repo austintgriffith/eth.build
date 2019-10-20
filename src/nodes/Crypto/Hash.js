@@ -6,6 +6,7 @@ function Hash()
   this.addInput("input","string,number");
   this.addOutput("hash","string");
   this.properties = { };
+  this.size = [100,30]
 }
 
 //name to show
@@ -16,7 +17,11 @@ Hash.prototype.onExecute = function()
 {
   let input = this.getInputData(0);
   if(typeof input != "undefined"){
-    this.setOutputData( 0, "0x"+keccak256(input).toString('hex') );
+    try{
+      this.setOutputData( 0, "0x"+keccak256(input).toString('hex') );
+    }catch(e){
+      
+    }
   }else{
     this.setOutputData( 0, input );
   }

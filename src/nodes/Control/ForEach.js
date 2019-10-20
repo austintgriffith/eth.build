@@ -11,8 +11,7 @@
       this.working = true
   }
 
-  ControlForEach.title = "ForEach";
-  ControlForEach.menu = "control/foreach"
+  ControlForEach.title = "For Each";
 
   ControlForEach.prototype.onExecute = function() {
     //console.log("FOREACH EXEC",this)

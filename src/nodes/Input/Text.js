@@ -6,8 +6,8 @@ import { Input, FilledInput } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Text() {
-  this.addInput("", 0, { label: "" });
-  this.addOutput("", 0, { label: "" });
+  this.addInput("", 0);
+  this.addOutput("", "string");
   this.properties =  {blockieSize: 50,placeholder:"enter text here",title:"Text",value:null}
   this.size = [300, 50];
 }
@@ -34,14 +34,13 @@ Text.prototype.getTitle = function() {
 };
 
 Text.prototype.handle = function(e) {
-    console.log("CHANGE",e)
     this.properties.value = e.target.value
     this.setOutputData(0,this.properties.value);
-    console.log(this.properties.value)
-    console.log("this.properties.value:",this.properties.value,this.id)
+    this.onDrawBackground()
 }
 
 Text.prototype.onDrawBackground = function(ctx) {
+
   if (this.flags.collapsed) {
     /*this.render(
       <div>
@@ -58,7 +57,6 @@ Text.prototype.onDrawBackground = function(ctx) {
             id="outlined-name"
             label="Name"
             placeholder={this.properties.placeholder}
-            variant="filled"
             value={this.properties.value}
             onChange={Text.prototype.handle.bind(this)}
             margin="normal"

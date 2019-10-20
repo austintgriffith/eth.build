@@ -15,6 +15,7 @@
     "dapparatus": "^1.0.96",
     "ethereumjs-util": "^6.1.0",
     "ethereumjs-wallet": "^0.6.3",
+    "json-url": "^2.4.2",
     "jsqr": "^1.2.0",
     "keccak256": "^1.0.0",
     "litegraph.js": "github:austintgriffith/litegraph.js#master",
