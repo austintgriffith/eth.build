@@ -6,7 +6,6 @@
   }
 
   EventsAny.title = "Any";
-  EventsAny.menu = "events/any";
 
   EventsAny.prototype.onAction = function(event, action) {
     this.trigger("output");

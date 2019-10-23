@@ -8,10 +8,10 @@ function Web3Balance() {
   this.addInput("check",-1)
   this.addOutput("balance","number")
   this.properties = { address: "", provider: defaultProvider };
+  this.size[0] = 210
 }
 
-Web3Balance.title = "Web3 Balance";
-Web3Balance.menu = "web3/balance";
+Web3Balance.title = "Balance";
 
 Web3Balance.prototype.onAdded = async function() {
   this.connectWeb3()
@@ -33,8 +33,13 @@ Web3Balance.prototype.checkBalance = async function() {
 Web3Balance.prototype.connectWeb3 = function() {
   if(this.properties.provider){
 //    console.log("CONNECTING TO",this.properties.provider)
-    this.web3 = new Web3(this.properties.provider)
-    this.checkBalance()
+    try{
+      this.web3 = new Web3(this.properties.provider)
+      this.checkBalance()
+    }catch(e){
+      console.log(e)
+    }
+
   }
 }
 

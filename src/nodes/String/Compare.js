@@ -1,11 +1,11 @@
 function StringLength() {
   this.addInput("string", "string");
   this.addOutput("length", "number");
-  this.size = [100, 26];
+  this.size = [140, 26];
 }
 
 StringLength.title = "Length";
-StringLength.menu = "string/length";
+StringLength.description = "get string character count" //added for search
 
 StringLength.prototype.onExecute = function() {
   if (this.inputs[0] && this.getInputData(0) && typeof this.getInputData(0) == "string") {

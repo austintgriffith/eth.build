@@ -9,11 +9,11 @@ function ObjectProperty() {
     this.setValue.bind(this)
   );
   this.widgets_up = true;
-  this.size = [140, 30];
+  this.size = [190, 30];
   this._value = null;
 }
 
-ObjectProperty.title = "Object property";
+ObjectProperty.title = "property";
 ObjectProperty.desc = "Outputs the property of an object";
 
 ObjectProperty.prototype.setValue = function(v) {

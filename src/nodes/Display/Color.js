@@ -5,7 +5,7 @@ function Color() {
   this.addInput("", 0, { label: "" });
   this.addOutput("", 0, { label: "" });
   this.properties =  {title:"Color", value:null}
-  this.size = [80, 50];
+  this.size = [140, 50];
 }
 
 Color.title = "Color";
@@ -28,7 +28,7 @@ Color.prototype.getTitle = function() {
 Color.prototype.onDrawBackground = function(ctx) {
   if(this.properties.value){
     ctx.beginPath();
-    ctx.arc(40, 25, 20, 0, 2 * Math.PI);
+    ctx.arc(55, 25, 36, 0, 2 * Math.PI);
     ctx.fillStyle = "#"+this.properties.value.replace("#","");
     ctx.fill();
   }

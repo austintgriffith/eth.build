@@ -2,10 +2,10 @@ function UtilsToWei() {
   this.addInput("input", "number");
   this.addOutput("output", "number")
   this.properties = {decimals: 18}
+  this.size[0] = 170
 }
 
-UtilsToWei.title = "Utils ToWei";
-UtilsToWei.menu = "utils/towei";
+UtilsToWei.title = "To Wei";
 
 UtilsToWei.prototype.onExecute = function() {
   if (this.inputs[0] && this.getInputData(0)) {

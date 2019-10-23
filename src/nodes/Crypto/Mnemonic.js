@@ -5,7 +5,7 @@ function Mnemonic() {
   this.addInput("[mnemonic]","string")
   this.addInput("[index]","number")
   this.addInput("generate",-1)
-  this.addOutput("🗝", "string");
+  this.addOutput("private key", "string");
   this.addOutput("mnemonic", "string");
   this.properties = { mnemonic: "", index: 0 };
 }

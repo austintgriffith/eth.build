@@ -9,7 +9,6 @@ function DisplayQR() {
 }
 
 DisplayQR.title = "QR";
-DisplayQR.menu = "display/qr";
 
 DisplayQR.prototype.onExecute = function() {
     if (this.inputs[0] && this.value != this.getInputData(0)) {

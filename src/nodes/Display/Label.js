@@ -2,46 +2,51 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import Blockies from 'react-blockies';
 
-import { Input } from '@material-ui/core';
+import { Input, FilledInput } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-function Number() {
-  this.addInput("", 0);
-  this.addOutput("", "number");
-  this.properties =  {blockieSize: 50,placeholder:"#",title:"Number",value:null}
-  this.size = [190, 50];
+function Text() {
+  this.properties =  {blockieSize: 50,placeholder:"",title:"Comment",value:null,fontSize:28}
+  this.size = [300, 0];
 }
 
-Number.title = "Number";
+Text.title = "Label";
+Text.title_color = "#222"
 
-Number.prototype.onConnectionsChange = function(args){
+Text.prototype.onConnectionsChange = function(args){
   console.log("onConnectionsChange",args)
 }
 
-Number.prototype.onExecute = function() {
-  let input = this.getInputData(0)
-  if (this.inputs[0] && typeof input != "undefined" && this.properties.value != input ) {
-    this.properties.value = parseFloat(this.getInputData(0));
-  }
-  this.setOutputData(0,parseFloat(this.properties.value));
-};
-
-Number.prototype.getTitle = function() {
+Text.prototype.getTitle = function() {
   if (this.flags.collapsed && this.properties.value) {
     return this.properties.value
   }
-  return this.title;
+  return "";
 };
 
-Number.prototype.handle = function(e) {
-    console.log("CHANGE",e)
+Text.prototype.handle = function(e) {
     this.properties.value = e.target.value
     this.setOutputData(0,this.properties.value);
-    console.log(this.properties.value)
-    console.log("this.properties.value:",this.properties.value,this.id)
+    this.onDrawBackground()
 }
 
-Number.prototype.onDrawBackground = function(ctx) {
+/*
+<TextareaAutosize
+  autoFocus
+  multiline={true}
+  style={{opacity:0.777,width:"100%",height:40,color:"#FFFFFF",background:"#222",fontSize:this.properties.fontSize,border:"none"}}
+  id="outlined-name"
+  label="Name"
+  placeholder={this.properties.placeholder}
+  value={this.properties.value}
+  onChange={Text.prototype.handle.bind(this)}
+  margin="normal"
+  variant="outlined"
+/>
+ */
+
+Text.prototype.onDrawBackground = function(ctx) {
+
   if (this.flags.collapsed) {
     /*this.render(
       <div>
@@ -58,9 +63,8 @@ Number.prototype.onDrawBackground = function(ctx) {
             id="outlined-name"
             label="Name"
             placeholder={this.properties.placeholder}
-            type="number"
             value={this.properties.value}
-            onChange={Number.prototype.handle.bind(this)}
+            onChange={Text.prototype.handle.bind(this)}
             margin="normal"
             variant="outlined"
           />
@@ -75,4 +79,4 @@ Number.prototype.onDrawBackground = function(ctx) {
 
 
 
-export default Number
+export default Text

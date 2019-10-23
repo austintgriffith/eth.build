@@ -5,6 +5,7 @@ function MathOperation() {
   this.addProperty("A", 1);
   this.addProperty("B", 1);
   this.addProperty("OP", "+", "enum", { values: MathOperation.values });
+  this.size[0] = 120
 }
 
 MathOperation.values = ["+", "-", "*", "/", "%", "^", "max", "min"];

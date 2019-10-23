@@ -1,12 +1,12 @@
 
 function SubString() {
-  this.size = [60, 30];
   this.addInput("string", 0);
   this.addInput("start", "number");
   this.addInput("length", "number");
   this.addOutput("output", "string");
   this.properties =  {start:null,length:null}
   this.value = 0;
+  this.size[0] = 190
 }
 
 SubString.title = "SubString";

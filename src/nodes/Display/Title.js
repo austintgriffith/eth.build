@@ -6,31 +6,23 @@ import { Input, FilledInput } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Text() {
-  this.addInput("", 0);
-  this.addOutput("", "string");
-  this.properties =  {blockieSize: 50,placeholder:"enter text here",title:"Text",value:null}
-  this.size = [300, 50];
+  this.properties =  {fontSize: 44,blockieSize: 50,placeholder:"",title:"Title",value:null}
+  this.size = [500, 0];
 }
 
-Text.title = "Text";
+Text.title = "Title";
+Text.title_color = "#222"
+//Text.bgcolor ="#000"
 
 Text.prototype.onConnectionsChange = function(args){
   console.log("onConnectionsChange",args)
 }
 
-Text.prototype.onExecute = function() {
-  let input = this.getInputData(0)
-  if (this.inputs[0] && typeof input != "undefined" && this.properties.value != input ) {
-    this.properties.value = input;
-  }
-  this.setOutputData(0,this.properties.value);
-};
-
 Text.prototype.getTitle = function() {
   if (this.flags.collapsed && this.properties.value) {
     return this.properties.value
   }
-  return this.properties.title;
+  return "";
 };
 
 Text.prototype.handle = function(e) {
@@ -54,8 +46,8 @@ Text.prototype.onDrawBackground = function(ctx) {
         <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
           <Input
             autoFocus
-            style={{width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize}}
-            id={"react-input-"+this.id}
+            style={{opacity:0.3333,width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize,marginTop:10}}
+            id="outlined-name"
             label="Name"
             placeholder={this.properties.placeholder}
             value={this.properties.value}

@@ -1,41 +1,49 @@
-function MathCondition() {
+function Condition() {
       this.addInput("A", "");
       this.addInput("B", "");
       this.addOutput("true", "boolean");
-      this.addOutput("false", "boolean");
-      this.addProperty("A", 1);
-      this.addProperty("B", 1);
-      this.addProperty("OP", ">", "enum", { values: MathCondition.values });
+      this.addOutput("event", -1);
 
-      this.size = [80, 60];
+
+      this.addProperty("OP", ">", "enum", { values: Condition.values });
+
+      this.properties = {A:1,B:1}
+      this.size[0] = 130
   }
 
-  MathCondition.values = [">", "<", "==", "!=", "<=", ">=", "||", "&&" ];
-  MathCondition["@OP"] = {
+  Condition.desc = "compare values equals not equals"
+
+  Condition.values = [">", "<", "==", "!=", "<=", ">=", "||", "&&" ];
+  Condition["@OP"] = {
       type: "enum",
       title: "operation",
-      values: MathCondition.values
+      values: Condition.values
   };
 
-  MathCondition.title = "Condition";
+  Condition.title = "Condition";
 
-  MathCondition.prototype.getTitle = function() {
+  Condition.prototype.getTitle = function() {
       return "A " + this.properties.OP + " B";
   };
 
-  MathCondition.prototype.onExecute = function() {
+  Condition.prototype.onPropertyChange = function(property, value) {
+    this.properties[property] = value
+    this.triggered = false
+  }
+
+  Condition.prototype.onExecute = function() {
       var A = this.getInputData(0);
       if (A === undefined) {
           A = this.properties.A;
       } else {
-          this.properties.A = A;
+        this.onPropertyChange("A",A)
       }
 
       var B = this.getInputData(1);
       if (B === undefined) {
           B = this.properties.B;
       } else {
-          this.properties.B = B;
+          this.onPropertyChange("B",B)
       }
 
       var result = true;
@@ -67,7 +75,10 @@ function MathCondition() {
       }
 
       this.setOutputData(0, result);
-      this.setOutputData(1, !result);
+      if(result&&!this.triggered){
+        this.trigger("event");
+        this.triggered = true
+      }
   };
 
-export default MathCondition
+export default Condition

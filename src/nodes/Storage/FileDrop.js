@@ -2,7 +2,7 @@ const axios = require('axios');
 
 function FileRead() {
   this.addOutput("output", "string");
-  this.size = [164,36]
+  this.size = [194,36]
 }
 
 FileRead.title = "File Drop";

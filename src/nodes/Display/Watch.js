@@ -6,7 +6,7 @@ function Watch() {
   this.addInput("", 0, { label: "" });
   this.value = 0;
   this.size = [300, 60];
-  this.properties = {autosize:true}
+  this.autosized = false
 }
 
 Watch.title = "Watch";
@@ -19,7 +19,7 @@ Watch.prototype.onExecute = function() {
 
 Watch.prototype.getTitle = function() {
   if (this.flags.collapsed) {
-    return this.inputs[0].label;
+    return this.value;
   }
   if(this.value){
     return (typeof this.value)
@@ -32,20 +32,23 @@ Watch.toString = function(o) {
 };
 
 Watch.prototype.onDrawBackground = function(ctx) {
-  if(this.value&&this.properties.autosize){
-    if(typeof this.value.toString != "function"){
-      this.size[0] = Math.max(90,25+11 * this.value.length)
+  if(this.value&&!this.autosized){
+    this.autosized=true;
+    if(typeof this.value == "object"){
+      this.size = [600,100]
+    }else if(typeof this.value.toString != "function"){
+      this.size[0] = Math.max(200,25+12 * Math.max(this.value.length,1))
     }else{
-      this.size[0] = Math.max(90,25+11 * this.value.toString().length)
+      this.size[0] = Math.max(200,25+12 * Math.max(this.value.toString().length,1))
     }
   }
 
   if (this.flags.collapsed) {
-    this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
+    this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR JUST NOT SHOW IT?! THIS SEEMS WEIRD
   }else{
     this.render(
       <div>
-        <pre style={{textAlign:'left',overflow:'auto',width:this.size[0]-25,height:this.size[1]-15,fontSize:12}}>{JSON.stringify(this.value,null,2)}</pre>
+        <pre style={{textAlign:'left',overflow:'auto',width:this.size[0]-25,height:this.size[1]-15,fontSize:18}}>{JSON.stringify(this.value,null,2)}</pre>
       </div>
     )
 };

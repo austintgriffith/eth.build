@@ -1,7 +1,7 @@
 const BurnerProvider = require('burner-provider');
 const Web3 = require('web3');
 
-const defaultProvider = "https://austingriffith.com"
+const defaultProvider = "https://austingriffith.com" //some junk url because you don't need a provider to sign messages but web3.js still needs a provider
 
 function Web3Sign() {
   this.addInput("[privatekey]","string")
@@ -16,8 +16,13 @@ function Web3Sign() {
   this.signatures = [] //cache each after signing
 }
 
-Web3Sign.title = "Web3 Sign";
-Web3Sign.menu = "web3/sign";
+Web3Sign.title = "Sign";
+
+Web3Sign.prototype.onAction = async function() {
+  if(this.properties['message'] && this.address){
+    this.sign()
+  }
+}
 
 Web3Sign.prototype.onExecute = async function() {
   let optionalPrivateKey = this.getInputData(0)
@@ -32,7 +37,7 @@ Web3Sign.prototype.onExecute = async function() {
   if(typeof optionalMessage != "undefined" && optionalMessage!=this.properties.message){
     this.onPropertyChanged("message",optionalMessage)
   }
-  this.setOutputData(0,this.address)
+  this.setOutputData(0,this.address?this.address.toLowerCase():this.address)
   this.setOutputData(1,this.properties.message)
   this.setOutputData(2,this.signature)
 };

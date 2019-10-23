@@ -18,10 +18,10 @@ function Web3Transaction() {
   this.addOutput("signed", "string");
   this.addOutput("signed",-1)
   this.properties = { value: 0, nonce: null, data: "0x", gas: 23000, gasPrice: 4100000000, provider: defaultProvider, privateKey: ""  };
+  this.size[0]=240
 }
 
-Web3Transaction.title = "Web3 Transaction";
-Web3Transaction.menu = "web3/transaction";
+Web3Transaction.title = "Transaction";
 
 
 Web3Transaction.prototype.connectWeb3 = function() {
@@ -60,7 +60,7 @@ Web3Transaction.prototype.onExecute = function() {
 
   let optionalPrivateKey = this.getInputData(1)
   if(typeof optionalPrivateKey != "undefined" && optionalPrivateKey!=this.properties.privateKey){
-    if(optionalPrivateKey.indexOf("0x")<0){
+    if(optionalPrivateKey && optionalPrivateKey.indexOf("0x")<0){
       optionalPrivateKey = "0x"+optionalPrivateKey
     }
     this.onPropertyChanged("privateKey",optionalPrivateKey)
@@ -80,6 +80,17 @@ Web3Transaction.prototype.onExecute = function() {
     }
     this.onPropertyChanged("data",optionalData)
   }
+
+  let optionalGas = this.getInputData(5)
+  if(typeof optionalGas != "undefined" && optionalGas!=this.properties.data){
+    this.onPropertyChanged("gas",optionalGas)
+  }
+  let optionalGasPrice= this.getInputData(6)
+  if(typeof optionalGasPrice != "undefined" && optionalGasPrice!=this.properties.data){
+    this.onPropertyChanged("gasPrice",optionalGasPrice)
+  }
+
+
   let optionalNonce = this.getInputData(7)
   if(typeof optionalNonce != "undefined"){
     if(optionalNonce!=this.properties.nonce){
@@ -129,7 +140,7 @@ Web3Transaction.prototype.craftTransaction = async function(){
 
   this.transaction = {
     to: ""+this.properties.to,
-    value: ""+this.properties.value,
+    value: parseInt(this.properties.value),
     data: ""+this.properties.data,
     gas: parseInt(this.properties.gas),
     gasPrice: parseInt(this.properties.gasPrice),

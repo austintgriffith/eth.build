@@ -3,7 +3,7 @@ var Web3 = require('web3');
 const defaultProvider = "https://mainnet.infura.io/v3/e59c464c322f47e2963f5f00638be2f8"
 
 function Web3SendTransaction() {
-  this.addInput("transaction","string")
+  this.addInput("signed","string")
   this.addInput("[blockchain]","string")
   this.addInput("send",-1)
   this.addOutput("hash","string")
@@ -11,8 +11,7 @@ function Web3SendTransaction() {
   this.properties = { address: "", provider: defaultProvider };
 }
 
-Web3SendTransaction.title = "Web3 Send Tx";
-Web3SendTransaction.menu = "web3/sendtx";
+Web3SendTransaction.title = "Send Tx";
 
 Web3SendTransaction.prototype.onAdded = async function() {
   this.connectWeb3()
@@ -23,21 +22,26 @@ Web3SendTransaction.prototype.onAction = function(event, tx, raw) {
 
   let transaction = raw
 
+  console.log("transaction",transaction)
+
   if(!transaction){
     transaction = this.getInputData(0)
   }
+
+  console.log("transaction",transaction)
+
   //console.log("TX",transaction)
   if(transaction){
-    //console.log("SENDING")
+    console.log("SENDING")
     if(!this.web3){
       this.connectWeb3()
     }
-    //console.log("this.web3",this.web3)
+    console.log("this.web3",this.web3)
     this.web3.eth.sendSignedTransaction(transaction, (err, transactionHash) => {
       if(err){
         console.log("ERROR",err)
       }
-      //console.log("TRANSACTION",transactionHash)
+      console.log("TRANSACTION",transactionHash)
       this.transactionHash = transactionHash
     });
   }

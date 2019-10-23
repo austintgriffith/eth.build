@@ -5,6 +5,7 @@ function NetworkRequest() {
   this.addInput("request",-1)//action
   this.addOutput("output", "string");
   this.properties = { url: "", debounce: 1000};
+  this.size[0] = 180
 }
 
 NetworkRequest.title = "Request";

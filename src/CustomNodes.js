@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
+const hexRgb = require('hex-rgb');
 
 function addHelpers(obj){
+
+  if(!obj.prototype.title_font) obj.prototype.title_font = "bold 18px 'Rubik Mono One', sans-serif"
 
   obj.prototype.sayHello = function() {
     console.log("HELLO")
   }
+
+
 
   obj.prototype.render = function(reactElement) {
     if(!document.getElementById(this.id+"_react_element")){
@@ -32,8 +37,18 @@ function addHelpers(obj){
 
   }
 
-  obj.prototype.originalOnOutputDblClick = obj.prototype.onOutputDblClick
+  //uppercase title of all nodes if not collapsed
+  /*obj.prototype.originalGetTitle = obj.prototype.getTitle
+  obj.prototype.getTitle = function(){
+    let title = ""
+    if(typeof   obj.prototype.originalGetTitle == "function")  title = obj.prototype.originalGetTitle()
+    if(!title) title=obj.prototype.name
+    if(obj.flags && !obj.flags.collapsed && title && typeof title.toUpperCase == "function") title = title.toUpperCase()
+    return title
+  }*/
 
+  //auto complete on double click
+  obj.prototype.originalOnOutputDblClick = obj.prototype.onOutputDblClick
   obj.prototype.onOutputDblClick = function(index,e){
     if(typeof   obj.prototype.originalOnOutputDblClick == "function")   obj.prototype.originalOnOutputDblClick()
     //look for all nodes already attached and bail if one is a Watch already
@@ -50,8 +65,8 @@ function addHelpers(obj){
     this.connect(index, node_watch, 0 );
   }
 
-  obj.prototype.originalOnInputDblClick = obj.prototype.onInputDblClick
 
+  obj.prototype.originalOnInputDblClick = obj.prototype.onInputDblClick
   obj.prototype.onInputDblClick = function(index,e){
     if(typeof obj.prototype.originalOnInputDblClick == "function")   obj.prototype.originalOnInputDblClick()
     if(this.inputs[index].type == -1){
@@ -104,13 +119,14 @@ function addHelpers(obj){
   return obj
 }
 
-const addNodes = function(LiteGraphJS,name,color,icon){
+const addNodes = function(LiteGraphJS,name,color,shadow){
   let nodeSet = require('./nodes/'+name)
   for(let n in nodeSet){
     if(nodeSet[n].default){
       console.log("Importing "+nodeSet[n].default.title+" as "+name)
       let nodeObject = nodeSet[n].default
-      if(color) nodeObject.title_color = color
+      if(color && !nodeObject.title_color) nodeObject.title_color = color
+      if(shadow && !nodeObject.shadow_color) nodeObject.prototype.shadow_color = shadow
       LiteGraphJS.LiteGraph.registerNodeType(name+"/"+nodeSet[n].default.title, addHelpers(nodeObject));
     }
   }
@@ -118,20 +134,31 @@ const addNodes = function(LiteGraphJS,name,color,icon){
 
 let globalLiteGraphJS = null
 
+const hexColor = (hex)=>{
+  let rgbVale = hexRgb(hex)
+  return ["rgba("+rgbVale.red+","+rgbVale.green+","+rgbVale.blue+")","rgba("+rgbVale.red+","+rgbVale.green+","+rgbVale.blue+",0.25)"]
+}
+
+//
+
 export default function(LiteGraphJS){
 
   globalLiteGraphJS = LiteGraphJS
 
-  addNodes(LiteGraphJS,"Input","#3f51b5")
-  addNodes(LiteGraphJS,"Display","#009688")
-  addNodes(LiteGraphJS,"Storage","#ffc107","💾")
-  addNodes(LiteGraphJS,"Network","#ffeb3b","📡")
-  addNodes(LiteGraphJS,"Math","#2196f3")
-  addNodes(LiteGraphJS,"Control","#e9e5e7")
-  addNodes(LiteGraphJS,"Crypto","#f44336")
-  addNodes(LiteGraphJS,"String","#6b6b6b")
-  addNodes(LiteGraphJS,"Object","#454545")
-  addNodes(LiteGraphJS,"Modules")
+  addNodes(LiteGraphJS,"Input",...hexColor("3f51b5"))
+  addNodes(LiteGraphJS,"Display",...hexColor("357a38"))
+  addNodes(LiteGraphJS,"Storage",...hexColor("ff9800"))
+  addNodes(LiteGraphJS,"Network",...hexColor("b2a429"),"📡")
+  addNodes(LiteGraphJS,"Crypto",...hexColor("f44336"))
+  addNodes(LiteGraphJS,"Web3",...hexColor("03A9F4"))
+  addNodes(LiteGraphJS,"Math",...hexColor("2196f3"))
+  addNodes(LiteGraphJS,"Control",...hexColor("a4a4a4"))
+  addNodes(LiteGraphJS,"Utils",...hexColor("b26500"))
+  addNodes(LiteGraphJS,"String",...hexColor("6b6b6b"))
+  addNodes(LiteGraphJS,"Object",...hexColor("454545"))
+
+  addNodes(LiteGraphJS,"System",...hexColor("989898"))
+  addNodes(LiteGraphJS,"Modules",...hexColor("7e57c2"))
 
 
   /*function substr(str, start, length) {

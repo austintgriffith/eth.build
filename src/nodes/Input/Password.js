@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 function Password() {
   this.addInput("", 0);
   this.addOutput("", "string");
-  this.properties =  {blockieSize: 50,placeholder:"password",title:"Password",value:null}
+  this.properties =  {blockieSize: 50,placeholder:"password",title:"Password"}
   this.size = [300, 50];
 }
 
@@ -20,22 +20,19 @@ Password.prototype.onConnectionsChange = function(args){
 
 Password.prototype.onExecute = function() {
   let input = this.getInputData(0)
-  if (this.inputs[0] && typeof input != "undefined" && this.properties.value != input ) {
-    this.properties.value = this.getInputData(0);
+  if (this.inputs[0] && typeof input != "undefined" && this.value != input ) {
+    this.value = this.getInputData(0);
   }
-  this.setOutputData(0,this.properties.value);
+  this.setOutputData(0,this.value);
 };
 
 Password.prototype.getTitle = function() {
-  if (this.flags.collapsed && this.properties.value) {
-    return this.properties.value
-  }
   return this.title;
 };
 
 Password.prototype.handle = function(e) {
-    this.properties.value = e.target.value
-    this.setOutputData(0,this.properties.value);
+    this.value = e.target.value
+    this.setOutputData(0,this.value);
     this.onDrawBackground()
 }
 
@@ -53,11 +50,12 @@ Password.prototype.onDrawBackground = function(ctx) {
       <div>
         <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
           <Input
+            autoFocus
             style={{width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize}}
             id="outlined-name"
             label="Name"
             placeholder={this.properties.placeholder}
-            value={this.properties.value}
+            value={this.value}
             type="password"
             onChange={Password.prototype.handle.bind(this)}
             margin="normal"

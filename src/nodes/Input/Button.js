@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 function Button() {
   this.addInput("", -1);
   this.addOutput("", -1);
-  this.properties =  {value:"click me"}
+  this.properties =  {value:"click me",title:"Button"}
   this.size = [200, 50];
 }
 
@@ -30,7 +30,7 @@ Button.prototype.getTitle = function() {
   if (this.flags.collapsed && this.properties.value) {
     return this.properties.value
   }
-  return this.title;
+  return this.properties.title;
 };
 
 Button.prototype.handle = function(e) {

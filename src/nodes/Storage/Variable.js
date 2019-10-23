@@ -2,7 +2,7 @@ function BasicVariable() {
   this.size = [60, 30];
   this.addInput("in");
   this.addOutput("out");
-  this.properties = { varname: "somevarname", global: false };
+  this.properties = { varname: "var", global: false };
   this.value = null;
 }
 

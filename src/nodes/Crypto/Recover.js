@@ -11,8 +11,7 @@ function Web3Recover() {
   this.signatures = [] //cache each after signing
 }
 
-Web3Recover.title = "Web3 Recover";
-Web3Recover.menu = "web3/recover";
+Web3Recover.title = "Recover";
 
 Web3Recover.prototype.onExecute = async function() {
   let optionalMessage = this.getInputData(0)
@@ -23,7 +22,7 @@ Web3Recover.prototype.onExecute = async function() {
   if(typeof optionalSignature != "undefined" && optionalSignature!=this.properties.signature){
     this.onPropertyChanged("signature",optionalSignature)
   }
-  this.setOutputData(0,this.address)
+  this.setOutputData(0,this.address?this.address.toLowerCase():this.address)
 };
 
 Web3Recover.prototype.onPropertyChanged = async function(name, value){

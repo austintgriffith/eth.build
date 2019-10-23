@@ -2,17 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import Blockies from 'react-blockies';
 
-import { Input, FilledInput } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 function Text() {
   this.addInput("", 0);
-  this.addOutput("", "string");
-  this.properties =  {blockieSize: 50,placeholder:"enter text here",title:"Text",value:null}
-  this.size = [300, 50];
+  this.addOutput("", "number");
+  this.properties =  {blockieSize: 50,placeholder:"enter text here",title:"Dollars",value:null}
+  this.size = [190, 55];
 }
 
-Text.title = "Text";
+Text.title = "Dollars";
 
 Text.prototype.onConnectionsChange = function(args){
   console.log("onConnectionsChange",args)
@@ -50,20 +54,19 @@ Text.prototype.onDrawBackground = function(ctx) {
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   }else{
     this.render(
-      <div>
-        <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
-          <Input
-            autoFocus
-            style={{width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize}}
-            id={"react-input-"+this.id}
-            label="Name"
-            placeholder={this.properties.placeholder}
-            value={this.properties.value}
-            onChange={Text.prototype.handle.bind(this)}
-            margin="normal"
-            variant="outlined"
-          />
-        </form>
+      <div >
+        <FormControl fullWidth>
+           <InputLabel style={{color:"#999999"}}  htmlFor="adornment-amount">USD</InputLabel>
+           <Input
+              style={{color:"#eeeeee"}}
+
+
+             id="adornment-amount"
+             value={this.properties.value}
+             onChange={this.handle.bind(this)}
+             startAdornment={<InputAdornment position="start"><span style={{color:"#cccccc"}} >$</span></InputAdornment>}
+           />
+         </FormControl>
       </div>
     )
   }

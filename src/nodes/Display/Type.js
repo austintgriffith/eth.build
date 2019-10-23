@@ -1,9 +1,9 @@
 function DisplayType() {
   this.addInput("", "");
+  this.addOutput("", "string");
 }
 
-DisplayType.title = "Display Type";
-DisplayType.menu = "display/type";
+DisplayType.title = "Type";
 
 DisplayType.prototype.getTitle = function() {
   if (this.flags.collapsed) {
@@ -13,7 +13,9 @@ DisplayType.prototype.getTitle = function() {
 };
 
 DisplayType.prototype.onDrawBackground = function(ctx) {
-  this.inputs[0].label = typeof this.getInputData(0);
+  this.value = typeof this.getInputData(0);
+  this.inputs[0].label = this.value
+  this.setOutputData(0,this.value)
 };
 
 export default DisplayType

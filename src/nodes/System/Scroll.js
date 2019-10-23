@@ -6,14 +6,13 @@ import { Input, FilledInput } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 function Text() {
-  this.addInput("", 0);
-  this.addOutput("", "string");
-  this.properties =  {blockieSize: 50,placeholder:"enter text here",title:"Text",value:null}
-  this.size = [300, 50];
+  this.addInput("x", "number");
+  this.addInput("y",  "number");
+  this.addInput("", -1);
 }
 
-Text.title = "Text";
-
+Text.title = "Scroll";
+/*
 Text.prototype.onConnectionsChange = function(args){
   console.log("onConnectionsChange",args)
 }
@@ -32,11 +31,11 @@ Text.prototype.getTitle = function() {
   }
   return this.properties.title;
 };
+*/
+Text.prototype.onAction = function(e,f,g) {
 
-Text.prototype.handle = function(e) {
-    this.properties.value = e.target.value
-    this.setOutputData(0,this.properties.value);
-    this.onDrawBackground()
+  //this.graph.canvas.ds.offset[0] = this.getInputData[0]
+  //this.graph.canvas.ds.offset[1] = this.getInputData[1]
 }
 
 Text.prototype.onDrawBackground = function(ctx) {
@@ -51,19 +50,7 @@ Text.prototype.onDrawBackground = function(ctx) {
   }else{
     this.render(
       <div>
-        <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
-          <Input
-            autoFocus
-            style={{width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize}}
-            id={"react-input-"+this.id}
-            label="Name"
-            placeholder={this.properties.placeholder}
-            value={this.properties.value}
-            onChange={Text.prototype.handle.bind(this)}
-            margin="normal"
-            variant="outlined"
-          />
-        </form>
+        Scroller
       </div>
     )
   }
