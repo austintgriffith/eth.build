@@ -22,6 +22,7 @@
     "litegraph.js": "github:austintgriffith/litegraph.js#master",
     "polished": "^3.4.1",
     "qrcode": "^1.4.2",
+    "qrcode.react": "^0.9.3",
     "react": "^16.9.0",
     "react-blockies": "^1.4.1",
     "react-copy-to-clipboard": "^5.0.1",
@@ -29,12 +30,14 @@
     "react-scripts": "3.1.2",
     "react-vis": "^1.11.7",
     "require-directory": "^2.1.1",
+    "s3": "^4.4.0",
     "styled-components": "^4.4.0",
-    "web3": "^1.2.1"
+    "web3": "^1.2.1",
+    "winston": "^3.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build --max-old-space-size=12000 ",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

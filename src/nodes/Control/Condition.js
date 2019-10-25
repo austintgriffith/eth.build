@@ -1,15 +1,15 @@
 function Condition() {
-      this.addInput("A", "");
-      this.addInput("B", "");
+      this.addInput("A", "string,number");
+      this.addInput("B", "string,number");
       this.addOutput("true", "boolean");
       this.addOutput("event", -1);
+      this.properties = {"A":1,"B":1}
+      this.addProperty("OP", "==", "enum", { values: Condition.values });
 
-
-      this.addProperty("OP", ">", "enum", { values: Condition.values });
-
-      this.properties = {A:1,B:1}
       this.size[0] = 130
   }
+
+  Condition.title = "Condition";
 
   Condition.desc = "compare values equals not equals"
 
@@ -20,7 +20,7 @@ function Condition() {
       values: Condition.values
   };
 
-  Condition.title = "Condition";
+
 
   Condition.prototype.getTitle = function() {
       return "A " + this.properties.OP + " B";
@@ -35,14 +35,14 @@ function Condition() {
       var A = this.getInputData(0);
       if (A === undefined) {
           A = this.properties.A;
-      } else {
+      } else if(this.properties.A!=A){
         this.onPropertyChange("A",A)
       }
 
       var B = this.getInputData(1);
       if (B === undefined) {
           B = this.properties.B;
-      } else {
+      } else if(this.properties.B!=B){
           this.onPropertyChange("B",B)
       }
 

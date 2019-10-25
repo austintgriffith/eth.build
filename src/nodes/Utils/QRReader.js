@@ -1,21 +1,20 @@
 const jsQR = require("jsqr");
 
-function WidgetQRReader() {
+function QRReader() {
   this.addInput("", "image,canvas");
   this.addOutput("output", "string")
   this.size = [640, 480];
 }
 
-WidgetQRReader.title = "QR Reader";
-WidgetQRReader.desc = "Read QR code from image";
-WidgetQRReader.menu = "widget/qrreader";
+QRReader.title = "QR Reader";
+QRReader.desc = "Read QR code from image";
 
-WidgetQRReader.widgets = [
+QRReader.widgets = [
   { name: "resize", text: "Resize box", type: "button" },
   { name: "view", text: "View Image", type: "button" }
 ];
 
-WidgetQRReader.prototype.onDrawBackground = function(ctx) {
+QRReader.prototype.onDrawBackground = function(ctx) {
   if (this.frame && !this.flags.collapsed) {
     //console.log("videoHeight",this.frame.videoHeight)
     //console.log("videoWidth",this.frame.videoWidth)
@@ -23,7 +22,7 @@ WidgetQRReader.prototype.onDrawBackground = function(ctx) {
     let widthRatio = this.frame.videoWidth / this.size[0]
     let heightRatio = this.frame.videoHeight / this.size[1]
     let ratio = this.frame.videoWidth / this.frame.videoHeight
-    
+
     ctx.drawImage(this.frame, 10, 10, this.size[0]-20, (this.size[0]/ratio)-20);
 
     ctx.save();
@@ -45,7 +44,7 @@ WidgetQRReader.prototype.onDrawBackground = function(ctx) {
 };
 
 
-WidgetQRReader.prototype.drawLine = function(canvas, begin, end, color) {
+QRReader.prototype.drawLine = function(canvas, begin, end, color) {
   canvas.beginPath();
   canvas.moveTo(begin.x-this.pos[0], begin.y-this.pos[1]);
   canvas.lineTo(end.x-this.pos[0], end.y-this.pos[1]);
@@ -54,7 +53,7 @@ WidgetQRReader.prototype.drawLine = function(canvas, begin, end, color) {
   canvas.stroke();
 }
 
-WidgetQRReader.prototype.onExecute = function() {
+QRReader.prototype.onExecute = function() {
   this.frame = this.getInputData(0);
   if(this.imageData){
     //console.log("IMAGE DATA?",this.imageData.data, this.frame.videoWidth, this.frame.videoHeight)
@@ -68,7 +67,7 @@ WidgetQRReader.prototype.onExecute = function() {
   this.setDirtyCanvas(true);
 };
 
-WidgetQRReader.prototype.onWidget = function(e, widget) {
+QRReader.prototype.onWidget = function(e, widget) {
   if (widget.name == "resize" && this.frame) {
     var width = this.frame.width;
     var height = this.frame.height;
@@ -89,4 +88,4 @@ WidgetQRReader.prototype.onWidget = function(e, widget) {
 
 
 
-export default WidgetQRReader;
+export default QRReader;

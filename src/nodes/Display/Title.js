@@ -29,6 +29,7 @@ Text.prototype.handle = function(e) {
     this.properties.value = e.target.value
     this.setOutputData(0,this.properties.value);
     this.onDrawBackground()
+    if(this.properties.value) global.title = this.properties.value
 }
 
 Text.prototype.onDrawBackground = function(ctx) {
