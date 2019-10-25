@@ -27,6 +27,7 @@
     "react-blockies": "^1.4.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.9.0",
+    "react-player": "^1.13.0",
     "react-scripts": "3.1.2",
     "react-stack-grid": "^0.7.1",
     "react-vis": "^1.11.7",

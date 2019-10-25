@@ -7,6 +7,7 @@ import 'litegraph.js/css/litegraph.css'
 import CustomNodes from './CustomNodes'
 import ICON from './icon.png'
 import StackGrid from "react-stack-grid";
+
 import { Icon, Tooltip, Button, CardActions, Divider, Drawer, Card, CardMedia, CardContent, CardActionArea, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 var codec = require('json-url')('lzw');
@@ -32,7 +33,12 @@ function App() {
   const [playing, setPlaying] = React.useState(true);
 
   const [openSaveDialog, setOpenSaveDialog] = React.useState(false);
-  const [showVideoLibrary, setShowVideoLibrary] = React.useState(true);
+
+  let showLibrary = localStorage.getItem("eth.build.showLibrary");
+  console.log("showLibrary",showLibrary)
+  const [showVideoLibrary, setShowVideoLibrary] = React.useState(showLibrary=='true'||showLibrary==null);
+
+
 
   const dynamicWidth = window.innerWidth/3
 
@@ -163,8 +169,6 @@ React.useEffect(()=>{
   window.onbeforeunload = function(){
     var data = JSON.stringify( graph.serialize() );
     localStorage.setItem("litegraph", data );
-
-
   }
 
   CustomNodes(LiteGraphJS)
@@ -195,7 +199,7 @@ React.useEffect(()=>{
       setLiteGraph(graph)
       setLiteGraphCanvas(canvas)
     } else {
-      let defaultData = "wofCrGxhc3Rfbm9kZV9pZC7EgcSDxIVsaW5rxItkIsKlxIfEiXPCmMKKwqLEjCPCpHR5cGXCrElucHV0L0LEq3RvbsKjcG9zwpIow40BIsKkc2l6ZcKSw4zDiDLCpWbEgmdzwoDCpW9yxIlyAMKkbcSIZQDCpsSTxKp0c8KRwoPCpG5hbWXCoMSixKRlw7_CpMSSxJTDgMKnb8SrxZjFmsWcxZ7FoMWixKPEpcO_wqXFqGvFmhfCqnByb8SlcnRpZXPCgsKldmFsdWXCqEdlbmVyYXRlwqXGgnRsZcKmxK50xLBuwonEn2QkxaPEpcKtRGlzcMSCeS9XxpNjaMSzxLXCkjIyxLzEvsWAw40EDz3FhcWHxYnFi8WNxpEDxZHFk8WVxZfEq8WawoTFncWfxaHGpMWUxafEk2sYxbdhYmVswqDFvMW-xoDGgsaEwoDEnsSMKMePwqxXZWIzxK3GiWFuY2XGssS2w40CEsS5QMa3xL_CgsKhMMOMw5LCoTFCxr5hxYjFisWMxY4Fx4XEiceHxKnHicKTxbDHjcKnYWRkcsaEc8ePwqbEhHLEk2fHkcSUHMiOxaDCrFtibG9ja8awYcSTXciXyJnIm8ida8OAyKDGlcawZcinx4_FpsW4xarFrHTFrsKRx4vFsWXCp2LHq8etZciXbnVtx5dyxbfHksWaIceVx5dsx7rHm8W_xpHHnsaFyJDIksiUc3PDmSoweDEwZDBjNmNhyak3OWE5M2M0M2UwOTHJt8eXZDc3YTI3ODHJsjQ2yoTCqMW9b3bEjMaRw5k9aMadcHM6Ly9tyKpuxpB0LsSTZnXGksqbby92x6llNTnJssqFYzPGtWY0N2UyOTYzZjVmMDDKszjHlzJmOMagxIwnx4_Cr8anxqnGqy9ByZzIlcewwpLHssO4w4zCqse3xrkBWVXIgciDx4HFjgTIiMWUxZbIi8WZxZvHjMWyx4_FkMW4G8mWx53Gg3PChMKryKTIpmvGg1PGuDLCq8aqYceuaG9sxY7CoMaWacaYyYLLiciTyJXGh8aJxovJoMmiyaTJpsmoyarJrMmuybDJssm0ybbJuDHJusm8yb7KgMqCNMqEyoTHoWQtx4_CrlXGgmxzL0bFvm0gx6Zpy4zDjQMCxLloy5LHuTB6x77JkcWGyIJzwoHCqWPLusSCypFlZMODy5nGkQbLnMiKyL7Is8Klx4h0yYjJismMyLAhxavFrceJy6HJgcKmyLzFmM2QyYvGkcmOxJTFmiLLqMmYy6rCgcKoxIljacqWzKUSzJ4uy4PLhcu2xqxEzYBhcnPMrgPCose1y5LFgcK-N8uXx4DIhcaRB82Jy57Ni8uix47FtMeQxbgizZXIvc2XyLPFs8WkwqbJic2eyY3FuHPDgM2kxoHLqsusy67Ip8uxy7PLtcSCy7jLusWOwq_Gj8aUciDGlHh0IGjGkcaVxpfGmcKnzbVsxILNuMyFxorFlMyeJsuDQ3LEpMSwL0tleSBQyKpyzK4Bw7TDjMK0zLTHusOKQ1PCmcKax77IgMy6y5jOhHICzofNjsS2yLPCrVvFvWnGiMaUIGvPiciszozImHTImm7InMW4Gsizwqhnxo_GkcaTyYfOjMi5x5LIu82WxZnIjc6Ky7XIms-qZc-sz4nIrc-yyJvNoMW5yLLOisW8dcikaWPQi3nQjc-zZ9CQzpvIs8mbzIPJntCb0I_OmsKSGxzOncmZwoHHm8-pz73PiHnDmULJojI1ODU2NcqvzJVkyrNiZmXKgci2yb5kybjJqGRhZjEzNjBhMzHRgsi2Mjhmyb84yalk0ZXKtjjKtDHQtsySzJ7Eu86Mwq_Pg8-FyqFNxpDFkm7Ql8-PGMOMw7DPlDDPljpmZs-bzoLIhMeCcgHPosufc9CFyYHCqltt0arEsdCXz6_Olciuz7TIsNCSyYHCp1vEk8SJeNKJxKXOls2RxpHSjc-4z7rGkMaSxpTIuMiwF86Qxa7Cksiz0IfQrs-rz63Qms-w0ovQnc6awpHPt86KwqjShWXRq9CX0KTPtNCewpEY0KrLqsKC0rPShtGsY8OZTHfEjHRoIMiUbs6xxorHrdOJY3J1c9OJxpTLt9OQyILQisiRdWzOsWV4cMesZCBzx6vTo3bGkcS9xLEgZ2nGktG20IrGmcW_zbdkzY1u0pMA0J7Cl8KWFyMAIgLDv8KWGCIBJAAAwpYaIgAmxZXSrcKWGyYCJ9SIwpYc1JMo1I_Qjs-0wpYh1JotxZXOl8mMwpYi1KEu1IjCpmfFvnXKkcKQwqbMv25maWfCgMKn06jNuGnEscOKPsOMw4zDjQ"
+      let defaultData = "wofCrGxhc3Rfbm9kZV9pZC7EgcSDxIVsaW5rxItkIsKlxIfEiXPCmMKJwqLEjCTCpHR5cGXCrURpc3DEgnkvV2F0Y2jCo3Bvc8KSMjLCpHNpemXCksONA8KpPcKlZsSCZ3PCgMKlb3LEiXIDwqRtxIhlAMKmxJNwdXRzwpHChMKkbmFtZcKgxKLEpMWUwqTEksSUGMKlxIJiZWzCoMKqcHJvxKVydGllxYnCisSfZCbFpMSlwq9DcsSkdG8vS2V5IFBhaXLEtMS2xYABwqTDjMWjxLzEvsKCwqEww4pDU8KZwprCoTFCxYXFh8WJxYvFjWVyAsWRxZPFlcWXxZnEt8KDxZ7FoMSmW8WyaXbEsGUga8aJXcW_ZcKmxIRyxJNnxafEk2saxrLFn8WhwqhnZW7Gqca6x4DDv8eHxJTDgMKnb8WZxZjFmsKTx4vGtMKrxrfGuXTGu8a9eceAx4J0x4RuZ8Wrx4hzw4DHn8WhxbF1YsSSY8a8xonHqMeDx4XHrsSUx7DHsmXCp2FkZHLFuXPHu8eqx73FqGvEtxscxbHFs8W1xbfFucKByJLGuMa6xoh5w5lCMHgwZTQwZGIzY8iFyKc5MGY1OWIyODA4Zjc0YmE0MTE1ZTZjMWE3OGI4M8mHZjYyyKswNGZhMmPIpDQyNzU2YTU0xbvEjC3HgMKuVcW3bHMvRsWzbSBXZWnGkMS3w40Cw6TDjQFexLvEvWXGmTB6xqEhxqRhxYjCgcKpY29sxIJwc2Vkw4PGp8WOBsasxInGrm7HnMWbyIHCpcavdMeobnVtxa1yx5ZrIceZx5vGsMKRyIHCpseadMecypjKmsqcx77IjsKRIsiSxbTGqciVc8KBwqjEiWNpbWHJoxLJnMSNx4DCr8SoxKrErC9EyoPEgnJzya3FgAN6ybI2ybXEvsKSw4zCvjfJvcWIxYrFjMWOB8qOxZTFlsqRyqPIgcWjxKPEpQDKniLKocqoy6LGs8Why6TFpcKmypnKm8apyq3HsMqxyJTFuHPChMKrx7ZvY2vFuFPJtjLHocSCY2VoyoPFjsKvx5DHpHIgx6R4dCBoxqllwqXFt3RsyILLh8qEYcuKwqXGuWx1xZTEnsSMJ8uBy4PEq2HErUHIhciHc8uLxLXJrgLDuMOMwrTLksS_ybJZVcuYxqbLm8apBMueypDKksqky63FoseAy6fIjRvLt8qzy7nLu8u9y7_MgcyDzIVhzIfMiWzFjsKgzJhpzJrIgsyuyIbIiMyhyrzMpMOZKsifOTnJg8qIOGXFrWTIrcirZTg0OcmVZcmRNTFkyYs4za0xNM2uN2EzNsq_KMeAwqzJqsimL0LKvGFuzIfLjMmyw4zJsizMucm4w4zDksahxqPFhsm-zL_GqHIFzYPLoMqSx57Nh8iDzK_IiMiKx6vHhsiNHMiBwqxbzZFrxLLGjW7Gv8ulx4HHvMesyp7Hsc2HwqXEsmXLv8eUzr7Lqs2FxZ3HjMiCyLjEgs6RZcqqy7Nyy7XCkcm8xazFrsaazY3Ftsu5woLOqc2hzLHNps2ozarNrWTNrc2vzbHIoc20zbY3zbhjzbrNvDnNvmXOgM6CzoQ2wqjFsm92xIzGqcOZPWh0yqhzOi8vyrvEk8eRdC7Ek2Z1cmHQisaGdjMvZciuYzQ2NGMzxLlmNM-ryYs2M8itZjAw0KLJhM24ZjjKvyPOiUnLoXTOjcWZxoVuy4w8zpbMucuUw4gyzL7Lms6hy6fFksqPzqXLrM-Ky6_EpceVyI3HmMqnzYXLo8eUz5MXz5nKtMKCzaPMo2XCqEfHkMeSx6TNnM2ewqZC0LRvbsq_IsuBxoLGhMaGTceRxZJuaWPLjMuVzLfOmMaaxpw6ZmbOnNC-yovGqcaT0YLLn8qWc86nz4rCqltt0avRotGuzrnLsM68zq7HiM6_z4rCp1vEk8SJeNKKxKXLscqrxqnOvsiBx47RmtCOx6TPhciNF8-HxrDCksiBx6HHhMejx6XHus66x6nOrc-Tx4rNh8Ko0oZl0azRrs6syIzHr8KRGNGSz5vSs9KH0a1jw5lSZsaOxIQgzKvEhNGuIG3EqXRhxr3TjMSpcyDEvMSExqnTiMWzas-DzJPEiWLHhNOUxLzMm27Mk9ONyofGg8yQ0aLGu2V4zIfMsSDEh9OPx7bMl9KT06wAy7XCl8KWFyMAIgLDv8KWGCIBJAAAwpYaIgAmxZXSjMKWGyYCJ9SGwpYc1JEo1I3Ii8eswpYh1JgtxZXLssqcwpYi1J8u1IbCpmfFs3XKhsKQwqbKgm7ThWfCgMKndsapxLzRosOKPsOMzpU"
       codec.decompress(defaultData).then(json => {
         global.graph.configure( json )
         graph.start()
@@ -309,7 +313,7 @@ return (
             </Tooltip>
           </span>
 
-          <span onClick={()=>{setShowVideoLibrary(true)}}>
+          <span onClick={()=>{setShowVideoLibrary(true);localStorage.setItem("eth.build.showLibrary",true);}}>
             <span style={{color:"#03a9f4"}}>eth</span>
             <span style={{position:'relative',left:-5,bottom:15,color:"#f44336",marginBottom:25}}>.</span>
             <span style={{position:'relative',left:-10,color:"#333"}}>build</span>
@@ -343,7 +347,7 @@ return (
             </Tooltip>
           </span>
           <span style={{margin:5,borderLeft:"1px solid #888888",height:barHeight}} onClick={async ()=>{
-              setShowVideoLibrary(true)
+              setShowVideoLibrary(true);localStorage.setItem("eth.build.showLibrary",true)
             }}>
             <Tooltip title="Learn More" style={{marginLeft:10,cursor:"pointer"}}>
               <Icon>
@@ -396,6 +400,7 @@ return (
         <div style={{margin:"auto",textAlign:"center",color:"#222222",height:barHeight+3,left:0,bottom:0,width:"100%",backgroundColor:"#DFDFDF"}}>
           <div style={{cursor:"pointer",letterSpacing:-5,borderBottom:"1px solid #999999",borderLeft:"1px solid #999999",borderRight:"1px solid #999999",fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={async ()=>{
               setShowVideoLibrary(false)
+              localStorage.setItem("eth.build.showLibrary",false)
             }}>
             <span style={{color:"#03a9f4"}}>eth</span>
             <span style={{position:'relative',left:-5,bottom:15,color:"#f44336",marginBottom:25}}>.</span>
