@@ -56,6 +56,14 @@ function App() {
 
     let link = window.location.protocol+"//"+window.location.host+"/"+compressed
 
+
+    let qrcode = "(too big for QR code)"
+    if(link && link.length<2580){
+      qrcode = (
+        <QRCode size={dynamicWidth} value={link} style={{ border: '1px solid #dddddd',padding:5,margin:5}}/>
+      )
+    }
+
     return (
       <Dialog onClose={()=>{setOpenSaveDialog(false)}} open={openSaveDialog} maxWidth={dynamicWidth*1.1}>
         <DialogTitle id="save-dialog" style={{textAlign:"center"}}>
@@ -75,18 +83,20 @@ function App() {
               element.setAttribute('href', url);
               element.setAttribute('download', global.title+".json" );
               element.style.display = 'none';
-              document.body.appendChild(element);
-              element.click();
-              document.body.removeChild(element);
-              setTimeout( function(){ URL.revokeObjectURL( url ); }, 1000*60 );
-              setOpenSaveDialog(false)
+              if(document.body){
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                setTimeout( function(){ URL.revokeObjectURL( url ); }, 1000*60 );
+                setOpenSaveDialog(false)
+              }
             }}>
             Download
           </Button>
         </CardActions>
 
         <CardActions style={{justifyContent: 'center'}}>
-          <QRCode size={dynamicWidth} value={link} style={{ border: '1px solid #dddddd',padding:5,margin:5}}/>
+          {qrcode}
         </CardActions>
         <CardActions style={{justifyContent: 'center'}}>
           <input id="savelink" style={{border: '1px solid #dddddd',padding:5,margin:5,width:dynamicWidth}} value={link}></input>
@@ -230,10 +240,19 @@ let allCards = []
 
 let lessons = [{
   name: "Hash Function",
-  image: "hashfunction.png",
+  image: "thumbs/hashfunction.png",
   desc: "A hash function is like a deterministic fingerprint of a piece of arbitrary data. It is very easy to compute but very hard to reverse.",
+  video: "https://youtu.be/QJ010l-pBpE",
   save: "wofCrGxhc3Rfbm9kZV9pZCLEgcSDxIVsaW5rxItkFsKlxIfEiXPClMKKwqLEjCDCpHR5cGXCqklucHV0L1RleHTCo3Bvc8KSWsOMwqDCpHNpemXCksONASwywqVmxIJnc8KAwqVvcsSJcgDCpG3EiGUAwqbEk8SqdHPCkcKDwqRuYW1lxLnEo8SlxY_EksSUw4DCp2_Eq8WXxZnFm8WdxZ_FocSkZcKmxIRyxJNnwqXFpWvFmRXCqnByb8SlcnRpZXPChMKrYmxvY2vGhFPEvGUywqtwxIJjZWhvbMWNwq9lbnRlciDGn8SwIGjGoGXCpcaDdGxlwqTErsSwwqV2YWx1xq3Gn8SExJ7EjB_EosWxwqtDcsSkdG8vSMSDaMSyxLTEvwHDjMS4xLrGkMKSeB7FhMWGxYjFisWMxqACxZDFksWUxZbEq8WsxZzFnsaox510xrzEpcKtxbTFtixudW1ixqDCpMW5FcWoxarHnsWax6DFn8KkaMeGx6XFsseobsW3xbnFmRbFvcW_xoHGg8aFwoDCicSfZCHHvMKtRGlzxpRheS9XYXRjx4fEs8S1w40CwqjDjMKWx47EvcS_AzE8x5NhxYfFicWLxY0Dx5rEicecxKnHtcKEx7fFoMe8xaTEk2vEmMSCx65swqDIhMaAxqDIh8WIwojIiyLIjsiQyJLEgsiVVGnGq2XHiMS1FCjIo8S-xYDDtADIqcirx5bFjQHIsMWTyYHIhsaEc8KFwqhmb8aexo_EvSzGiMaKxozGjsaQxpLIk8aWxpjGmsagwqDGqcmPxqzCpcmOyZDGscazxrXCrceFc2ggRnVuY8aDyanFuMi6xLXClhUgAB8Ax6d0xbXHv8eqx6zHrnLClhbKlSEAxZRnxb91cHPCkMKmY8mpZmlnwoDCp3bGoMS7yanDij7HjMON",
+},{
+  name: "Key Pair",
+  image: "thumbs/keypair.png",
+  desc: "A private key is used to derive a public key which acts as your public address. Then, you can sign messages with your private key and anyone else can cryptographically prove that your key pair signed the message.",
+  video: "https://youtu.be/9LtBDy67Tho",
+  save: "wofCrGxhc3Rfbm9kZV9pZMONAQvEgcSDxIVsaW5rxItkw4zDqcKlxIfEiXPCmsKKwqLEjMOMw73CpHR5cGXCrElucHV0L0LEr3RvbsKjcG9zwpJ1xI4NwqRzaXplwpLDjMOIMsKlZsSCZ3PCgMKlb3LEiXIAwqRtxIhlAMKmxJXErnRzwpHCg8KkbmFtZcKgxKbEqGXDv8KkxJTElsOAwqdvxK_Fm8WdxZ_FocWjxaXEp8Spw7_CpcWra8Wdw4zDmsKqcHJvxKlydGllc8KCwqV2YWx1ZcKoY8SUY2sgxaPCpcaGdGxlwqbEsnTEtG7EocSjw7zFpsSpwq9DcsSoxLQvS2V5IFBhaXLEt8S5wpLEjsKDw4zDm8S_xYFlwoLCoTDDikNTwpnCmsKhMULFiMWKxYzFjsWQZXICxZTFlsWYxZrEr8S6xbPFomXCrVvGgWnGjHRlIGvGrl3GpcacxIRyxJVnxarElWvDgMeYxaPCqGdlbsePYcegx6bFqcW7xb7FrsWwx5bCk8ewZcKrx53Hn8ehx6N5x6bCpseox6rFusetxb3DoMiBxoB1YsaTx6LGrsiJyItuZ8iNxJZzwpDIgcKnYWRkcsaIc8iYdMepyJrInMW8xYTDnsOMw5_GgMaCxoTGhsaIwoHIsseex7dlxq15w5lCMHg4Nzg0ZTgwZjJhODVmZGIzYjA0Y2NiZDI5NTEyMGUwYzcyZTJjOTQ3NTgyYmXJkjPJhsmpyZQxNTlkN2XJtWM4wonEosSNAQHHpsKtRGlzcMSCeS9Xx7djaMa1xLrDjQLCnsOMwrTGvMWCxrcCETzHimHFi8WNxY_FkQTHksSJx5TErceWwpHChMWgx5nFtsWnxZPHu8Oexbphya1swqDIssaDx4_ItcWMyb3EjMSOx5HFt2XCr8qEyobKiC9ByKPIpXNzyo_GtwUKw4zCqsqWxYPEjlZPypzKnseNxZEFyqPFl8WZyqbFnMWeyqrFtcemyq7HrciwyrbItMaHc8KEwqvIlG_GlMaHU8a9MsiDxIJjZWhvbMWRwqDGmGnGmmXCp8uGyKTIpsaLxo3Gj8OZKsmAM8mKOWU5MTljZsmrZMySOGQ1MDLJhTFlMTBhNcmRMDM1NcyOZTRmYsq7yb8GyoLLgsqHYcqJyot0yo3Li8qRwpTEjsOgy5HGtwZJypvFicqdx4zKoMePzK_Flcqky53Fscqoy6HFpMujx6zElsOMw6PKscqzyrXGgcq3xoXLqcKAxqLJvwfHpsKuxqjGqm8vUmVjb3bHj8y4AgjKkcO4y5HGv8eBQyEzM8eHLsuWzYTHjnLNns2Iy5zHlcWcwpLIgcKpW8Wjy4nKnWXHpcq_yIrIqceqzZBrxJrIgcKrW8WAZ8WhdHXIpc6KxafOjMiqx6vHu8Oox710zYvIoMiizIPLiciozp7IrMS6w4zDpsOMw6fLp8q4y6nCgsKnzoZzzojCvcmtYXIgdGjHocqFIMSEacaUxq93y75oIMu4x7V5wqnOlc6Xzpllw5nChMmAMWI0zKUwNTLMojVkOTLJnDDMjzVjzKdhyYU1ybjJpTfMkjDJjzZiNjA4ZTY3NmZhyaIzZsmkNjXMoTY2YcyhyadjYcmWz5rMj8yfyarQiMSJM8mCzI_QkdCUyZE5ZtCBMc-9Mjg5YWbPt9ChOGEyz6vQpcylNMymMDcwNsyeYs2cxI4Dx6bCq82hcMary7HOlsy4AcKuzLvNsMeAx4I6ZmbHh1bNucqfzbvQs82-yqXFscKUyIHCrMecx6nIhciHzpvEqc6dzo7Hu8iQzY3CqtGRzajEjMeP0ZXHp86NyJrOj8evzY3OhM62zojRodGX0aTHu8OhyIHGvM6Wx7nRpc6i0Y3OpcuHyKbOqciMxbtz0abFtMyA0anHs9G6yKvRvNG-x5nPjmnOlse3z5HSg8ib0bzFhMOjw4zDqMiByIrSice1ZMe5zqvDgM6xzZnGiMKFzrXIps64zrrOvM6-z4Bzz4LGhs-FIM-Hzr7PisS1xq7IuMiFyLzIvsmAyYLJhMmGyYjJismMyY7JkMmSyZTJlsmYyZrPosmfyaHJo8mlyafJqcmrya3Jr8mxNcmzybXJt8m5zJE4wqjNl3bRn3LCumjGn3BzOi8vYXXPg8iax6nRg8-ILs2nbdKI0orOmMilw4DCqNOixLTQuW7Dg9CxAcqiyr_CqsSsxZsvVGV4dMuLUMSOw6rMvcSOLMWHzYLLl82FcsqB0YvNisqnyIHKrMSpy6TFrNG11JLNjdSU0aLOqtKPw4zDocSa0pzKucury63Lr2XLscWCy7PMssu2y7jLusePwq_HtMeg0qTUgHTPisePZcu9y7_CpNO_1IHMhcaOZc65Zc67zr3OvyDPgc-D0qrSrM-Jz4vGrsytxI4KzLDKhcyyzLTKjMqOxLjKkAMgypHCntSHypnNgceL0YjFkQjLm9GMyqfKqdG_1JvUls6Qw6bNlGXKtNSizZrVjsSPx6bLgdWSy4TMgsuIy4rVl8a3AyrDjQM01IcBQFDRh8uYx48J1aTUkcuf1JPNj8e7zrDNl8uoxojUpGzLrmvLsMuyy7TQicu3y7nLu9S5xpvMgdG4y4nUvsyHzIl4zIthzI3Mj8yRzJMyzJXMk8yYzJrMnMyezKDMosmvzKbMqMyqYs6rwprClsW-xKQAw4zDvAHDv9a-yK_DvALEjgEAANa-w5_XgteJAQLXjNa-w6DXggDQssWYyJln1r7DocSOBNeYAQMC0azXnM2S0LLXkQbXlM6txI4H16EK16vDp9et16EL16vDqNeo160B16XWvsOp15_Xodeu16XCpmfGgnXTncKQwqbNp25m0onCgMKnzalyxYDEtcOKPsOMw4zDjQ",
 }]
+
+
 
 
 allCards = lessons.map(lesson => {
@@ -266,7 +285,7 @@ allCards = lessons.map(lesson => {
           Load
         </Button>
         <Button size="small" variant="contained" onClick={()=>{
-            alert("open youtube in popup?")
+            window.open(lesson.video)
           }}>
           Watch
         </Button>
