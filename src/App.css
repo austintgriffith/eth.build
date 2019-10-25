@@ -19,3 +19,7 @@
 .App-link {
   color: #09d3ac;
 }
+
+.MuiDrawer-paperAnchorDockedBottom {
+  border-top: 0px;
+}
