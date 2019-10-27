@@ -9,6 +9,7 @@ function Combine() {
 }
 
 Combine.title = "Combine";
+Combine.desc = "join concat string";
 
 Combine.prototype.onExecute = function() {
   if (this.inputs[0]) {
