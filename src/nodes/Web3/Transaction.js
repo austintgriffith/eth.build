@@ -122,31 +122,34 @@ Web3Transaction.prototype.onAction = async function(event, args) {
 }
 
 Web3Transaction.prototype.craftTransaction = async function(){
-  this.connectWeb3()
-  let nonce = this.properties.nonce
-  //console.log("CRAFTING",nonce,this.properties.privateKey,"PROVIDER:",this.web3._provider.host)
-  if((nonce == null || typeof nonce == "undefined" || typeof this.getInputData(7) == "undefined") && this.properties.privateKey && this.web3){
-    //console.log("================ > > > > >  LOADING NONCE")
-    try{
-      let publicAddress = "0x"+EthUtil.privateToAddress(this.properties.privateKey).toString('hex')
-      //console.log("publicAddress",publicAddress)
-      nonce = await this.web3.eth.getTransactionCount(publicAddress)
-      //console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{"+nonce+"}}}}}}}}}}}}}}}}}}}}}}}}}}}")
-    }catch(e){
+  try{
+    this.connectWeb3()
+    let nonce = this.properties.nonce
+    //console.log("CRAFTING",nonce,this.properties.privateKey,"PROVIDER:",this.web3._provider.host)
+    if((nonce == null || typeof nonce == "undefined" || typeof this.getInputData(7) == "undefined") && this.properties.privateKey && this.web3){
+      //console.log("================ > > > > >  LOADING NONCE")
+      try{
+        let publicAddress = "0x"+EthUtil.privateToAddress(this.properties.privateKey).toString('hex')
+        //console.log("publicAddress",publicAddress)
+        nonce = await this.web3.eth.getTransactionCount(publicAddress)
+        //console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{"+nonce+"}}}}}}}}}}}}}}}}}}}}}}}}}}}")
+      }catch(e){
 
+      }
     }
-  }
-  //console.log("LOADED NONCE OF ",nonce)
+    //console.log("LOADED NONCE OF ",nonce)
 
-  this.transaction = {
-    to: ""+this.properties.to,
-    value: parseInt(this.properties.value),
-    data: ""+this.properties.data,
-    gas: parseInt(this.properties.gas),
-    gasPrice: parseInt(this.properties.gasPrice),
-    nonce: nonce
-  }
-  //console.log("CRAFTED",this.transaction.nonce,this.transaction)
+    this.transaction = {
+      to: ""+this.properties.to,
+      value: parseInt(this.properties.value),
+      data: ""+this.properties.data,
+      gas: parseInt(this.properties.gas),
+      gasPrice: parseInt(this.properties.gasPrice),
+      nonce: nonce
+    }
+    //console.log("CRAFTED",this.transaction.nonce,this.transaction)
+  }catch(e){}
+
 }
 
 

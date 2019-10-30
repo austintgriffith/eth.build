@@ -5,6 +5,7 @@ import QrReader from "react-qr-reader";
 function QRReader() {
   this.addInput("toggle", -1);
   this.addOutput("output", "string")
+  this.addOutput("update", -1)
   this.properties = {enabled: false}
   this.size = [320, 240];
 }
@@ -35,6 +36,7 @@ QRReader.prototype.onDrawBackground = function(ctx) {
             console.log("SCAN",result)
             if(result && this.value!=result){
               this.value = result
+              this.trigger(null, "update");
             }
           }}
           style={{ width: this.size[0]-40, height: this.size[1]-40 }}

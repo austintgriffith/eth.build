@@ -74,7 +74,9 @@ Web3SendTransaction.prototype.onPropertyChanged = async function(name, value){
   this.properties[name] = value;
   console.log("property change",name,value)
   if(name=="provider"){
-    this.connectWeb3()
+    try{
+      this.connectWeb3()
+    }catch(e){}
   }
   return true;
 };

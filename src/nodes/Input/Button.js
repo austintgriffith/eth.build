@@ -38,6 +38,11 @@ Button.prototype.handle = function(e) {
     this.setOutputData(0,this.properties.value);
 }
 
+Button.prototype.onAction = function(e) {
+    this.trigger()
+}
+
+
 Button.prototype.onDrawBackground = function(ctx) {
   //console.log(this)
   if (this.flags.collapsed) {
