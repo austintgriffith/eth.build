@@ -12,7 +12,7 @@ import { FileCopy } from '@material-ui/icons';
 function Address() {
   this.addInput("", 0);
   this.properties =  {blockieSize: 50,placeholder:"",title:"Address",value:null}
-  this.size = [320, 80];
+  this.size = [340, 80];
 }
 
 Address.title = "Address";

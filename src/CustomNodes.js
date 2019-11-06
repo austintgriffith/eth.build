@@ -51,18 +51,26 @@ function addHelpers(obj){
   obj.prototype.originalOnOutputDblClick = obj.prototype.onOutputDblClick
   obj.prototype.onOutputDblClick = function(index,e){
     if(typeof   obj.prototype.originalOnOutputDblClick == "function")   obj.prototype.originalOnOutputDblClick()
-    //look for all nodes already attached and bail if one is a Watch already
-    for(let l in this.outputs[index].links){
-      var link_info = this.graph.links[this.outputs[index].links[l]];
-      let node = this.graph.getNodeById(link_info.target_id)
-      if(node && node.title == "Watch"){
-        return
-      }
+
+    console.log("DOUBLECKICK OUTTY")
+
+    if(this.outputs[index].type == -1){
+      var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Action");
+      node_watch.pos = [e.canvasX+90,e.canvasY-25];
+      this.graph.add(node_watch);
+      this.connect(index, node_watch, 0 );
+    }else if(this.outputs[index].type == "function"){
+      var node_watch = globalLiteGraphJS.LiteGraph.createNode("Utils/Function");
+      node_watch.pos = [e.canvasX+90,e.canvasY-25];
+      this.graph.add(node_watch);
+      this.connect(index, node_watch, 0 );
+    }else{
+      var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Watch");
+      node_watch.pos = [e.canvasX+90,e.canvasY-25];
+      this.graph.add(node_watch);
+      this.connect(index, node_watch, 0 );
     }
-    var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Watch");
-    node_watch.pos = [e.canvasX+90,e.canvasY-25];
-    this.graph.add(node_watch);
-    this.connect(index, node_watch, 0 );
+
   }
 
 
@@ -81,6 +89,15 @@ function addHelpers(obj){
       },1)
     }else if(this.inputs[index].type&& this.inputs[index].type.indexOf("string")==0){
       var node_text = globalLiteGraphJS.LiteGraph.createNode("Input/Text");
+      node_text.pos = [e.canvasX-380,e.canvasY];
+      this.graph.add(node_text);
+      //i have no idea why, but I have to do this to make it work:
+      let that = this
+      setTimeout(()=>{
+        node_text.connect(0, that, index);
+      },1)
+    }else if(this.inputs[index].type&& this.inputs[index].type.indexOf("object")==0){
+      var node_text = globalLiteGraphJS.LiteGraph.createNode("Object/Object");
       node_text.pos = [e.canvasX-380,e.canvasY];
       this.graph.add(node_text);
       //i have no idea why, but I have to do this to make it work:
@@ -156,6 +173,8 @@ export default function(LiteGraphJS){
   addNodes(LiteGraphJS,"Utils",...hexColor("b26500"))
   addNodes(LiteGraphJS,"String",...hexColor("6b6b6b"))
   addNodes(LiteGraphJS,"Object",...hexColor("454545"))
+
+  addNodes(LiteGraphJS,"Special",...hexColor("7aa838"))
 
   addNodes(LiteGraphJS,"System",...hexColor("989898"))
   addNodes(LiteGraphJS,"Modules",...hexColor("7e57c2"))
