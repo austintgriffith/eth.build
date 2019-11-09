@@ -140,13 +140,17 @@ Web3Transaction.prototype.craftTransaction = async function(){
     //console.log("LOADED NONCE OF ",nonce)
 
     this.transaction = {
-      to: ""+this.properties.to,
       value: parseInt(this.properties.value),
       data: ""+this.properties.data,
       gas: parseInt(this.properties.gas),
       gasPrice: parseInt(this.properties.gasPrice),
       nonce: nonce
     }
+
+    if(this.properties.to){
+      this.transaction.to = ""+this.properties.to
+    }
+
     //console.log("CRAFTED",this.transaction.nonce,this.transaction)
   }catch(e){}
 

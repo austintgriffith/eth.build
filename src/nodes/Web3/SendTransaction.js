@@ -43,10 +43,22 @@ Web3SendTransaction.prototype.onAction = function(event, tx, raw) {
       }
       console.log("TRANSACTION",transactionHash)
       this.transactionHash = transactionHash
+      this.checkForReceipt()
     });
   }
 }
 
+Web3SendTransaction.prototype.checkForReceipt = async function() {
+  if(this.transactionHash){
+    console.log("Checking for receipt of "+this.transactionHash)
+    this.receipt = await this.web3.eth.getTransactionReceipt(this.transactionHash)
+    console.log(this.receipt)
+    //if(!this.receipt){
+      setTimeout(this.checkForReceipt.bind(this),1000)
+    //}
+  }
+
+}
 
 Web3SendTransaction.prototype.connectWeb3 = function() {
   if(this.properties.provider){

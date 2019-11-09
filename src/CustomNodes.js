@@ -16,7 +16,9 @@ function addHelpers(obj){
     if(!document.getElementById(this.id+"_react_element")){
       var node = document.createElement("div");
       node.id = this.id+"_react_element"
-      document.getElementById("reactElements").appendChild(node);
+      try{
+        document.getElementById("reactElements").appendChild(node);
+      }catch(e){console.log(e)}
     }
     if(this.graph && this.graph.canvas && this.graph.canvas.ds){
       ReactDOM.render((
@@ -56,6 +58,16 @@ function addHelpers(obj){
 
     if(this.outputs[index].type == -1){
       var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Action");
+      node_watch.pos = [e.canvasX+90,e.canvasY-25];
+      this.graph.add(node_watch);
+      this.connect(index, node_watch, 0 );
+    }else if(this.outputs[index].type == "contractCall"){
+      var node_watch = globalLiteGraphJS.LiteGraph.createNode("Web3/Call");
+      node_watch.pos = [e.canvasX+90,e.canvasY-25];
+      this.graph.add(node_watch);
+      this.connect(index, node_watch, 0 );
+    }else if(this.outputs[index].type == "contractFunction"){
+      var node_watch = globalLiteGraphJS.LiteGraph.createNode("Web3/Function");
       node_watch.pos = [e.canvasX+90,e.canvasY-25];
       this.graph.add(node_watch);
       this.connect(index, node_watch, 0 );
