@@ -1,7 +1,9 @@
+const defaultColor = "7e57c2"
+
 function Module() {
   var that = this;
-  this.size = [140, 80];
-  this.properties = { enabled: true, title: "Module" };
+  this.size = [160, 80];
+  this.properties = { enabled: true, title: "Module", color: defaultColor };
   this.enabled = true;
 
   //create inner graph
@@ -13,22 +15,19 @@ function Module() {
 
   this.subgraph.onInputAdded = this.onSubgraphNewInput.bind(this);
   this.subgraph.onInputRenamed = this.onSubgraphRenamedInput.bind(this);
-  this.subgraph.onInputTypeChanged = this.onSubgraphTypeChangeInput.bind(
-    this
-  );
+  this.subgraph.onInputTypeChanged = this.onSubgraphTypeChangeInput.bind(this);
   this.subgraph.onInputRemoved = this.onSubgraphRemovedInput.bind(this);
 
   this.subgraph.onOutputAdded = this.onSubgraphNewOutput.bind(this);
   this.subgraph.onOutputRenamed = this.onSubgraphRenamedOutput.bind(this);
-  this.subgraph.onOutputTypeChanged = this.onSubgraphTypeChangeOutput.bind(
-    this
-  );
+  this.subgraph.onOutputTypeChanged = this.onSubgraphTypeChangeOutput.bind(this);
   this.subgraph.onOutputRemoved = this.onSubgraphRemovedOutput.bind(this);
+
 }
 
 Module.title = "Module";
 
-Module.title_color = "#334";
+Module.title_color = "#"+(defaultColor);
 
 Module.prototype.onGetInputs = function() {
   return [["enabled", "boolean"]];
@@ -44,10 +43,12 @@ Module.prototype.onDrawTitle = function(ctx) {
     return;
   }
 
+  this.title_color = "#"+(this.properties.color)
+
   ctx.fillStyle = "#555";
   var w = global.LiteGraphJS.LiteGraph.NODE_TITLE_HEIGHT;
   var x = this.size[0] - w;
-  ctx.fillRect(x, -w, w, w);
+  ctx.fillRect(x, -w, w+1, w);
   ctx.fillStyle = "#333";
   ctx.beginPath();
   ctx.moveTo(x + w * 0.2, -w * 0.6);
@@ -140,6 +141,7 @@ Module.prototype.onSubgraphRenamedInput = function(oldname, name) {
 };
 
 Module.prototype.onSubgraphTypeChangeInput = function(name, type) {
+  console.log("onSubgraphTypeChangeInput",name, type)
   var slot = this.findInputSlot(name);
   if (slot == -1) {
     return;
@@ -216,7 +218,7 @@ Module.prototype.serialize = function() {
 //no need to define node.configure, the default method detects node.subgraph and passes the object to node.subgraph.configure()
 
 Module.prototype.clone = function() {
-  var node = global.LiteGraphJS.createNode(this.type);
+  var node = global.LiteGraphJS.LiteGraph.createNode(this.type);
   var data = this.serialize();
   delete data["id"];
   delete data["inputs"];

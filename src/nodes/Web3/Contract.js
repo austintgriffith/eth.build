@@ -36,18 +36,16 @@ Contract.prototype.onPropertyChanged = async function(name, value){
 };
 
 Contract.prototype.onAction = function() {
-  const abiString = '[{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bytes32","name":"_name","type":"bytes32"},{"indexed":false,"internalType":"uint256","name":"_id","type":"uint256"}],"name":"AddDrink","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"drinkId","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"price","type":"uint256"},{"indexed":false,"internalType":"bytes32","name":"drinkName","type":"bytes32"}],"name":"BuyDrink","type":"event"},{"constant":false,"inputs":[{"internalType":"bytes32","name":"_name","type":"bytes32"},{"internalType":"uint256","name":"_minCost","type":"uint256"},{"internalType":"uint256","name":"_multiplier","type":"uint256"},{"internalType":"uint256","name":"_cooler","type":"uint256"}],"name":"addDrink","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"bartender","outputs":[{"internalType":"address payable","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"buyDrink","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"drinkMenu","outputs":[{"internalType":"bytes32","name":"name","type":"bytes32"},{"internalType":"uint256","name":"minCost","type":"uint256"},{"internalType":"uint256","name":"multiplier","type":"uint256"},{"internalType":"uint256","name":"cooler","type":"uint256"},{"internalType":"uint256","name":"lastPrice","type":"uint256"},{"internalType":"uint256","name":"lastPurchase","type":"uint256"},{"internalType":"bytes1","name":"visible","type":"bytes1"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"},{"internalType":"uint256","name":"_multiplier","type":"uint256"},{"internalType":"uint256","name":"_cooler","type":"uint256"},{"internalType":"bytes1","name":"_visible","type":"bytes1"}],"name":"editDrink","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getAge","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getCool","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getCooler","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getLastPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getLastPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getMinCost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getMultiplier","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getName","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getPrice","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_drinkId","type":"uint256"}],"name":"getVisible","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"maxCost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address payable","name":"_bartender","type":"address"}],"name":"setBartender","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_owner","type":"address"}],"name":"setOwner","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]'
-  let abi = JSON.parse(abiString)
 
-  this.abi = abi
+
 
   this.functions = {}
   this.types = {}
-  for(let i in abi){
-    if(abi[i].type == "function"){
-      console.log(abi[i].name,abi[i].inputs)
-      this.functions[abi[i].name] = abi[i].inputs
-      this.types[abi[i].name] = abi[i].stateMutability
+  for(let i in this.abi){
+    if(this.abi[i].type == "function"){
+      console.log(this.abi[i].name,this.abi[i].inputs)
+      this.functions[this.abi[i].name] = this.abi[i].inputs
+      this.types[this.abi[i].name] = this.abi[i].stateMutability
     }
   }
 
@@ -164,10 +162,7 @@ Contract.prototype.onExecute = function() {
   }
 
   this.address = this.getInputData(1)
-  //this.abi = this.getInputData(2)
-  if(this.abi){
-    //console.log("ABI",this.abi)
-  }
+  this.abi = this.getInputData(2)
 }
 
 

@@ -65,7 +65,7 @@ function App() {
     }
 
     return (
-      <Dialog onClose={()=>{setOpenSaveDialog(false)}} open={openSaveDialog} maxWidth={dynamicWidth*1.1}>
+      <Dialog onClose={()=>{setOpenSaveDialog(false)}} open={openSaveDialog} maxWidth={Math.round(dynamicWidth*1.1)}>
         <DialogTitle id="save-dialog" style={{textAlign:"center"}}>
           <Icon style={{verticalAlign:'middle'}}>
             save

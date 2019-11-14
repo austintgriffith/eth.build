@@ -13,6 +13,7 @@ function addHelpers(obj){
 
 
   obj.prototype.render = function(reactElement) {
+    //console.log("REACT RENDER!")
     if(!document.getElementById(this.id+"_react_element")){
       var node = document.createElement("div");
       node.id = this.id+"_react_element"
@@ -20,6 +21,7 @@ function addHelpers(obj){
         document.getElementById("reactElements").appendChild(node);
       }catch(e){console.log(e)}
     }
+    //console.log("RENDER",this.graph)
     if(this.graph && this.graph.canvas && this.graph.canvas.ds){
       ReactDOM.render((
         <div key={this.id+"_react_key"} style={{
@@ -31,6 +33,23 @@ function addHelpers(obj){
           borderRadius: "0px 0px 7px 7px",
         }}>
         <div stlye={{transform:"scale("+this.graph.canvas.ds.scale+")"}}>
+        {reactElement}
+        </div>
+        </div>
+      ), document.getElementById(this.id+"_react_element"));
+    }else if(this.graph && this.graph._subgraph_node){
+      //console.log("SUBGRAPH IS STILL SENT?")
+      let graph = this.graph._subgraph_node.graph
+      ReactDOM.render((
+        <div key={this.id+"_react_key"} style={{
+          position:'absolute',
+          left:(20+this.pos[0]+graph.canvas.ds.offset[0])*graph.canvas.ds.scale,
+          top:(this.pos[1]+graph.canvas.ds.offset[1])*graph.canvas.ds.scale,
+          width:((this.size[0]-40)*graph.canvas.ds.scale),
+          height:((this.size[1])*graph.canvas.ds.scale),
+          borderRadius: "0px 0px 7px 7px",
+        }}>
+        <div stlye={{transform:"scale("+graph.canvas.ds.scale+")"}}>
         {reactElement}
         </div>
         </div>
@@ -138,6 +157,13 @@ function addHelpers(obj){
     }
   }
 
+  obj.prototype.originalonHide = obj.prototype.onHideNode
+  obj.prototype.onHideNode = function() {
+    if(typeof obj.prototype.originalonHide == "function") obj.prototype.originalonHide()
+    this.destory()
+  }
+
+
   obj.prototype.originalOnRemoved = obj.prototype.onRemoved
 
   obj.prototype.onRemoved = function(e) {
@@ -152,7 +178,7 @@ const addNodes = function(LiteGraphJS,name,color,shadow){
   let nodeSet = require('./nodes/'+name)
   for(let n in nodeSet){
     if(nodeSet[n].default){
-      console.log("Importing "+nodeSet[n].default.title+" as "+name)
+      //console.log("Importing "+nodeSet[n].default.title+" as "+name)
       let nodeObject = nodeSet[n].default
       if(color && !nodeObject.title_color) nodeObject.title_color = color
       if(shadow && !nodeObject.shadow_color) nodeObject.prototype.shadow_color = shadow
@@ -186,10 +212,16 @@ export default function(LiteGraphJS){
   addNodes(LiteGraphJS,"String",...hexColor("6b6b6b"))
   addNodes(LiteGraphJS,"Object",...hexColor("454545"))
 
-  addNodes(LiteGraphJS,"Special",...hexColor("7aa838"))
+  addNodes(LiteGraphJS,"Special",...hexColor("278e79"))
 
   addNodes(LiteGraphJS,"System",...hexColor("989898"))
   addNodes(LiteGraphJS,"Modules",...hexColor("7e57c2"))
+
+
+  console.log("HOOK INTO CLOSE AND OPEN OF SUBGRAPH TO DESTROY NODES?",LiteGraphJS)
+  LiteGraphJS.LiteGraph.onClear = ()=>{
+    alert("CLEAR")
+  }
 
 
   /*function substr(str, start, length) {

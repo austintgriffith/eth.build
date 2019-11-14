@@ -29,7 +29,8 @@ function Ledger() {
       {
         from: "0x0000000000000000000000000000000000000000",
         value: 1000,
-        to: "0xc08b5542d177ac6686946920409741463a15dddb"
+        to: "0xc08b5542d177ac6686946920409741463a15dddb",
+        nonce: 0
       }
     ]
   }
@@ -119,7 +120,7 @@ Ledger.prototype.onDrawBackground = function(ctx) {
 
     //transformOrigin:"3% -7%"
     this.render(
-      <div style={{overflow:"auto",color:"#444444",transformOrigin:"10px -20px",transform:"scale("+this.graph.canvas.ds.scale+")",borderRadius:"0px 0px 8px 8px",background:"#CCCCCC",marginLeft:-19,marginTop:topPadding,width:this.size[0],height:this.size[1]-topPadding-1}}>
+      <div style={{overflow:"auto",color:"#444444",transformOrigin:"10px -20px",transform:"scale("+(this.graph.canvas?this.graph.canvas.ds.scale:0)+")",borderRadius:"0px 0px 8px 8px",background:"#CCCCCC",marginLeft:-19,marginTop:topPadding,width:this.size[0],height:this.size[1]-topPadding-1}}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
