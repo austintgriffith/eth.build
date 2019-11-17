@@ -2,7 +2,7 @@ const defaultColor = "7e57c2"
 
 function Module() {
   var that = this;
-  this.size = [160, 80];
+  this.size = [180, 80];
   this.properties = { enabled: true, title: "Module", color: defaultColor };
   this.enabled = true;
 
@@ -127,6 +127,7 @@ Module.prototype.onSubgraphNewInput = function(name, type) {
   var slot = this.findInputSlot(name);
   if (slot == -1) {
     //add input to the node
+    console.log("onSubgraphNewInput",name,type)
     this.addInput(name, type);
   }
 };

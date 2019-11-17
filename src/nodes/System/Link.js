@@ -29,19 +29,13 @@ Text.prototype.getTitle = function() {
 
 Text.prototype.onAction = async function(e) {
     this.encoded = await codec.compress(this.graph.serialize())
-    this.properties.value = "http://10.0.0.29:3000/"+(this.encoded)
+    this.properties.value = "https://eth.build/"+(this.encoded)
     this.setOutputData(0,this.properties.value);
     this.onDrawBackground()
 }
 
 Text.prototype.onDrawBackground = function(ctx) {
-
   if (this.flags.collapsed) {
-    /*this.render(
-      <div>
-
-      </div>
-    )*/
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   }else{
     this.render(
@@ -50,11 +44,7 @@ Text.prototype.onDrawBackground = function(ctx) {
       </div>
     )
   }
-
-
 };
-
-
 
 
 export default Text

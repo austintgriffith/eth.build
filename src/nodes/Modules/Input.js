@@ -52,7 +52,9 @@ Input.prototype.onConfigure = function()
 
 Input.prototype.updateType = function()
 {
+  console.log("updateType")
   var type = this.properties.type;
+  console.log("type",type)
   this.type_widget.value = type;
   if(type == "number")
   {
@@ -68,13 +70,14 @@ Input.prototype.updateType = function()
   {
     this.value_widget.type = "text";
     this.value_widget.value = "";
+  }else{
+    this.value_widget.value = this.properties.value;
   }
-  else
-  {
-    this.value_widget.type = null;
-    this.value_widget.value = null;
-  }
+
   this.properties.value = this.value_widget.value;
+  this.removeOutput(0);
+  this.addOutput(this.properties.name, this.properties.value);
+
 }
 
 Input.prototype.onPropertyChanged = function(name,v)
@@ -87,9 +90,11 @@ Input.prototype.onPropertyChanged = function(name,v)
     if(this.graph)
     {
       if (this.name_in_graph) {
+        console.log("~~~~INPUT ALREDY", v )
         //already added
         this.graph.renameInput( this.name_in_graph, v );
       } else {
+        console.log("~~~~ADD INPUT",this.properties.type )
         this.graph.addInput( v, this.properties.type );
       }
     } //what if not?!
@@ -99,11 +104,13 @@ Input.prototype.onPropertyChanged = function(name,v)
   else if( name == "type" )
   {
     v = v || "";
-    this.updateType(v);
+    this.properties.type = v
+    this.updateType();
   }
   else if( name == "value" )
   {
   }
+  this.updateType();
 }
 
 Input.prototype.getTitle = function() {
@@ -120,6 +127,7 @@ Input.prototype.onAction = function(action, param) {
 };
 
 Input.prototype.onExecute = function() {
+  console.log(this)
   var name = this.properties.name;
   //read from global input
   var data = this.graph.inputs[name];

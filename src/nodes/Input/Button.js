@@ -8,7 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 function Button() {
   this.addInput("", -1);
   this.addOutput("", -1);
-  this.properties =  {value:"click me",title:"Button"}
+  this.addOutput("", "boolean");
+  this.properties =  {value:"click me",title:"Button",toggled:false}
   this.size = [200, 50];
 }
 
@@ -24,6 +25,7 @@ Button.prototype.onExecute = function() {
     this.properties.value = this.getInputData(0);
   }
   this.setOutputData(0,this.properties.value);
+  this.setOutputData(1,this.properties.toggled);
 };
 
 Button.prototype.getTitle = function() {
@@ -36,10 +38,12 @@ Button.prototype.getTitle = function() {
 Button.prototype.handle = function(e) {
     this.properties.value = e.target.value
     this.setOutputData(0,this.properties.value);
+    this.setOutputData(1,this.properties.toggled);
 }
 
 Button.prototype.onAction = function(e) {
-    this.trigger()
+  this.properties.toggled = !this.properties.toggled
+  this.trigger()
 }
 
 
@@ -56,6 +60,7 @@ Button.prototype.onDrawBackground = function(ctx) {
     this.render(
       <div style={{marginTop:4}}>
         <MaterialButton variant="contained" color="primary" size={"large"} onClick={()=>{
+            this.properties.toggled = !this.properties.toggled
             this.trigger()
           }}>
           {this.properties.value}

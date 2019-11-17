@@ -1,6 +1,6 @@
 function StringSplit() {
   this.addInput("string", "string");
-  this.addOutput("output", "array")
+  this.addOutput("output", "array,object")
   this.properties = {delimiter: "\n"}
 }
 

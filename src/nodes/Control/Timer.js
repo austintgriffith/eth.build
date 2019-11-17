@@ -1,9 +1,9 @@
 function TimerEvent() {
-  this.addProperty("interval", 10000);
+  this.addProperty("interval", 3000);
   this.addProperty("event", "tick");
   this.addOutput("on_tick", -1);
   this.time = 0;
-  this.last_interval = 10000;
+  this.last_interval = 3000;
   this.triggered = false;
   this.size[0] = 140
 }

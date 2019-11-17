@@ -9,8 +9,8 @@ const resetSize = [320,100]
 const defaultColor = "#5a5a5a"
 
 function Object() {
-  this.addInput("","object")
-  this.addOutput("","object")
+  this.addInput("o",0)
+  this.addOutput("o","object")
 
   this.properties =  {
     title:"Object",
@@ -18,7 +18,7 @@ function Object() {
     fontSize:16
   }
   this.size = resetSize;
-  this.value = {}
+  this.value = null
   this.currentTitleColor = defaultColor
   this.hasProcessedOnce = false
 }
@@ -196,7 +196,7 @@ Object.prototype.onDrawBackground = function(ctx) {
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   }else{
     this.render(
-      <div style={{marginLeft:30}}>
+      <div style={{marginLeft:0}}>
         <TextareaAutosize style={{background:"#333333",color:"#bbbbbb",border:"none",fontSize:this.properties.fontSize,letterSpacing:1,width:this.size[0]-160,height:this.size[1]-10}} rows={3} placeholder="{'key':'value'}" value={this.properties.value} onChange={(e)=>{
           this.properties.value = e.target.value
           clearTimeout(debounce)

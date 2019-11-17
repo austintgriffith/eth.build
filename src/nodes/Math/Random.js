@@ -1,8 +1,8 @@
 function Random() {
         this.addOutput("value", "number");
         this.addProperty("min", 0);
-        this.addProperty("max", 1);
-        this.size = [130, 30];
+        this.addProperty("max", 100000000000000000);
+        this.size = [145, 30];
     }
 
     Random.title = "Random";
@@ -28,7 +28,7 @@ function Random() {
 
     Random.prototype.onDrawBackground = function(ctx) {
         //show the current value
-        this.outputs[0].label = (this._last_v || 0).toFixed(12);
+        this.outputs[0].label =  Math.floor(this._last_v || 0);
     };
 
     Random.prototype.onGetInputs = function() {

@@ -4,6 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import Blockies from 'react-blockies';
 
+
+const topPadding = 70
+const rowStyle = {fontSize:20,letterSpacing:-1}
+
 const StyledTableRow = withStyles(theme => ({
   root: {
     '&:nth-of-type(odd)': {
@@ -17,41 +21,35 @@ function Ledger() {
   this.addInput("tx","object")
   this.addInput("add",-1)
   //this.addOutput("[network]",0)
+  this.addOutput("","array,object")
   this.addOutput("balance()","function")
+  this.addOutput("nonce()","function")
 
   this.balances = {}
+  this.nonces = {}
   this.txns = []
 
   this.properties =  {
     title:"Ledger",
     currency: "SomeCoin",
-    genesis:[
-      {
-        from: "0x0000000000000000000000000000000000000000",
-        value: 1000,
-        to: "0xc08b5542d177ac6686946920409741463a15dddb",
-        nonce: 0
-      }
-    ]
+    requireNonce: false
   }
   this.size = [640, 360];
 
-
-  for(let g in this.properties.genesis){
-    this.processTx(this.properties.genesis[g],true)
-  }
-
 }
 
-Ledger.prototype.processTx = function(tx,genesis) {
+Ledger.prototype.processTx = function(tx) {
   console.log("process",tx)
   try{
     if(tx.to&&tx.from&&tx.value){
-      if(!genesis || tx.from!="0x0000000000000000000000000000000000000000"){
-        this.balances[tx.from] = this.balances[tx.from]?this.balances[tx.from]-tx.value:-tx.value
+      this.balances[tx.from] = this.balances[tx.from]?this.balances[tx.from]-tx.value:-tx.value
+      if(this.nonces[tx.from]){
+        this.nonces[tx.from]++
+      }else{
+        this.nonces[tx.from]=1
       }
       this.balances[tx.to] = this.balances[tx.to]?this.balances[tx.to]+tx.value:tx.value
-      this.txns.push(tx)
+      this.txns.push(JSON.parse(JSON.stringify(tx)))
     }
   }catch(e){console.log(e)}
 }
@@ -63,7 +61,8 @@ Ledger.prototype.getTitle = function() {
 
 
 Ledger.prototype.onExecute = function() {
-  this.setOutputData(0,{
+  this.setOutputData(0,this.txns)
+  this.setOutputData(1,{
     name:"balance",
     args:[{name:"address",type:"string"}],
     function:(args)=>{
@@ -71,16 +70,22 @@ Ledger.prototype.onExecute = function() {
       return this.balances[args.address]
     }
   })
+  this.setOutputData(2,{
+    name:"nonce",
+    args:[{name:"address",type:"string"}],
+    function:(args)=>{
+      console.log("RUN A FUNCTION BUT IN THIS CONTEXT!",args)
+      return this.nonces[args.address]
+    }
+  })
 }
 
 Ledger.prototype.onAction = function() {
   let tx = this.getInputData(0)
   console.log("INPUT 0 is",tx)
-  this.processTx(tx,false)
+  this.processTx(tx)
 }
 
-const topPadding = 50
-const rowStyle = {fontSize:20,letterSpacing:-1}
 
 Ledger.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
@@ -117,6 +122,7 @@ Ledger.prototype.onDrawBackground = function(ctx) {
         </StyledTableRow>
       )
     }
+    rows.reverse()
 
     //transformOrigin:"3% -7%"
     this.render(
