@@ -5,19 +5,21 @@ import { TextareaAutosize } from '@material-ui/core';
 let debounce
 
 const staticInputs = 1
-const resetSize = [320,100]
+const resetSizeX = 320
+const resetSizeY = 100
+
 const defaultColor = "#5a5a5a"
 
 function Object() {
-  this.addInput("o",0)
-  this.addOutput("o","object")
+  this.addInput("","object")
+  this.addOutput("","object")
 
   this.properties =  {
     title:"Object",
     color:defaultColor,
     fontSize:16
   }
-  this.size = resetSize;
+  this.size = [resetSizeX,resetSizeY];
   this.value = null
   this.currentTitleColor = defaultColor
   this.hasProcessedOnce = false
@@ -98,6 +100,7 @@ Object.prototype.parseInput = function(force){
     }else if(this.properties.value){
       this.value = this.properties.value
     }
+    let startSize = this.size
 
     let index = staticInputs
     let inputs = []
@@ -133,7 +136,7 @@ Object.prototype.parseInput = function(force){
           target_node.connect(link_info.origin_slot,this,thisIndex)
         }
       }
-      this.size = resetSize;
+      this.size = startSize;
     }
 
     index = staticInputs
@@ -180,7 +183,7 @@ Object.prototype.parseInput = function(force){
           }
         }
       }
-      this.size = resetSize;
+      this.size = startSize
     }
 
     this.properties.value = JSON.stringify(this.value,null,2)
@@ -196,7 +199,7 @@ Object.prototype.onDrawBackground = function(ctx) {
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   }else{
     this.render(
-      <div style={{marginLeft:0}}>
+      <div key={"object_"+this.id} style={{marginLeft:0}}>
         <TextareaAutosize style={{background:"#333333",color:"#bbbbbb",border:"none",fontSize:this.properties.fontSize,letterSpacing:1,width:this.size[0]-160,height:this.size[1]-10}} rows={3} placeholder="{'key':'value'}" value={this.properties.value} onChange={(e)=>{
           this.properties.value = e.target.value
           clearTimeout(debounce)

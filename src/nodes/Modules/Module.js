@@ -131,6 +131,59 @@ Module.prototype.onSubgraphNewInput = function(name, type) {
     this.addInput(name, type);
   }
 };
+/*
+Module.prototype.updateInputs = function(index,name,type){
+  console.log("UPDATE ",index,name,type)
+  if(this.outputs[index]){
+    console.log("updating an existing output...",this.outputs[index])
+    let newOutputs = []
+    let oldLinks = []
+    for(let o = 0; o < this.outputs.length; o++){
+      //newOutputs[o] = this.outputs[o]
+      if(o==index){
+        //newOutputs[o].name=name
+        //newOutputs[o].type=type
+        newOutputs.push([name,type,null])
+      }else{
+        newOutputs.push([this.outputs[o].name,this.outputs[o].type,null])
+      }
+      let currentLinks = this.outputs[o].links
+      let linksArray = []
+      for(let l in currentLinks){
+        let link_info = this.graph.links[currentLinks[l]];
+        linksArray.push(link_info)
+      }
+      oldLinks[o] = linksArray
+    }
+
+    console.log("NEW OUTPUTS",newOutputs)
+    console.log("OLD LINKS", oldLinks)
+
+    for(let o = 0; o < this.outputs.length; o++){
+      this.removeOutput(0)
+    }
+
+
+    this.addOutputs(newOutputs)
+
+    for(let o = 0; o < newOutputs.length; o++){
+      console.log("REWIRE ",oldLinks[o])
+
+      if(oldLinks[o]){
+        for(let l in oldLinks[o]){
+          let link_info = oldLinks[o][l]
+          let target_node = this.graph.getNodeById(link_info.target_id)
+          //console.log("CONNECT",link_info)
+          this.connect(o,target_node,link_info.target_slot)
+        }
+      }
+
+    }
+
+    console.log("FINAL",this.outputs)
+    //this.onDrawBackground()
+  }
+}*/
 
 Module.prototype.onSubgraphRenamedInput = function(oldname, name) {
   var slot = this.findInputSlot(oldname);

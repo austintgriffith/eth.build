@@ -10,6 +10,7 @@ function Function() {
 
   this.properties = {name: startingName, arguments: []}
   this.size[0] = initialWidth
+  this.value = null
 }
 
 Function.title = "Function";

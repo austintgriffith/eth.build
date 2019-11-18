@@ -9,7 +9,7 @@ function Button() {
   this.addInput("", -1);
   this.addOutput("", -1);
   this.addOutput("", "boolean");
-  this.properties =  {value:"click me",title:"Button",toggled:false}
+  this.properties =  {value:"click me",title:"Button",count:0}
   this.size = [200, 50];
 }
 
@@ -25,7 +25,7 @@ Button.prototype.onExecute = function() {
     this.properties.value = this.getInputData(0);
   }
   this.setOutputData(0,this.properties.value);
-  this.setOutputData(1,this.properties.toggled);
+  this.setOutputData(1,this.properties.count);
 };
 
 Button.prototype.getTitle = function() {
@@ -38,11 +38,11 @@ Button.prototype.getTitle = function() {
 Button.prototype.handle = function(e) {
     this.properties.value = e.target.value
     this.setOutputData(0,this.properties.value);
-    this.setOutputData(1,this.properties.toggled);
+    this.setOutputData(1,this.properties.count);
 }
 
 Button.prototype.onAction = function(e) {
-  this.properties.toggled = !this.properties.toggled
+  this.properties.count = this.properties.count+1
   this.trigger()
 }
 
@@ -60,7 +60,7 @@ Button.prototype.onDrawBackground = function(ctx) {
     this.render(
       <div style={{marginTop:4}}>
         <MaterialButton variant="contained" color="primary" size={"large"} onClick={()=>{
-            this.properties.toggled = !this.properties.toggled
+            this.properties.count = this.properties.count+1
             this.trigger()
           }}>
           {this.properties.value}

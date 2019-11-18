@@ -2,8 +2,8 @@ function MathOperation() {
   this.addInput("A", "number");
   this.addInput("B", "number");
   this.addOutput("=", "number");
-  this.addProperty("A", 1);
-  this.addProperty("B", 1);
+  this.addProperty("A", 0);
+  this.addProperty("B", 0);
   this.addProperty("OP", "+", "enum", { values: MathOperation.values });
   this.size[0] = 120
 }
