@@ -10,6 +10,7 @@ function IPFSSub() {
   this.size[0] = 280
   this.history = null
   this.message = null
+  this.status = "connecting..."
 }
 
 IPFSSub.title = "Subscribe";
@@ -22,6 +23,7 @@ IPFSSub.prototype.onReceiveMsg = async function(msg) {
 }
 
 IPFSSub.prototype.onAdded = async function() {
+  this.title_color = "#dddddd";
   this.ipfs = new IPFS({
     EXPERIMENTAL: {
      pubsub: true
@@ -42,6 +44,8 @@ IPFSSub.prototype.onAdded = async function() {
   console.log("IPFS SUBSCRIBING TO ",this.properties.channel)
   await this.ipfs.pubsub.subscribe(this.properties.channel, this.onReceiveMsg.bind(this))
   console.log("IPFS SUBSCRIBED")
+  this.title_color = "#eeee44";
+  this.status = "connected"
 };
 
 IPFSSub.prototype.onExecute = function() {
@@ -50,6 +54,15 @@ IPFSSub.prototype.onExecute = function() {
       this.onPropertyChanged("channel",channel)
   }
   this.setOutputData(0,this.message)
+  //console.log(this.ipfs)
+  if(this.ipfs && this.ipfs.isOnline() && this.ipfs.pubsub && typeof this.ipfs.pubsub.peers == "function"){
+    const peerCount = this.ipfs.pubsub.peers()
+    if( peerCount>0){
+      this.status = peerCount+" peers"
+      this.title_color = "#ee4444";
+    }
+  }
+
 }
 
 IPFSSub.prototype.onDrawBackground = function(ctx) {
@@ -60,6 +73,9 @@ IPFSSub.prototype.onDrawBackground = function(ctx) {
       <div>
         <div style={{opacity:0.5}}>
           {this.properties.channel}
+        </div>
+        <div style={{padding:6}}>
+          {this.status}
         </div>
       </div>
     )

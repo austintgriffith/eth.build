@@ -33,6 +33,7 @@ NetworkRequest.prototype.onExecute = function() {
     this.onPropertyChanged("url",optionalUrl)
   }
   this.setOutputData(0,this.value)
+  this.outputs[0].type = typeof this.value
 };
 
 NetworkRequest.prototype.onPropertyChanged = function(name, value) {

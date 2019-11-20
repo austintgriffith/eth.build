@@ -53,6 +53,8 @@ Function.prototype.onExecute = function() {
         this.size[0] = initialWidth
 
         this.encode()
+      }else{
+        this.encode()
       }
     }
   }else{

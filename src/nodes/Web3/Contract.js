@@ -23,8 +23,9 @@ Contract.prototype.getTitle = function() {
   return this.properties.title;
 };
 
-Contract.prototype.onAdded = async function() {
+Contract.prototype.onStart = async function() {
   this.connectWeb3()
+  this.parseContract()
 }
 
 Contract.prototype.onPropertyChanged = async function(name, value){
@@ -32,12 +33,15 @@ Contract.prototype.onPropertyChanged = async function(name, value){
   if(name=="provider"){
     this.connectWeb3()
   }
+  this.parseContract()
   return true;
 };
 
 Contract.prototype.onAction = function() {
+  this.parseContract()
+}
 
-
+Contract.prototype.parseContract = function() {
 
   this.functions = {}
   this.types = {}
@@ -48,7 +52,6 @@ Contract.prototype.onAction = function() {
       this.types[this.abi[i].name] = this.abi[i].stateMutability
     }
   }
-
 
   try{
     let index = staticOutputs
@@ -116,8 +119,8 @@ Contract.prototype.onExecute = function() {
     }
   }
   let index = staticOutputs
-  for(let name in this.functions){
 
+  for(let name in this.functions){
     let argArray = []
     for(let a in this.functions[name]){
       //console.log("Adding argument ",this.functions[name][a])
@@ -126,6 +129,7 @@ Contract.prototype.onExecute = function() {
     //console.log("FUNCTION",this.functions)
     //console.log("setting output data of ",index)
     if(this.types[name]=="view"){
+      console.log(name,"view")
       this.setOutputData(index++,{
         name:name,
         args:argArray,
@@ -141,6 +145,7 @@ Contract.prototype.onExecute = function() {
         }
       })
     }else{
+      console.log(name,"send")
       this.setOutputData(index++,{
         name:name,
         args:argArray,
@@ -161,8 +166,22 @@ Contract.prototype.onExecute = function() {
 
   }
 
-  this.address = this.getInputData(1)
-  this.abi = this.getInputData(2)
+  let changed = false
+  let address = this.getInputData(1)
+  if(address!=this.address){
+    this.address=address
+    changed = true
+  }
+  let abi = this.getInputData(2)
+  if(abi!=this.abi){
+    this.abi=abi
+    changed = true
+  }
+
+  if(changed){
+      this.parseContract()
+  }
+
 }
 
 

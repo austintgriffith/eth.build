@@ -52,6 +52,13 @@ function touchHandler(event)
 
 function App() {
 
+  /*
+  window.addEventListener("wheel", event => {
+    console.info(event.deltaY)
+    event.preventDefault();
+  });*/
+
+
   document.addEventListener("touchstart", touchHandler, true);
   document.addEventListener("touchmove", touchHandler, true);
   document.addEventListener("touchend", touchHandler, true);

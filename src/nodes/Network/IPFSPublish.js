@@ -11,9 +11,10 @@ function IPFSPub() {
   this.size[0] = 240
 }
 
-IPFSPub.title = "Publish";
+IPFSPub.title = "IPFSPublish";
 
 IPFSPub.prototype.onAdded = async function() {
+  this.title_color = "#dddddd";
   this.ipfs = new IPFS({
     EXPERIMENTAL: {
      pubsub: true
@@ -29,7 +30,16 @@ IPFSPub.prototype.onAdded = async function() {
   console.log('IPFS (publish) node is ready')
   const { id, agentVersion, protocolVersion } = await this.ipfs.id()
   console.log("IPFS FOR PUBLISH!",id, agentVersion, protocolVersion)
+  this.title_color = "#eeee44";
 };
+
+IPFSPub.prototype.onExecute = async function() {
+  let channel = this.getInputData(0)
+  if(channel && this.properties.channel!=channel){
+      this.properties.channel = channel
+
+  }
+}
 
 IPFSPub.prototype.onAction = async function() {
   let data = this.getInputData(1)
