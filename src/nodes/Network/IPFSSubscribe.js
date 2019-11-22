@@ -13,7 +13,7 @@ function IPFSSub() {
   this.status = "connecting..."
 }
 
-IPFSSub.title = "Subscribe";
+IPFSSub.title = "IPFSSubscribe";
 
 IPFSSub.prototype.onReceiveMsg = async function(msg) {
   console.log(msg)

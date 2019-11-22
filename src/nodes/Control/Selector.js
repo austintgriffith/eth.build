@@ -45,8 +45,8 @@ Selector.prototype.onExecute = function() {
     }else if (sel == null || sel.constructor !== Number) {
         sel = 0;
     }
-    this.selected = sel = Math.round(sel) % (this.inputs.length - 1);
-    var v = this.getInputData(sel + 1);
+    this.selected = Math.round(sel) % (this.inputs.length - 1);
+    var v = this.getInputData(this.selected+1);
     if (v !== undefined) {
         this.setOutputData(0, v);
     }

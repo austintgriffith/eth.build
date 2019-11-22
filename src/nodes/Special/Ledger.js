@@ -30,6 +30,7 @@ function Ledger() {
   this.balances = {}
   this.nonces = {}
   this.txns = []
+  console.log("CLEARED:",this.txns)
 
   this.properties =  {
     title:"Ledger",
@@ -56,6 +57,7 @@ Ledger.prototype.processTx = function(tx) {
           this.nonces[tx.from]=1
         }
         this.balances[tx.to] = this.balances[tx.to]?this.balances[tx.to]+tx.value:tx.value
+        console.log("PUSGHIN",tx)
         this.txns.push(JSON.parse(JSON.stringify(tx)))
       }
     }
@@ -69,13 +71,7 @@ Ledger.prototype.getTitle = function() {
 
 
 Ledger.prototype.onExecute = function() {
-  let genesis = this.getInputData(2)
-  if(genesis && !this.genesis){
-    for(let k in genesis){
-      this.processTx(genesis[k])
-    }
-    this.genesis = true
-  }
+  //console.log("this.txns",this.txns)
   this.setOutputData(0,this.txns)
   this.setOutputData(1,{
     name:"balance",
@@ -100,10 +96,17 @@ Ledger.prototype.onExecute = function() {
 
 Ledger.prototype.onAction = function(name) {
   if(name=="reset"){
+    console.log("RESET ")
       this.balances = {}
       this.nonces = {}
       this.txns = []
-      this.genesis = false
+      let genesis = this.getInputData(2)
+      if(genesis){
+          console.log("GENESIS:",genesis)
+        for(let k in genesis){
+          this.processTx(genesis[k])
+        }
+      }
   }else{
     let tx = this.getInputData(0)
     console.log("INPUT 0 is",tx)
@@ -122,28 +125,36 @@ Ledger.prototype.onDrawBackground = function(ctx) {
 
     let rows = []
 
+    //console.log("this.txns",this.txns)
+
     for(let t in this.txns){
       let tx = this.txns[t]
+
+      let nonceDisplay = ""
+      if(typeof tx.nonce !="undefined"){
+        nonceDisplay = (
+          "["+tx.nonce+"]"
+        )
+      }
       rows.push(
         <StyledTableRow>
           <TableCell style={rowStyle}>
             <Blockies
-              seed={tx.from.toLowerCase()}
+              seed={tx.from?tx.from.toLowerCase():""}
               size={8}
               scale={2}
-
-            /><span style={{marginLeft:4}}>{tx.from.substr(0,8)+" "+((typeof tx.nonce !="undefined")?"["+tx.nonce+"]":"")}</span>
+            /><span style={{marginLeft:4}}>{tx.from?tx.from.substr(0,8):""} {nonceDisplay}</span>
           </TableCell>
           <TableCell style={rowStyle}>
             {parseFloat(tx.value).toFixed(2)}
           </TableCell>
           <TableCell style={rowStyle}>
           <Blockies
-            seed={tx.to.toLowerCase()}
+            seed={tx.to?tx.to.toLowerCase():""}
             size={8}
             scale={2}
 
-          /><span style={{marginLeft:4}}>{tx.to.substr(0,8)}</span>
+          /><span style={{marginLeft:4}}>{tx.to?tx.to.substr(0,8):""}</span>
           </TableCell>
         </StyledTableRow>
       )

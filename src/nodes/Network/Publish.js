@@ -22,7 +22,10 @@ Publish.prototype.onExecute = async function() {
 }
 
 Publish.prototype.onAction = async function() {
-  this.socket.emit("eth.build", this.properties.channel, this.getInputData(1))
+  let message = this.getInputData(1)
+  if(typeof message != "undefined" && message!=null){
+    this.socket.emit("eth.build", this.properties.channel, message)
+  }
 }
 
 Publish.prototype.onDrawBackground = function(ctx) {

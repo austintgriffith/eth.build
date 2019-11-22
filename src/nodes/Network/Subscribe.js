@@ -28,10 +28,10 @@ Subscribe.prototype.subscribe = function() {
 
 Subscribe.prototype.onExecute = async function() {
   let channel = this.getInputData(0)
-  if(!channel) channel = defaultChannel
-  if((!this.subscribed || this.properties.channel!=channel)){
+  if(!this.subscribed || this.channel!=channel){
       if(this.properties.channel) this.socket.removeAllListeners(this.properties.channel)
-      this.properties.channel = channel
+      this.channel = channel
+      if(this.channel) this.properties.channel = this.channel
       this.subscribe()
       this.subscribed=true
   }

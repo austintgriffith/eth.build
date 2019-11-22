@@ -19,12 +19,17 @@ ObjectLength.prototype.getTitle = function() {
 
 ObjectLength.prototype.onExecute = function() {
   var data = this.getInputData(0);
-  if (data != null && typeof data.length == "function") {
-    this.value = data.length()
+  console.log("GETTING LENGTH OF ",data)
+  if (typeof data != "undefined" && data != null && typeof data.length == "number") {
+    console.log("data.length",data.length)
+    this.value = data.length
+    if(!this.value) this.value=0
+    console.log("this.value",this.value)
   }else if(data){
     this.value = Object.keys(data).length
   }
-  if(this.value) {
+  if(!this.value) this.value = 0
+  if(typeof this.value != "undefined" && this.value != null ) {
     this.outputs[0].label = this.value
   }
   this.setOutputData(0, this.value );
