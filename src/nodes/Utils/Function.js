@@ -24,10 +24,10 @@ Function.prototype.onAction = async function() {
     for(let a in this.function.args){
       let arg = this.function.args[a]
       let index = parseInt(a)+parseInt(staticInputs)
-      console.log("packaging args",a,staticInputs,index)
+      //console.log("packaging args",a,staticInputs,index)
       args[arg.name] = this.getInputData(index)
     }
-    console.log("args are",args)
+    //console.log("args are",args)
     this.value = await this.function.function(args)
     this.trigger("",this.value)
   }

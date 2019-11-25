@@ -17,31 +17,10 @@ function Output() {
         //already added
         that.graph.renameOutput(that.name_in_graph, v);
       } else {
-        that.graph.addOutput(v, that.properties.type);
+        if(that.graph) that.graph.addOutput(v, 0);//
       }
       that.name_widget.value = v;
       that.name_in_graph = v;
-    },
-    enumerable: true
-  });
-
-  Object.defineProperty(this.properties, "type", {
-    get: function() {
-      return that.inputs[0].type;
-    },
-    set: function(v) {
-      if (v == "action" || v == "event") {
-        v = global.LiteGraphJS.ACTION;
-      }
-      that.inputs[0].type = v;
-      if (that.name_in_graph) {
-        //already added
-        that.graph.changeOutputType(
-          that.name_in_graph,
-          that.inputs[0].type
-        );
-      }
-      that.type_widget.value = v || "";
     },
     enumerable: true
   });
@@ -57,18 +36,10 @@ function Output() {
       that.properties.name = v;
     }
   );
-  this.type_widget = this.addWidget(
-    "text",
-    "Type",
-    this.properties.type,
-    function(v) {
-      v = v || "";
-      that.properties.type = v;
-    }
-  );
+
 
   this.widgets_up = true;
-  this.size = [180, 60];
+  this.size = [180, 40];
 }
 
 Output.title = "Output";

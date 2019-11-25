@@ -12,7 +12,7 @@ import { FileCopy } from '@material-ui/icons';
 function Blockie() {
   this.addInput("", 0);
   this.properties =  {blockieSize: 50,placeholder:"",title:"",value:null}
-  this.size = [340, 80];
+  this.size = [70, 60];
 }
 
 Blockie.title = "Blockie";

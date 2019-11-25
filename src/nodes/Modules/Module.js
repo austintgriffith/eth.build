@@ -2,7 +2,7 @@ const defaultColor = "7e57c2"
 
 function Module() {
   var that = this;
-  this.size = [180, 80];
+  this.size = [200, 80];
   this.properties = { enabled: true, title: "Module", color: defaultColor };
   this.enabled = true;
 
@@ -44,7 +44,7 @@ Module.prototype.onDrawTitle = function(ctx) {
   }
 
   this.title_color = "#"+(this.properties.color)
-
+/*
   ctx.fillStyle = "#555";
   var w = global.LiteGraphJS.LiteGraph.NODE_TITLE_HEIGHT;
   var x = this.size[0] - w;
@@ -54,7 +54,7 @@ Module.prototype.onDrawTitle = function(ctx) {
   ctx.moveTo(x + w * 0.2, -w * 0.6);
   ctx.lineTo(x + w * 0.8, -w * 0.6);
   ctx.lineTo(x + w * 0.5, -w * 0.3);
-  ctx.fill();
+  ctx.fill();*/
 };
 
 Module.prototype.onDblClick = function(e, pos, graphcanvas) {
@@ -128,7 +128,7 @@ Module.prototype.onSubgraphNewInput = function(name, type) {
   if (slot == -1) {
     //add input to the node
     console.log("onSubgraphNewInput",name,type)
-    this.addInput(name, type);
+    this.addInput(name, 0);
   }
 };
 /*

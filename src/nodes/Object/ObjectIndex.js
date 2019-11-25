@@ -4,7 +4,7 @@ function ObjectIndex() {
   this.addOutput("", "string,object,array");
   this.addOutput("", "");
 
-  this.size = [190, 30];
+  this.size = [190, 60];
   this._value = null;
 }
 

@@ -1,28 +1,28 @@
 function Random() {
+        this.addInput("", -1);
         this.addOutput("value", "number");
+        this.addProperty("automatic", true);
         this.addProperty("min", 0);
-        this.addProperty("max", 100000000000000000);
-        this.size = [145, 30];
+        this.addProperty("max", 1000000000000000000);
+        this.size = [200, 30];
     }
 
     Random.title = "Random";
     Random.desc = "Random";
 
-    Random.prototype.onExecute = function() {
-        if (this.inputs) {
-            for (var i = 0; i < this.inputs.length; i++) {
-                var input = this.inputs[i];
-                var v = this.getInputData(i);
-                if (v === undefined) {
-                    continue;
-                }
-                this.properties[input.name] = v;
-            }
-        }
-
+    Random.prototype.onAction = function() {
+        this.properties.automatic = false
         var min = this.properties.min;
         var max = this.properties.max;
         this._last_v = Math.random() * (max - min) + min;
+    }
+
+    Random.prototype.onExecute = function() {
+        if(this.properties.automatic){
+            var min = this.properties.min;
+            var max = this.properties.max;
+            this._last_v = Math.random() * (max - min) + min;
+        }
         this.setOutputData(0, this._last_v);
     };
 

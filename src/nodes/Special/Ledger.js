@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { withStyles } from '@material-ui/core/styles';
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import Blockies from 'react-blockies';
+const keccak256 = require('keccak256')
 
 
 const topPadding = 90
@@ -26,15 +27,20 @@ function Ledger() {
   this.addOutput("","array,object")
   this.addOutput("balance()","function")
   this.addOutput("nonce()","function")
+  this.addOutput("difficulty","number")
 
   this.balances = {}
+  this.prev = {}
   this.nonces = {}
   this.txns = []
   console.log("CLEARED:",this.txns)
 
   this.properties =  {
     title:"Ledger",
-    requireNonce: false
+    requireNonce: false,
+    difficulty: 0,
+    requireTo: true,
+    valueType: "float"
   }
   this.size = [640, 360];
 
@@ -42,23 +48,78 @@ function Ledger() {
 
 Ledger.prototype.processTx = function(tx) {
   console.log("process",tx)
+  let txHash = ""
+  if(tx.hash){
+    txHash = tx.hash
+    delete tx.hash
+    console.log("txHash",txHash)
+  }
+
   try{
-    if(tx.to&&tx.from&&tx.value){
-      tx.value = parseFloat(tx.value)
-      this.balances[tx.from] = this.balances[tx.from]?this.balances[tx.from]-tx.value:-tx.value
+    if((!this.properties.requireTo || tx.to)&&tx.from&&tx.value){
+      if(this.properties.valueType=="float"){
+        tx.value = parseFloat(tx.value)
+        this.balances[tx.from] = this.balances[tx.from]?this.balances[tx.from]-tx.value:-tx.value
+      }
       let thisNonce = this.nonces[tx.from]
       if(!thisNonce) thisNonce=0
       if(this.properties.requireNonce && parseInt(tx.nonce) != thisNonce){
         console.log("ILLEGAL NONCE ")
       }else{
-        if(this.nonces[tx.from]){
-          this.nonces[tx.from]++
+        //let work = tx.work
+        //delete tx.work
+        //
+        let stringified = JSON.stringify(tx)
+
+
+        let valid = false
+
+        if(this.properties.difficulty>0 ){
+          //this.prev
+
+          //console.log("difficulty",this.properties)
+          //console.log("stringified",stringified)
+          let hash = keccak256(stringified).toString('hex')
+          //console.log("hash",hash)
+
+          //console.log("work",work)
+          let sub = hash.substr(0,this.properties.difficulty)
+          console.log("sub",sub)
+          let int = parseInt(sub,16)
+          console.log("int",int)
+
+
+          if(int===0){
+            valid = true
+            this.prev[tx.from] = hash
+            let oTx = JSON.parse(stringified)
+            oTx.hash = "0x"+hash
+            stringified = JSON.stringify(oTx)
+          }
         }else{
-          this.nonces[tx.from]=1
+            valid = true
         }
-        this.balances[tx.to] = this.balances[tx.to]?this.balances[tx.to]+tx.value:tx.value
-        console.log("PUSGHIN",tx)
-        this.txns.push(JSON.parse(JSON.stringify(tx)))
+
+        //console.log("stringify",tx)
+
+
+        if(valid){
+          if(this.nonces[tx.from]){
+            this.nonces[tx.from]++
+          }else{
+            this.nonces[tx.from]=1
+          }
+          if(this.properties.valueType=="float"){
+            this.balances[tx.to] = this.balances[tx.to]?this.balances[tx.to]+tx.value:tx.value
+          }
+
+
+          console.log("PUSGHIN",tx)
+          this.txns.push(JSON.parse(stringified))
+        }else{
+          console.log("INVALID WORK or TX?")
+        }
+
       }
     }
   }catch(e){console.log(e)}
@@ -77,7 +138,7 @@ Ledger.prototype.onExecute = function() {
     name:"balance",
     args:[{name:"address",type:"string"}],
     function:(args)=>{
-      console.log("RUN A FUNCTION BUT IN THIS CONTEXT!",args)
+      //console.log("RUN A FUNCTION BUT IN THIS CONTEXT!",args)
       return this.balances[args.address]
     }
   })
@@ -85,13 +146,14 @@ Ledger.prototype.onExecute = function() {
     name:"nonce",
     args:[{name:"address",type:"string"}],
     function:(args)=>{
-      console.log("RUN A FUNCTION BUT IN THIS CONTEXT!",args)
+      //console.log("RUN A FUNCTION BUT IN THIS CONTEXT!",args)
       if(!this.nonces[args.address]){
         return 0
       }
       return parseInt(this.nonces[args.address])
     }
   })
+  this.setOutputData(3,this.properties.difficulty)
 }
 
 Ledger.prototype.onAction = function(name) {
@@ -99,6 +161,7 @@ Ledger.prototype.onAction = function(name) {
     console.log("RESET ")
       this.balances = {}
       this.nonces = {}
+      this.prev = {}
       this.txns = []
       let genesis = this.getInputData(2)
       if(genesis){
@@ -126,6 +189,8 @@ Ledger.prototype.onDrawBackground = function(ctx) {
     let rows = []
 
     //console.log("this.txns",this.txns)
+    //
+
 
     for(let t in this.txns){
       let tx = this.txns[t]
@@ -136,6 +201,51 @@ Ledger.prototype.onDrawBackground = function(ctx) {
           "["+tx.nonce+"]"
         )
       }
+      let tableCell = ""
+      if(tx.hash){
+        tableCell = (
+          <TableCell style={rowStyle}>
+            <Blockies
+              seed={tx.hash}
+              size={8}
+              scale={2}
+            />
+          <span style={{marginLeft:6}}>
+            {tx.hash.substr(0,8)}
+          </span>
+          </TableCell>
+        )
+      }
+
+      let toCell =""
+      if(this.properties.requireTo){
+        toCell = (
+          <TableCell style={rowStyle}>
+          <Blockies
+            seed={tx.to?tx.to.toLowerCase():""}
+            size={8}
+            scale={2}
+
+          /><span style={{marginLeft:4}}>{tx.to?tx.to.substr(0,8):""}</span>
+          </TableCell>
+        )
+      }
+
+      let valueCell = ""
+      if(this.properties.valueType=="float"){
+        valueCell = (
+          <TableCell style={rowStyle}>
+            {parseFloat(tx.value).toFixed(2)}
+          </TableCell>
+        )
+      }else{
+        valueCell = (
+          <TableCell style={rowStyle}>
+            {tx.value}
+          </TableCell>
+        )
+      }
+
       rows.push(
         <StyledTableRow>
           <TableCell style={rowStyle}>
@@ -145,21 +255,34 @@ Ledger.prototype.onDrawBackground = function(ctx) {
               scale={2}
             /><span style={{marginLeft:4}}>{tx.from?tx.from.substr(0,8):""} {nonceDisplay}</span>
           </TableCell>
-          <TableCell style={rowStyle}>
-            {parseFloat(tx.value).toFixed(2)}
-          </TableCell>
-          <TableCell style={rowStyle}>
-          <Blockies
-            seed={tx.to?tx.to.toLowerCase():""}
-            size={8}
-            scale={2}
-
-          /><span style={{marginLeft:4}}>{tx.to?tx.to.substr(0,8):""}</span>
-          </TableCell>
+          {valueCell}
+          {toCell}
+          {tableCell}
         </StyledTableRow>
       )
     }
     rows.reverse()
+
+
+    let hashCell = ""
+
+    if(this.properties.difficulty>0){
+      hashCell = (
+        <TableCell>
+          Hash
+        </TableCell>
+      )
+    }
+
+
+    let toCell = ""
+    if(this.properties.requireTo){
+      toCell = (
+        <TableCell>
+          To
+        </TableCell>
+      )
+    }
 
     //transformOrigin:"3% -7%"
     this.render(
@@ -173,9 +296,8 @@ Ledger.prototype.onDrawBackground = function(ctx) {
               <TableCell>
                 Value
               </TableCell>
-              <TableCell>
-                To
-              </TableCell>
+              {toCell}
+              {hashCell}
             </TableRow>
           </TableHead>
           <TableBody>

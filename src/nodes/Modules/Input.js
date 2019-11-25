@@ -1,11 +1,9 @@
 function Input() {
-  this.addOutput("", "number");
+  this.addOutput("",0);
 
   this.name_in_graph = "";
   this.properties = {
     name: "",
-    type: "number",
-    value: 0
   };
 
   var that = this;
@@ -21,26 +19,9 @@ function Input() {
       that.setProperty("name",v);
     }
   );
-  this.type_widget = this.addWidget(
-    "text",
-    "Type",
-    this.properties.type,
-    function(v) {
-      that.setProperty("type",v);
-    }
-  );
-
-  this.value_widget = this.addWidget(
-    "number",
-    "Value",
-    this.properties.value,
-    function(v) {
-      that.setProperty("value",v);
-    }
-  );
 
   this.widgets_up = true;
-  this.size = [180, 90];
+  this.size = [180, 60];
 }
 
 Input.title = "Input";
@@ -52,29 +33,6 @@ Input.prototype.onConfigure = function()
 
 Input.prototype.updateType = function()
 {
-  console.log("updateType")
-  var type = this.properties.type;
-  console.log("type",type)
-  this.type_widget.value = type;
-  if(type == "number")
-  {
-    this.value_widget.type = "number";
-    this.value_widget.value = 0;
-  }
-  else if(type == "bool")
-  {
-    this.value_widget.type = "toggle";
-    this.value_widget.value = true;
-  }
-  else if(type == "string")
-  {
-    this.value_widget.type = "text";
-    this.value_widget.value = "";
-  }else{
-    this.value_widget.type = false
-    //this.value_widget.value = this.properties.value;
-  }
-
   this.updateOutputs(0,this.properties.name, this.properties.type)
 }
 
