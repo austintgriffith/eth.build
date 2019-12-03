@@ -8,7 +8,7 @@ import {SketchField, Tools} from 'react-sketch';
 function Action() {
   this.addInput("",-1);
   this.properties = {
-    title:"Whiteboard",
+    title:"Drawing",
     value:""
   }
   this.size = [420,320]
@@ -16,7 +16,7 @@ function Action() {
   this.color = "#EEEEEE"
 }
 
-Action.title = "Whiteboard";
+Action.title = "Drawing";
 
 Action.prototype.onExecute = function() {
 };

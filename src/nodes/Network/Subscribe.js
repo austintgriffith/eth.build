@@ -10,10 +10,11 @@ function Subscribe() {
   this.addOutput("message", "string");
   this.addOutput("received", -1)
 
-  this.properties = { channel: defaultChannel};
+  this.properties = { channel: defaultChannel, network: "http://localhost:4001"};
   this.size[0] = 240
-  this.socket = socketIOClient("http://localhost:4001");
+  this.socket = socketIOClient(this.properties.network);
   this.subscribed = false
+  this.loadedNetwork = this.properties.network
 }
 
 Subscribe.title = "Subscribe";
@@ -36,6 +37,11 @@ Subscribe.prototype.onExecute = async function() {
       this.subscribed=true
   }
   this.setOutputData(0,this.value)
+  if(this.properties.network!=this.loadedNetwork){
+    this.loadedNetwork = this.properties.network
+    this.socket = socketIOClient(this.properties.network);
+      this.subscribed = false
+  }
 }
 
 Subscribe.prototype.onDrawBackground = function(ctx) {

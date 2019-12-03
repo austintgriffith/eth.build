@@ -43,17 +43,19 @@ function Ledger() {
     valueType: "float"
   }
   this.size = [640, 360];
-
+  this.showingTo = this.properties.requireTo
+  this.showingData = false
 }
 
 Ledger.prototype.processTx = function(tx) {
   console.log("process",tx)
   let txHash = ""
-  if(tx.hash){
+  if(tx && tx.hash){
     txHash = tx.hash
     delete tx.hash
     console.log("txHash",txHash)
   }
+
 
   try{
     if((!this.properties.requireTo || tx.to)&&tx.from&&tx.value){
@@ -113,6 +115,14 @@ Ledger.prototype.processTx = function(tx) {
             this.balances[tx.to] = this.balances[tx.to]?this.balances[tx.to]+tx.value:tx.value
           }
 
+          //this.showingTo
+          if(tx.to&&!this.showingTo){
+            this.showingTo = true
+          }
+
+          if(tx.input && !this.showingData){
+            this.showingData = true
+          }
 
           console.log("PUSGHIN",tx)
           this.txns.push(JSON.parse(stringified))
@@ -218,7 +228,7 @@ Ledger.prototype.onDrawBackground = function(ctx) {
       }
 
       let toCell =""
-      if(this.properties.requireTo){
+      if(this.showingTo){
         toCell = (
           <TableCell style={rowStyle}>
           <Blockies
@@ -227,6 +237,15 @@ Ledger.prototype.onDrawBackground = function(ctx) {
             scale={2}
 
           /><span style={{marginLeft:4}}>{tx.to?tx.to.substr(0,8):""}</span>
+          </TableCell>
+        )
+      }
+      //this.showingData
+      let dataCell =""
+      if(this.showingData){
+        dataCell = (
+          <TableCell style={rowStyle}>
+            {tx.input?tx.input.substr(0,8):""}
           </TableCell>
         )
       }
@@ -258,6 +277,7 @@ Ledger.prototype.onDrawBackground = function(ctx) {
           {valueCell}
           {toCell}
           {tableCell}
+          {dataCell}
         </StyledTableRow>
       )
     }
@@ -276,10 +296,19 @@ Ledger.prototype.onDrawBackground = function(ctx) {
 
 
     let toCell = ""
-    if(this.properties.requireTo){
+    if(this.showingTo){
       toCell = (
         <TableCell>
           To
+        </TableCell>
+      )
+    }
+
+    let dataCell = ""
+    if(this.showingData){
+      dataCell = (
+        <TableCell>
+          Data
         </TableCell>
       )
     }
@@ -298,6 +327,7 @@ Ledger.prototype.onDrawBackground = function(ctx) {
               </TableCell>
               {toCell}
               {hashCell}
+              {dataCell}
             </TableRow>
           </TableHead>
           <TableBody>

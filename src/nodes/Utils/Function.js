@@ -1,6 +1,6 @@
 const startingName = "Function"
 const staticInputs = 2
-const initialWidth = 200
+const initialWidth = 230
 
 function Function() {
   this.addInput("","function");

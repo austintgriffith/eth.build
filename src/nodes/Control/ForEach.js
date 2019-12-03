@@ -9,6 +9,7 @@
       this.index = 0
       this.data = null
       this.working = true
+      this.size[0] = 180
   }
 
   ControlForEach.title = "For Each";

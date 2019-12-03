@@ -46,10 +46,15 @@ Selector.prototype.onExecute = function() {
         sel = 0;
     }
     this.selected = Math.round(sel) % (this.inputs.length - 1);
-    var v = this.getInputData(this.selected+1);
-    if (v !== undefined) {
-        this.setOutputData(0, v);
+    try{
+      var v = this.getInputData(this.selected+1);
+      if (v !== undefined) {
+          this.setOutputData(0, v);
+      }
+    }catch(e){
+      console.log(e)
     }
+
 };
 
 Selector.prototype.onGetInputs = function() {

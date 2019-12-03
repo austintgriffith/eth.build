@@ -40,20 +40,29 @@ function addHelpers(obj){
     }else if(this.graph && this.graph._subgraph_node){
       //console.log("SUBGRAPH IS STILL SENT?")
       let graph = this.graph._subgraph_node.graph
-      ReactDOM.render((
-        <div key={this.id+"_react_key"} style={{
-          position:'absolute',
-          left:(20+this.pos[0]+graph.canvas.ds.offset[0])*graph.canvas.ds.scale,
-          top:(this.pos[1]+graph.canvas.ds.offset[1])*graph.canvas.ds.scale,
-          width:((this.size[0]-40)*graph.canvas.ds.scale),
-          height:((this.size[1])*graph.canvas.ds.scale),
-          borderRadius: "0px 0px 7px 7px",
-        }}>
-        <div stlye={{transform:"scale("+graph.canvas.ds.scale+")"}}>
-        {reactElement}
-        </div>
-        </div>
-      ), document.getElementById(this.id+"_react_element"));
+      let canvas = this.graph._subgraph_node.graph.canvas
+      if(!canvas){
+        canvas = graph._subgraph_node.graph.canvas
+      }
+      if(canvas){
+        ReactDOM.render((
+          <div key={this.id+"_react_key"} style={{
+            position:'absolute',
+            left:(20+this.pos[0]+canvas.ds.offset[0])*canvas.ds.scale,
+            top:(this.pos[1]+canvas.ds.offset[1])*canvas.ds.scale,
+            width:((this.size[0]-40)*canvas.ds.scale),
+            height:((this.size[1])*canvas.ds.scale),
+            borderRadius: "0px 0px 7px 7px",
+          }}>
+          <div stlye={{transform:"scale("+canvas.ds.scale+")"}}>
+          {reactElement}
+          </div>
+          </div>
+        ), document.getElementById(this.id+"_react_element"));
+      }else{
+        console.log("no graph.canvas I bet it is sub sub module",canvas,graph._subgraph_node.graph.canvas)
+      }
+
     }
 
   }

@@ -1,8 +1,8 @@
 function ObjectIndex() {
   this.addInput("obj", "");
   this.addInput("index", "number");
-  this.addOutput("", "string,object,array");
-  this.addOutput("", "");
+  this.addOutput("value", "string,object,array");
+  this.addOutput("index", "");
 
   this.size = [190, 60];
   this._value = null;

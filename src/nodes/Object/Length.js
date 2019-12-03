@@ -19,12 +19,12 @@ ObjectLength.prototype.getTitle = function() {
 
 ObjectLength.prototype.onExecute = function() {
   var data = this.getInputData(0);
-  console.log("GETTING LENGTH OF ",data)
+  //console.log("GETTING LENGTH OF ",data)
   if (typeof data != "undefined" && data != null && typeof data.length == "number") {
-    console.log("data.length",data.length)
+    //console.log("data.length",data.length)
     this.value = data.length
     if(!this.value) this.value=0
-    console.log("this.value",this.value)
+    //console.log("this.value",this.value)
   }else if(data){
     this.value = Object.keys(data).length
   }

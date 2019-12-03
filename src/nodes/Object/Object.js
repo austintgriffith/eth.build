@@ -10,7 +10,7 @@ const resetSizeY = 100
 
 const defaultColor = "#5a5a5a"
 
-function Object() {
+function ObjectObject() {
   this.addInput("","object")
   this.addOutput("","object")
 
@@ -25,23 +25,23 @@ function Object() {
   this.hasProcessedOnce = false
 }
 
-Object.title = "Object";
-Object.prototype.getTitle = function() {
+ObjectObject.title = "Object";
+ObjectObject.prototype.getTitle = function() {
   return this.properties.title;
 };
 
 
-Object.title_color = defaultColor;
+ObjectObject.title_color = defaultColor;
 
-Object.prototype.onStart = function() {
+ObjectObject.prototype.onStart = function() {
   this.parseInput()
 }
 
-Object.prototype.onAdded = function() {
+ObjectObject.prototype.onAdded = function() {
   this.parseInput()
 }
 
-Object.prototype.onExecute = function() {
+ObjectObject.prototype.onExecute = function() {
   try{
     this.setOutputData(0,this.value)
   }catch(e){}
@@ -85,7 +85,24 @@ Object.prototype.onExecute = function() {
   }
 }
 
-Object.prototype.parseInput = function(force){
+/*
+ObjectObject.prototype.onConnectionsChange = function(type,slot,connected,link,obj){
+  //watching for new, empty object, and populating it by referece hehe
+  //if( type==2 && slot==0 && connected==true ){
+    //setTimeout(()=>{
+      let current = this.getInputData(0)
+      console.log("CURRENT:",current)
+      console.log("keys",JSON.stringify(current))
+      current = {
+        "to":"test"
+      }
+    //},1000)
+
+//  }
+}*/
+
+
+ObjectObject.prototype.parseInput = function(force){
   try{
     if(force){
       this.properties.value = this.value
@@ -194,7 +211,7 @@ Object.prototype.parseInput = function(force){
   }
 }
 
-Object.prototype.onDrawBackground = function(ctx) {
+ObjectObject.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   }else{
@@ -214,4 +231,4 @@ Object.prototype.onDrawBackground = function(ctx) {
   }
 };
 
-export default Object
+export default ObjectObject

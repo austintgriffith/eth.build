@@ -8,6 +8,7 @@ function DisplayList() {
   this.addInput("add",-1)
   this.addInput("reset",-1)
   this.addOutput("",0)
+  this.addOutput("latest",0)
   this.properties =  {title:"List",fontSize:18,autoAddNewItem:true}
   this.size = [250,250]
   this.list = []
@@ -22,7 +23,7 @@ DisplayList.prototype.onExecute = function() {
     this.lastItem = input
     this.list.push(input)
   }
-  this.setOutputData(0,this.list.join("\n"))
+  this.setOutputData(1,this.lastItem)
 }
 
 DisplayList.prototype.onAction = function(action) {
