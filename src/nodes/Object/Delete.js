@@ -13,12 +13,7 @@ function ObjectProperty() {
   this._value = null;
 }
 
-ObjectProperty.title = "property";
-ObjectProperty.desc = "Outputs the property of an object";
-
-ObjectProperty.prototype.onAdded = function() {
-  this.widget.value = this.properties.value
-};
+ObjectProperty.title = "Delete";
 
 ObjectProperty.prototype.setValue = function(v) {
   this.properties.value = v;
@@ -37,9 +32,20 @@ ObjectProperty.prototype.onPropertyChanged = function(name, value) {
 };
 
 ObjectProperty.prototype.onExecute = function() {
-  var data = this.getInputData(0);
-  if (data != null) {
-    this.setOutputData(0, data[this.properties.value]);
+  let input = this.getInputData(0)
+  if(input){
+    console.log("string and parse",input)
+    let data
+    try{
+      data = JSON.parse(JSON.stringify(input));
+    }catch(e){
+      console.log(e)
+    }
+
+    if (data != null && typeof data[this.properties.value]!="undefined") {
+      delete data[this.properties.value]
+    }
+    this.setOutputData(0,data)
   }
 };
 

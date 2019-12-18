@@ -40,7 +40,10 @@ function Ledger() {
     requireNonce: false,
     difficulty: 0,
     requireTo: true,
-    valueType: "float"
+    valueType: "float",
+    decimals: 0,
+    showGas: false,
+    limit: 25,
   }
   this.size = [640, 360];
   this.showingTo = this.properties.requireTo
@@ -48,12 +51,12 @@ function Ledger() {
 }
 
 Ledger.prototype.processTx = function(tx) {
-  console.log("process",tx)
+  //console.log("process",tx)
   let txHash = ""
   if(tx && tx.hash){
     txHash = tx.hash
     delete tx.hash
-    console.log("txHash",txHash)
+    //console.log("txHash",txHash)
   }
 
 
@@ -124,7 +127,7 @@ Ledger.prototype.processTx = function(tx) {
             this.showingData = true
           }
 
-          console.log("PUSGHIN",tx)
+          //console.log("PUSGHIN",tx)
           this.txns.push(JSON.parse(stringified))
         }else{
           console.log("INVALID WORK or TX?")
@@ -168,21 +171,21 @@ Ledger.prototype.onExecute = function() {
 
 Ledger.prototype.onAction = function(name) {
   if(name=="reset"){
-    console.log("RESET ")
+    //console.log("RESET ")
       this.balances = {}
       this.nonces = {}
       this.prev = {}
       this.txns = []
       let genesis = this.getInputData(2)
       if(genesis){
-          console.log("GENESIS:",genesis)
+          //console.log("GENESIS:",genesis)
         for(let k in genesis){
           this.processTx(genesis[k])
         }
       }
   }else{
     let tx = this.getInputData(0)
-    console.log("INPUT 0 is",tx)
+    //console.log("INPUT 0 is",tx)
     this.processTx(tx)
   }
 
@@ -250,11 +253,24 @@ Ledger.prototype.onDrawBackground = function(ctx) {
         )
       }
 
+      let gasCell =""
+      if(this.properties.showGas){
+        gasCell = (
+          <TableCell style={rowStyle}>
+            {tx.gasPrice?(tx.gasPrice/10**9):""}
+          </TableCell>
+        )
+      }
+
       let valueCell = ""
       if(this.properties.valueType=="float"){
+        let value = parseFloat(tx.value)
+        if(this.properties.decimals){
+          value/=10**this.properties.decimals
+        }
         valueCell = (
           <TableCell style={rowStyle}>
-            {parseFloat(tx.value).toFixed(2)}
+            {value.toFixed(2)}
           </TableCell>
         )
       }else{
@@ -278,10 +294,24 @@ Ledger.prototype.onDrawBackground = function(ctx) {
           {toCell}
           {tableCell}
           {dataCell}
+          {gasCell}
         </StyledTableRow>
       )
     }
-    rows.reverse()
+    if(this.properties.showGas){
+      rows.sort((a,b)=>{
+        return (a.gasPrice>b.gasPrice)
+      })
+    }else{
+      rows.reverse()
+    }
+
+
+    if(rows.length>this.properties.limit){
+      //console.log("limiting to ",this.properties.limit)
+      rows = rows.slice(0,this.properties.limit)
+    }
+
 
 
     let hashCell = ""
@@ -313,9 +343,18 @@ Ledger.prototype.onDrawBackground = function(ctx) {
       )
     }
 
+    let gasCell = ""
+    if(this.properties.showGas){
+      gasCell = (
+        <TableCell>
+          Gas
+        </TableCell>
+      )
+    }
+
     //transformOrigin:"3% -7%"
     this.render(
-      <div style={{overflow:"auto",color:"#444444",transformOrigin:"10px -20px",transform:"scale("+(this.graph.canvas?this.graph.canvas.ds.scale:0)+")",borderRadius:"0px 0px 8px 8px",background:"#CCCCCC",marginLeft:-19,marginTop:topPadding,width:this.size[0],height:this.size[1]-topPadding-1}}>
+      <div style={{overflow:"auto",color:"#444444",transformOrigin:"10px -20px",transform:"scale("+(this.graph.canvas?this.graph.canvas.ds.scale:0)+")",borderRadius:"0px 0px 8px 8px",background:"#CCCCCC",marginLeft:-19,marginTop:topPadding,width:this.size[0]-5,height:this.size[1]-topPadding-1-5}}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -328,6 +367,7 @@ Ledger.prototype.onDrawBackground = function(ctx) {
               {toCell}
               {hashCell}
               {dataCell}
+              {gasCell}
             </TableRow>
           </TableHead>
           <TableBody>

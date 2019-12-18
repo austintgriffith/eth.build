@@ -25,7 +25,7 @@ Mnemonic.prototype.onExecute = function() {
   }
   let optionalIndex = this.getInputData(1)
   if(typeof optionalIndex != "undefined" && optionalIndex!=this.properties.index){
-    this.onPropertyChanged("index",optionalIndex)
+    this.properties.index = optionalIndex
     this.generatePrivateKey()
   }
   this.setOutputData(0,this.value)
@@ -37,11 +37,17 @@ Mnemonic.prototype.onAction = async function(name){
   this.generatePrivateKey()
 }
 Mnemonic.prototype.generatePrivateKey = async function(){
-  const seed = await bip39.mnemonicToSeed(this.mnemonic)
-  const hdwallet = hdkey.fromMasterSeed(seed);
-  const wallet_hdpath = "m/44'/60'/0'/0/";
-  const wallet = hdwallet.derivePath(wallet_hdpath + this.properties.index).getWallet();
-  this.value = "0x"+wallet._privKey.toString('hex');
+  try{
+    const seed = await bip39.mnemonicToSeed(this.mnemonic)
+    const hdwallet = hdkey.fromMasterSeed(seed);
+    const wallet_hdpath = "m/44'/60'/0'/0/";
+    let fullPath = wallet_hdpath + this.properties.index
+    console.log("fullPath",fullPath)
+    const wallet = hdwallet.derivePath(fullPath).getWallet();
+    this.value = "0x"+wallet._privKey.toString('hex');
+  }catch(e){
+    console.log(e)
+  }  
 }
 
 

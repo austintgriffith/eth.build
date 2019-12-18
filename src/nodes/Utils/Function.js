@@ -28,7 +28,9 @@ Function.prototype.onAction = async function() {
       args[arg.name] = this.getInputData(index)
     }
     //console.log("args are",args)
+    //console.log("calling function")
     this.value = await this.function.function(args)
+    //console.log("called, trigger...")
     this.trigger("",this.value)
   }
 }

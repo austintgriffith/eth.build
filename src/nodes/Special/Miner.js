@@ -6,7 +6,8 @@ function Miner() {
   this.addInput("pool","array,object")
   this.addOutput("transactions","array,object")
   this.addOutput("nonce","number")
-  this.properties = {difficulty:2}
+  this.addOutput("valid",-1)
+  this.properties = {difficulty:2, addMinerToBlocks: false}
   this.size[0] = 180
 }
 
@@ -49,8 +50,13 @@ Miner.prototype.onExecute = function() {
     if(!thisBlock.parent){
       thisBlock.parent = 0
     }
+
+    if(this.properties.addMinerToBlocks){
+      thisBlock.miner = this.address
+    }
+
     let stringified = JSON.stringify(thisBlock)
-    //console.log("HASH THIS",stringified)
+
     this.hash = "0x"+keccak256(stringified).toString('hex')
 
 
@@ -61,9 +67,17 @@ Miner.prototype.onExecute = function() {
 
     if(this.validHash(this.hash)){
       console.log("VALID ",this.nonce,this.hash)
+      console.log("HASHED FROM",stringified)
+
+      //console.log("SETTING MINER FROM MINER TO",this.address)
+      if(this.properties.addMinerToBlocks){
+       this.blockObject.miner = this.address
+      }
+
       thisBlock.hash = this.hash
       this.validNonce = this.nonce
       //console.log(JSON.stringify(thisBlock))
+      this.trigger('valid',this.nonce)
     }
 
   }

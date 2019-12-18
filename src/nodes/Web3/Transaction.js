@@ -19,6 +19,7 @@ function Web3Transaction() {
   this.addOutput("signed",-1)
   this.properties = { value: 0, nonce: null, data: "0x", gas: 23000, gasPrice: 4100000000, provider: defaultProvider, privateKey: ""  };
   this.size[0]=240
+  this.signed = false
 }
 
 Web3Transaction.title = "Transaction";
@@ -75,7 +76,7 @@ Web3Transaction.prototype.onExecute = function() {
   }
   let optionalData = this.getInputData(4)
   if(typeof optionalData != "undefined" && optionalData!=this.properties.data){
-    if(typeof optionalData.indexOf == "function" && optionalData.indexOf("0x")<0){
+    if(optionalData && typeof optionalData.indexOf == "function" && optionalData.indexOf("0x")<0){
       optionalData = "0x"+optionalData
     }
     this.onPropertyChanged("data",optionalData)
@@ -104,6 +105,11 @@ Web3Transaction.prototype.onExecute = function() {
 
   this.setOutputData(0,this.transaction)
   this.setOutputData(1,this.signedTransaction)
+
+  if(this.signed){
+    this.signed = false
+    this.trigger("signed",this.signedTransaction)
+  }
 };
 
 
@@ -116,9 +122,7 @@ Web3Transaction.prototype.onAction = async function(event, args) {
   const rawTx = '0x' + serializedTx.toString('hex');
   this.signedTransaction = rawTx
   console.log(" * * * SIGNED",JSON.stringify(tx))
-  setTimeout(()=>{
-    this.trigger("signed",tx,this.signedTransaction);
-  },10)
+  this.signed = true
 }
 
 Web3Transaction.prototype.craftTransaction = async function(){

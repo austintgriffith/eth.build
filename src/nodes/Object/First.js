@@ -1,6 +1,5 @@
 function ObjectIndex() {
   this.addInput("obj", "");
-  this.addInput("index", "number");
   this.addOutput("value", "string,object,array");
   this.addOutput("index", "number");
 
@@ -8,7 +7,7 @@ function ObjectIndex() {
   this._value = null;
 }
 
-ObjectIndex.title = "index";
+ObjectIndex.title = "first";
 
 ObjectIndex.prototype.getTitle = function() {
   if (this.flags.collapsed) {
@@ -19,8 +18,8 @@ ObjectIndex.prototype.getTitle = function() {
 
 ObjectIndex.prototype.onExecute = function() {
   var obj = this.getInputData(0);
-  var index = this.getInputData(1);
-  if (obj && typeof index == "number") {
+  var index = 0
+  if (obj) {
     this.keys = Object.keys(obj)
     //console.log(this.keys)
     this.index = this.keys[index]

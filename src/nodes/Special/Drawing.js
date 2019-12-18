@@ -66,7 +66,7 @@ Action.prototype.onDrawBackground = function(ctx) {
           {colors}
         </div>
 
-        <SketchField key={this.key} width={this.size[0]} height={this.size[1]-20}
+        <SketchField key={this.key} width={this.size[0]-5} height={this.size[1]-30}
                          tool={Tools.Pencil}
                          lineColor={this.color}
                          lineWidth={5}/>

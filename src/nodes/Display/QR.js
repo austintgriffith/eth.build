@@ -14,7 +14,7 @@ DisplayQR.prototype.onExecute = function() {
     if (this.inputs[0] && this.value != this.getInputData(0)) {
         this.value = this.getInputData(0);
         if(this.value){
-            console.log("QR VALUE ",this.value)
+            //console.log("QR VALUE ",this.value)
             QRCode.toDataURL(this.value, {color: {
               dark: '#EEE',
               light: '#111',
@@ -24,11 +24,11 @@ DisplayQR.prototype.onExecute = function() {
                 var image = new Image();
                 image.onload = ()=>{
                   this.qr = image
-                  console.log("QR SET",this.qr)
+                  //console.log("QR SET",this.qr)
                 };
                 if(this.value){
                   image.src = url;
-                  console.log("SRC",image.src)
+                  //console.log("SRC",image.src)
                 }
             })
         }

@@ -30,11 +30,12 @@ Number.prototype.getTitle = function() {
 };
 
 Number.prototype.handle = function(e) {
-    console.log("CHANGE",e)
+    //console.log("CHANGE",e)
     this.properties.value = e.target.value
     this.setOutputData(0,this.properties.value);
-    console.log(this.properties.value)
-    console.log("this.properties.value:",this.properties.value,this.id)
+    //console.log(this.properties.value)
+    //console.log("this.properties.value:",this.properties.value,this.id)
+    this.onDrawBackground()
 }
 
 Number.prototype.onDrawBackground = function(ctx) {

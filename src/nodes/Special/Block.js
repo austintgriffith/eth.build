@@ -40,7 +40,9 @@ function Block() {
     title:"Block",
     number: 0,
     difficulty: 1,
-    lockOnValidBlock: true
+    lockOnValidBlock: true,
+    requireMiner: false,
+    blockReward: 10,
   }
   this.size = [640, 360];
   this.showingTo = true
@@ -92,18 +94,16 @@ Block.prototype.getTitle = function() {
 
 
 Block.prototype.onExecute = function() {
-
-
-
-
-
-  if(this.properties.lockOnValidBlock && this.properties.validTxns && this.properties.validNonce && this.properties.validHash) {
-    //console.log("VALID>?!?!?!?",this.properties.validTxns, this.properties.validNonce, this.properties.validHash)
+  if(this.properties.lockOnValidBlock /*&& this.properties.validTxns*/ && this.properties.validNonce && this.properties.validHash) {
     this.title_color = "#22aa66";
     this.properties.title = "#"+this.properties.number
 
 
-    this.blockToDoublecheckHash = {"transactions":this.txns,"nonce":this.nonce,"parent":this.parent?this.parent.hash:0}
+    this.blockToDoublecheckHash = {"transactions":JSON.parse(this.properties.validTxns),"nonce":this.properties.validNonce,"parent":this.parent?this.parent.hash:0}
+
+    if(this.properties.validMiner){
+      this.blockToDoublecheckHash.miner = this.properties.validMiner
+    }
 
     let stringified = JSON.stringify(this.blockToDoublecheckHash)
     //console.log("block #"+this.properties.number+" to double check hash stringified",stringified)
@@ -115,12 +115,19 @@ Block.prototype.onExecute = function() {
     this.setOutputData(2,valid)
 
     if(!valid){
+      console.log("NOT VALID")
       this.properties.validHash = null
     }else{
       this.txns = JSON.parse(this.properties.validTxns)
       this.parent = this.getInputData(0)
 
-      this.block = {"transactions":this.txns,"nonce":this.properties.validNonce,"parent":this.parent?this.parent:0,"hash":this.properties.validHash}
+      this.block = {"transactions":this.txns,"nonce":this.properties.validNonce,"parent":this.parent?this.parent:0}
+
+      if(this.properties.validMiner){
+        this.block.miner = this.properties.validMiner
+      }
+
+      this.block.hash = this.properties.validHash
 
       this.setOutputData(0,this.block)
     }
@@ -185,14 +192,25 @@ Block.prototype.onExecute = function() {
       }
     }
 
+    let miner = ""
+    if(this.block && this.block.miner && miner != this.block.miner){
+      miner = this.block.miner
+    }
+
     //console.log("this.txns",this.txns)
     this.block = {"transactions":this.txns,"nonce":this.nonce,"parent":this.parent?this.parent.hash:0}
+
+    if(miner && this.properties.requireMiner){
+      this.block.miner = miner
+    }
 
     let stringified = JSON.stringify(this.block)
     //console.log("block #"+number+" stringified",stringified)
 
     this.hash = "0x"+keccak256(stringified).toString('hex')
     this.setOutputData(1,this.hash)
+
+    //console.log("resulting hash: ",this.hash)
 
     this.block.hash = this.hash
     this.block.parent = this.parent
@@ -207,9 +225,13 @@ Block.prototype.onExecute = function() {
         this.trigger("valid",this.properties.validNonce)
       }
       this.properties.validNonce = this.nonce
+      //console.log("SETTING this.properties.validHash to this.hash",this.hash,stringified)
       this.properties.validHash = this.hash
       this.properties.validParent = this.parent.hash
-
+      if(miner && this.properties.requireMiner){
+         //console.log("VALID MINER IS NOW",miner)
+         this.properties.validMiner = miner
+      }
     }else{
       this.title_color = "#4488bb";
     }
@@ -335,6 +357,28 @@ Block.prototype.onDrawBackground = function(ctx) {
         </StyledTableRow>
       )
     }
+
+    if(this.properties.validHash && this.properties.requireMiner){
+      rows.push(
+        <StyledTableRow>
+          <TableCell style={rowStyle}>
+            ⚒
+          </TableCell>
+          <TableCell style={rowStyle}>
+            {this.properties.blockReward}
+          </TableCell>
+          <TableCell style={rowStyle}>
+          <Blockies
+            seed={this.properties.validMiner}
+            size={8}
+            scale={2}
+
+          /><span style={{marginLeft:4}}>{this.properties.validMiner}</span>
+          </TableCell>
+        </StyledTableRow>
+      )
+    }
+
     rows.reverse()
 
 
@@ -349,6 +393,8 @@ Block.prototype.onDrawBackground = function(ctx) {
     }
 
     let minedBlockDisplay = ""
+
+    //console.log("this.properties.validHash",this.properties.validHash)
 
     if(this.properties.validNonce){
       minedBlockDisplay = (
