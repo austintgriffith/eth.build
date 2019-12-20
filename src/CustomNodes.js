@@ -185,13 +185,22 @@ function addHelpers(obj){
 
 const addNodes = function(LiteGraphJS,name,color,shadow){
   let nodeSet = require('./nodes/'+name)
+  if(!global.customNodeItems){
+    global.customNodeItems = {}
+  }
+  if(!global.customNodeItems[name]){
+    global.customNodeItems[name] = []
+  }
   for(let n in nodeSet){
+
     if(nodeSet[n].default){
+
       //console.log("Importing "+nodeSet[n].default.title+" as "+name)
       let nodeObject = nodeSet[n].default
       if(color && !nodeObject.title_color) nodeObject.title_color = color
       if(shadow && !nodeObject.shadow_color) nodeObject.prototype.shadow_color = shadow
       LiteGraphJS.LiteGraph.registerNodeType(name+"/"+nodeSet[n].default.title, addHelpers(nodeObject));
+      global.customNodeItems[name].push({title:nodeSet[n].default.title,color:nodeObject.title_color})
     }
   }
 }
@@ -204,27 +213,37 @@ const hexColor = (hex)=>{
 }
 
 //
+//
+//
+
+
+global.customNodes = [
+  {name:"Input",color:"3f51b5"},
+  {name:"Display",color:"357a38"},
+  {name:"Storage",color:"ff9800"},
+  {name:"Network",color:"b2a429"},
+  {name:"Crypto",color:"f44336"},
+  {name:"Web3",color:"03A9F4"},
+  {name:"Control",color:"a4a4a4"},
+  {name:"Utils",color:"b26500"},
+  {name:"Math",color:"7fa9cb"},
+  {name:"String",color:"6b6b6b"},
+  {name:"Object",color:"454545"},
+  {name:"Special",color:"278e79"},
+  {name:"System",color:"989898"},
+  {name:"Modules",color:"7e57c2"},
+]
+
+
+
 
 export default function(LiteGraphJS){
 
   globalLiteGraphJS = LiteGraphJS
 
-  addNodes(LiteGraphJS,"Input",...hexColor("3f51b5"))
-  addNodes(LiteGraphJS,"Display",...hexColor("357a38"))
-  addNodes(LiteGraphJS,"Storage",...hexColor("ff9800"))
-  addNodes(LiteGraphJS,"Network",...hexColor("b2a429"),"📡")
-  addNodes(LiteGraphJS,"Crypto",...hexColor("f44336"))
-  addNodes(LiteGraphJS,"Web3",...hexColor("03A9F4"))
-  addNodes(LiteGraphJS,"Math",...hexColor("2196f3"))
-  addNodes(LiteGraphJS,"Control",...hexColor("a4a4a4"))
-  addNodes(LiteGraphJS,"Utils",...hexColor("b26500"))
-  addNodes(LiteGraphJS,"String",...hexColor("6b6b6b"))
-  addNodes(LiteGraphJS,"Object",...hexColor("454545"))
-
-  addNodes(LiteGraphJS,"Special",...hexColor("278e79"))
-
-  addNodes(LiteGraphJS,"System",...hexColor("989898"))
-  addNodes(LiteGraphJS,"Modules",...hexColor("7e57c2"))
+  for(let n in global.customNodes){
+    addNodes(LiteGraphJS,global.customNodes[n].name,...hexColor(global.customNodes[n].color))
+  }
 
 
   console.log("HOOK INTO CLOSE AND OPEN OF SUBGRAPH TO DESTROY NODES?",LiteGraphJS)

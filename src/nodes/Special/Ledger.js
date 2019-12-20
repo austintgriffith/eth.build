@@ -33,7 +33,7 @@ function Ledger() {
   this.prev = {}
   this.nonces = {}
   this.txns = []
-  console.log("CLEARED:",this.txns)
+  //console.log("CLEARED:",this.txns)
 
   this.properties =  {
     title:"Ledger",
@@ -61,7 +61,7 @@ Ledger.prototype.processTx = function(tx) {
 
 
   try{
-    if((!this.properties.requireTo || tx.to)&&tx.from&&tx.value){
+    if((!this.properties.requireTo || tx.to)&&tx.from&&typeof tx.value !="undefined"){
       if(this.properties.valueType=="float"){
         tx.value = parseFloat(tx.value)
         this.balances[tx.from] = this.balances[tx.from]?this.balances[tx.from]-tx.value:-tx.value
@@ -89,9 +89,9 @@ Ledger.prototype.processTx = function(tx) {
 
           //console.log("work",work)
           let sub = hash.substr(0,this.properties.difficulty)
-          console.log("sub",sub)
+          //console.log("sub",sub)
           let int = parseInt(sub,16)
-          console.log("int",int)
+          //console.log("int",int)
 
 
           if(int===0){
@@ -105,7 +105,7 @@ Ledger.prototype.processTx = function(tx) {
             valid = true
         }
 
-        //console.log("stringify",tx)
+        //console.log("stringify",JSON.stringify(tx))
 
 
         if(valid){

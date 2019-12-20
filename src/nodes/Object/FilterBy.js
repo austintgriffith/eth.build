@@ -42,7 +42,7 @@ FilterBy.prototype.onExecute = function() {
     if (this.properties.value) {
       for(let i in input){
         let item = JSON.stringify(input[i]);
-        console.log("searching",item,"for ",this.properties.value)
+      //  console.log("searching",item,"for ",this.properties.value)
         if(item.toLowerCase().indexOf(this.properties.value.toLowerCase())>=0){
           output.push(input[i])
         }
