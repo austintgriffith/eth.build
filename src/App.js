@@ -596,7 +596,7 @@ for(let n in global.customNodes){
 let clickawayscreen = ""
 if(menu){
   clickawayscreen = (
-    <div ref={drop}  style={{position:"absolute",left:0,top:0,zIndex:1,width:"100%",height:"100%"}} onClick={()=>{setMenu("")}}></div>
+    <div ref={drop}  style={{position:"absolute",left:0,top:0,zIndex:1,width:"100%",height:"100%"}} onClick={()=>{setMenu("");if(global.graph&&global.graph.canvas.search_box)  global.graph.canvas.search_box.close()}}></div>
   )
 }
 
@@ -606,6 +606,44 @@ if(global.graph&&global.graph.canvas){
   //console.log("TOOLSm",selectToolActive)
   tools = (
     <div>
+
+      <div style={{margin:5}} onClick={async (e)=>{
+          if(global.graph.canvas.search_box){
+            global.graph.canvas.search_box.close()
+            setMenu("")
+          }else{
+            global.graph.canvas.last_mouse_position[0] = e.clientX-209
+            global.graph.canvas.last_mouse_position[1] = e.clientY
+            global.graph.canvas.showSearchBox()
+            setMenu("search")
+          }
+          global.graph.canvas.last_mouse_position[0] = width/2
+          global.graph.canvas.last_mouse_position[1] = height/2
+        }}>
+        <Tooltip title="Add Item" style={{marginLeft:4,cursor:"pointer"}}>
+          <Icon>
+            add_circle_outline
+          </Icon>
+        </Tooltip>
+      </div>
+
+
+
+            <div style={{margin:5}} onClick={async ()=>{
+                if(global.graph.canvas.search_box) global.graph.canvas.search_box.close()
+                global.graph.canvas.closeSubgraph()
+                global.graph.canvas.ds.reset()
+                global.graph.canvas.setDirty(true);
+                global.graph.canvas.graph.change();
+              }}>
+              <Tooltip title="Reorient" style={{marginLeft:4,cursor:"pointer"}}>
+                <Icon>
+                  aspect_ratio
+                </Icon>
+              </Tooltip>
+            </div>
+
+
       <div style={{margin:5,color:selectToolActive?"#03A9F4":"#dddddd"}} onClick={async ()=>{
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.selectToolActive = !global.graph.canvas.selectToolActive
@@ -631,6 +669,7 @@ if(global.graph&&global.graph.canvas){
 
 
 
+
       <div style={{margin:5}} onClick={async ()=>{
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.deleteSelectedNodes()
@@ -641,6 +680,11 @@ if(global.graph&&global.graph.canvas){
           </Icon>
         </Tooltip>
       </div>
+
+
+
+
+
     </div>
 
   )
@@ -650,7 +694,7 @@ return (
   <div className="App" style={{color:"#FFFFFF"}}>
 
     <div style={{zIndex:1,position:"fixed",right:0,top:"50%",width:40}}>
-      <div style={{borderRadius:"8px 0px 0px 8px",textAlign:"left",color:"#dddddd",height:130,right:0,top:0,width:475,backgroundColor:"#333333"}}>
+      <div style={{borderRadius:"8px 0px 0px 8px",textAlign:"left",color:"#dddddd",height:220,right:0,top:0,width:475,backgroundColor:"#333333"}}>
         <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
 
           {tools}
