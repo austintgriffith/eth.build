@@ -59,7 +59,6 @@ function touchHandler(event)
 
 
 
-
 }
 
 function App() {
@@ -321,7 +320,7 @@ React.useEffect(()=>{
       setLiteGraph(graph)
       setLiteGraphCanvas(canvas)
     } else {
-      let defaultData = "wofCrGxhc3Rfbm9kZV9pZC7EgcSDxIVsaW5rxItkIsKlxIfEiXPCmMKJwqLEjCTCpHR5cGXCrURpc3DEgnkvV2F0Y2jCo3Bvc8KSFDLCpHNpemXCksONA8OlOMKlZsSCZ3PCgMKlb3LEiXIDwqRtxIhlAMKmxJNwdXRzwpHChMKkbmFtZcKgxKLEpMWUwqTEksSUGMKlxIJiZWzCoMKqcHJvxKVydGllxYnCisSfxJfFpMSlwq9DcsSkdG8vTW5lxZJuaWPEtMS2xYABBMOMwpbEu8S9ZcKCwqEww4pDOmZmwqExQsWFxYfFicWLxY1lcgHFkcWTxZXFl8WZc8KTwoPFnsWgZcKqW23GiMaKxoxdxb5lwqbEhHLEk2fFp8STa8OAxrLFn8WhwqdbxJPEiXjGvMSjxKXCpm51bcWtcseExJTHh8azxaHCqGdlxohyxLBlxr3Dv8eZaxfCp2_FmcWYxZrCkseIxrTCq8WyaXbHoyBrZXnGvca_dMeBbmfFq8eFxZsax7DHnca4xolvxotjx7vHgMeCyIHElMWbGMWxxbPFtcW3xbnCgsKlx41leADCqMiHxrpjw5lSZmlyxIQgxKvEkMaMIG3EqXRhx7jIrMSpcyDEvMSExqjIqMWzamVjdCDEiWLHgci0xLxsx6DIvsitc8aoeSDGhMaIIMibY8W5yLTEh8ivYsmFxbvEjCPGvcKsSW7HrS9CxZnJjcaOxLcUw4zFo8S8xL7CksOMw4gyxqNhxYjFisWMxY4AxqvEicatyZ7Gr8KRyIXFoselx6fDgMeqx6zGr8evx5zJvceRZcO_yI9rxZsXybzFo8qHwqdib2_JhWFuyopzw4DIk8W0xqjIlnPCg8Klx7VsdWXCqEfHoMaox6PCpcW3dMmFwqbJoXTJjcKlY8erbnQPyZhkJsa9xoDGgnDGhC9Lx7kgUGHIpcmkxpDDlsaTxpXEvsaYxppDU8KZwprGoMaixYbJsMalybPGqALJtsWUxZbJuceuybzCrVvHs8e1dGXHt8e5x5DFpce8x77Hg8Woa8iEyoXHnsqox6LLpsm-y6_KgMerdMetxrDJvMeyx4HLpcunx7jHusqHy6zIjsuvypnJvMWxdcmWyKvMg8iMx73Mh8iCx5vHiWXCp2FkZHLJksyQy63KmMKSGxzKm8iVxbhzwoHIk8e0x6PLgnnDmUIweGE0ZGLMmDhlZmPMuDhkMjgwZGE4MjJiNWNiMzdjMjFhzYg5MWI5M2QzNGU4MTYwZsy3NDTNgci8zZ1hzYkzZjHKuS3GvcKuVcW3bHMvRsWzbSBXZWnLiMWBwpjDjMOmy4zGl8aZesagIcmvxYjCgcKpyrRsxIJwyYlkw4PGpsWOBsucybjLvMm7yoXImcufx7vHlMeWxqjHpyHKgcu7ybrJvMKmy7rHrc6Zx5XHl8qYwpEizKPKncylwoHCqMSJY2ltYc2vEsq5KMmbzbbNiMmgzrXKlsmRzbkCw4bJrM2-y47DjMOSy5TOhMuYxqdyBc6Sy57LvMaxyoXMl8yZzJtzc8ydx4LHpxzJvMKsW8mWb2NrxLLLhm7LqseSyI3Hv8m_ybzKs2jIvGvLt8eFy7nKgsWaxZzPk8y0xIJuyZHOps6bcs6pzoPFrMWuxpnOrMW2zKXCgs-UzJrJksOZKsyvNWQ3zY7MtzPMtsy_zLJiMjc2zZ81N8yzzZhmNTM5ZmFjzZMyzZ85yqXFsm92xIzGqMOZPWjKsc6LOi8vzrTEk8aIdC7Ek2Z1x6LQvcaFdjMvZTU5YzTQmmMzzYNmNDdlMjk2zaY1ZjAw0ZY4xa0yZjjEnsSMJ8q8xKjEqsSsL0HPlcmSy4gew43Gkc2-xpBZVc-KybLPjATPj8auz7XKjsa9ybXLrxvQhMqewoTCq8-gz6LFuFPGljLHssSCyZFoypTFjsKgyqtpyq3MltGq0InPl8qhzrXKpNCL0I3Qj9CRZtCTZdCVzLPQmNCaNNCc0J440KDQotCk0KbRjtCpZcq5LtGlxKnIqcStRMqUxILIps25AcOC0a8O0bHDjMK-N9G1zo_GqAfRucufxZvRvMqH0b7HhSLOn86U04zLq86azqjMiMqa0KzMpMW50oPShWvSh9KJ0ovQpWXSjmzFjsKvyYbIuMumeMi-z67Mm9KS0pTCp9K4zolhyKbSmcqjxZTKmMKXwpYXIwAiAsO_wpYYIgEkAADClhoiACbFlc-pZ8KWGyYCJ9SHwpYc1JMo1I7Mkce_wpYh1JotxZXTlcaowpYi1KEu1IfCpmfFs3XOi8KQwqbKtG7IpGfCgMKndsaoxLzIicOLP8OZwpnUvtS-wpo"
+      let defaultData = "wofCrGxhc3Rfbm9kZV9pZMONAcKJxIHEg8SFbGlua8SLxI0CFMKlxIfEiXPCnsKKwqLEjMSOe8KkdHlwZcKtQ29udHJvbC9UaW1lcsKjcG9zwpLDjQJSxI7CosKkc2l6ZcKCwqEww4zCjMKhMRrCpWbEgmdzwoHCqWPEscSCcHNlZMOCwqVvcsSJcgDCpG3EiGUAwqdvdXRwxaxzwpHChMKkbmHEtsWqbl90aWNrxKbEqGXDv8KlxJTElsWwxL4AxoJhYmVswqczMMaPMG1zwqpwxLDEqXLFumVzwoLCqMSVdMS3dmFsw411MMKlZXZlxK7EpsW7a8KoYm94xZdsxaDCpCMyxrjEocSjAV3FvsSpwq9DcsSodG8vS2V5IFBhacS4xLrEvMONAxjDjMOnxYPFhcWHxYnDikNTwpnCmsWNQsWQxZJzwoDFn8WhxLcHxaXFpwDCpsSVxa50xLzCg8WzxbXEqlvGlWnGocafIGvHiMa9xKfEqcKmxIRyxJVnwqTGg2vEjsOmx7HFtMS2wqhnxqrEt2HGn8a-xoDIhcSVa8OAxarFrMeuc8KTyIrHs8Krx7bHuGXHuseIyJPIgMSvyIPGgsiWc8KQyJ7EtsaUdWLElGPIpHnIpsiByKnIhsisyK5lwqdhZGRyxppzyLfIqG5nyKrGhMKTxI7Dp8SOw7_EvgLGlMaWxLfGmcWUyZLHt8iRZceHecOZQjB4ZjQzMzZhYTU0NDFlYzA2Y8mlN2RiYsmtNmViOTHJozk4YsaPyas2MmQzybM5YTk0YjYxZmY3MmPKicSJMjFhNMKJxKLEjQFeyJPCr0Rpc3DEgnkvQcmAyYJzc8S5xLvEvQQaw4zDkseWxYbEvQFUUMehYcWTx6TFoMWiCcepxInHq8etxa_Ckci8wqDIk8WkyIbJjMmSb8aXyZXChMKryLJvxbxpZVPHlzLIoMSCY2VoxLHFosKgwqXFunRsyL3Kp8mByYPCpcahbHVlw5kqyZ81MWM1YcmyyaIyYjVmNcmlZcqHODTJrjRkZsqNMTfMicmryatjN8mjxrrKm3rIk8KsV8m4My9CxqJhbsucyqzHkAMDxI7MksWExYbFiMWKw5LHn8q5yrvHpcWiCsuAxajHrG7Im8idx7LFtsi_y6jKqsmFyILJh8iVxJbJjsi8wqxby5LFvGNox4xux73Fv8inzLvIhMiGw4DIvMKlzYXJrMW9x77IlMuKAsWpxavFrcuExbLIi8i9YsyazJxlyKZudW3GinLJiWvGhQIExojGimzFicuMy47LlcabyL7KqMmDy6_Lscuzy7XLtzPLucu7y71hy79hzIHMg8yFzIfMiTfMi8mszI4zwqjGlW92xIzEt8OZPWh0xa1zOi8vbc2HbmV0LsSVZnVyYc6kx4V2zJdlNTljNDY0Y82_MsmhN2UyOTYzy7xmxo_Ovcm-zrpmOMqZxrt9yJPCqsqgyqLKpC9RUsyexL0FwpZayrNlyrXCkMSOwpDMqsejzKzEtwvMr8uCzLLNnMy1ZcuHzZXLiciWyZDNr8aLzbp4y7LLtMu2ZMu4y7rLvMu-zIDMgs6zzojMhs6KzozMjcmjzbPJlM21woHCpnFyy5fFhsSOGMyQxI5cyp7HgceDx4VNzqHFpm7Fu8-SxL46w4zDsM-XzKbHmjrKjsypxZHKus-eyr3EtwbPosyxzLPIvMKqW23QlcStxbvNice_yLjMvMuKAcO-yLzCp1vElcSJeNC0ZcKmzaXNp8S3zL3Il8i8yI3Ij86oyJLNlcO_0YfEvhDImc2bx6_Cksi8yKDIgsiiyLXMusi5yKvCkciI0YnQsGXQlsW70ZzJh82qzawT0ILGmNCEwqXQvmV4AM-HypvCiMiTwq3PjMqjYcqlV8iRzYXQmQF8bs-Xyq4JPM-dyrzHpnII0KrLg8evxbHPps-oxb_Pqsy-AhPPrWzCoNGryZXCgNCNAXfPilPJhmfKpm550b_ChsOMw7rQnsWJxYvQo8ei0ojFogXSjM-kx6_MtM2ewqFBy4jRkAHDu8i8wqFC0rrQuMO80r5D04HPq8Sa0ZPIm8uFz6bCps2ax67RpsmIyLrRn9C50prNtcKA0bPEjs-WzZXCrEnStC9VyqNvyL_PkkbPlsykz5jDjMOcVtKHz59yAc-i04nLhMuG05DRqNOTw7vTlcaawoHCpGZpy6XCont90p14yJPCrtOdx64vx4vKqnfKvc-SKMOMw6bSg8SOLDLTrNCncgLSs9OK07PPqdGHyJjTjtOy0pDTtNOSxI7DvNO4c8KDy5HGtMuUy5bLmMuaYcucy55sxaLOkMSDc9SLxaHLomnLpGXCqNSJ1LbKvdKdwonPitSGxazEs9GwdM-SHsSOStSRAdST1JXSiQPUmdSgzZ7SkcSp0pPIl9Ox0o7Um82K0LbTkdGexL4U1KbLkM2Da8uV0InOutSu1LDLn8S3wq_GqsafciDGn3h0IGjEt2XUudS7wqRU1YfLqsaiy63DgNKdwobMk9WEdMyYxazHhG7Rv3LEjnzSg8OMw4jUlNCkzKvUlgTVk9Wb1KHRjtSd1ZrHsNaaxb_GgdSjAhDVnMSpwqfGsMSxZcyb0ajDgNSmwoPVv8us1LxjyLNrIMS21brLpcKmQtaJxK3NkcWrxK4f05gBwoDRttG4z47RvHTRvsePyq50xI7CpNWN0oXVkMWiDdaYxbDNncez1ZbFqNGQAgXSl9KZzpHNtMaa0pzKmsSOf9SEVcW6bHMvRsSwbSDMlWnQmQQGxI5U0qvFisKgxY3Fj9aU0KbSiQzXldOLzZ7RrtK0zaTNps2o15sE1p3Ygsez043ImsWs2IbRhc2p1qIF1KbCgcKoxIljxLXGonMS0ajCncKWyIjQjgDEjl3Hq9We2KEByY3GvALEjl4AANipw7vTmdik0p7YsNipw7zEjtGxxI53AdixxI7Dvti82LVc2KfSotipyY_YrMyi2YXNjNihzZjEpNi1egLDv9mN2K3ZiQF92LfEvgTZitelx6vRhM2o2Y0F2Z3EjsKA2ZnWo8SOwobZg9mS2Y0T0I4BxI7CiNmmFMSOwonYtXfNmMKmZ8SwdcWawpDCpsWXbtO8Z8KAwqfGqXLFhMStw4s_w5nCmdqN2o3Cmg"
       codec.decompress(defaultData).then(json => {
         global.graph.configure( json )
         //graph.start()
@@ -500,7 +499,8 @@ let [width, height] = useWindowSize();
 let spacing = 0
 
 const mouseEnter = (name,e)=>{
-  if(e.pageY>60){
+  console.log(e.pageY,height)
+  if(e.pageY>60 && e.pageY<height-60){
     setMenu("")
   }else{
     setMenu(name)
@@ -512,89 +512,137 @@ const mouseLeave = (e)=>{
 }
 
 
+
+let extraTabs = []
 //console.log("MENU:",menu)
 let customNodes = []
-for(let n in global.customNodes){
-  //console.log("GRID",global.customNodes[n])
-  if(global.customNodes[n].name!="Special" && global.customNodes[n].name!="Modules"){
-    if(global.customNodes[n].name==menu){
 
-      let items = []
-      let itemspace = 40
-      for(let i in global.customNodeItems[global.customNodes[n].name]){
-        let item = global.customNodeItems[global.customNodes[n].name][i]
-        //console.log("Add item",item)
-        let style = {whiteSpace:"nowrap",letterSpacing:-1,fontSize:14,position:"absolute",top:50+itemspace*i,margin:4,borderRadius:"8px 8px 8px 8px",padding:6,textAlign:"center",color:"#FFFFFF",backgroundColor:"#"+global.customNodes[n].color}
-        if(n < 6 ){
-          style.left = 0
-        }else{
-          style.right = 0
+if(!showVideoLibrary){
+
+  for(let n in global.customNodes){
+    //console.log("GRID",global.customNodes[n])
+    //if(global.customNodes[n].name!="Special" && global.customNodes[n].name!="Modules"){
+      if(global.customNodes[n].name==menu){
+
+        let items = []
+        let itemspace = 40
+        for(let i in global.customNodeItems[global.customNodes[n].name]){
+          let item = global.customNodeItems[global.customNodes[n].name][i]
+          //console.log("Add item",item)
+          let style = {whiteSpace:"nowrap",letterSpacing:-1,fontSize:14,position:"absolute",top:50+itemspace*i,margin:4,borderRadius:"8px 8px 8px 8px",padding:6,textAlign:"center",color:"#FFFFFF",backgroundColor:"#"+global.customNodes[n].color}
+          if(n < 6 ){
+            style.left = 0
+          }else{
+            style.right = 0
+          }
+
+          items.push([
+            <Dragger key={"dragger"+n+"_"+i} name={item.title}  drop={(name,x,y)=>{
+                //console.log("DO A DROP AT ",name,x,y)
+                setMenu("")
+                var node_watch = global.LiteGraphJS.LiteGraph.createNode(menu+"/"+item.title);
+                node_watch.pos = [x-40+global.graph.canvas.visible_area[0],y+global.graph.canvas.visible_area[1]];
+                //console.log("looking in",,liteGraph,liteGraph._is_subgraph)
+                global.graph.canvas.graph.add(node_watch);
+              }}>
+              <div onMouseUp={()=>{
+                  if(menu){
+                    setMenu("")
+                    var node_watch = global.LiteGraphJS.LiteGraph.createNode(menu+"/"+item.title);
+                    node_watch.pos = [width/2-40+global.graph.canvas.visible_area[0],height/2+global.graph.canvas.visible_area[1]];
+                    //console.log("looking in",,liteGraph,liteGraph._is_subgraph)
+                    global.graph.canvas.graph.add(node_watch);
+                  }
+
+              }} style={style}>
+                {item.title}
+              </div>
+            </Dragger>
+          ])
         }
 
-        items.push([
-          <Dragger key={"dragger"+n+"_"+i} name={item.title}  drop={(name,x,y)=>{
-              //console.log("DO A DROP AT ",name,x,y)
-              setMenu("")
-              var node_watch = global.LiteGraphJS.LiteGraph.createNode(menu+"/"+item.title);
-              node_watch.pos = [x-40+global.graph.canvas.visible_area[0],y+global.graph.canvas.visible_area[1]];
-              //console.log("looking in",,liteGraph,liteGraph._is_subgraph)
-              global.graph.canvas.graph.add(node_watch);
-            }}>
-            <div onMouseUp={()=>{
-                if(menu){
-                  setMenu("")
-                  var node_watch = global.LiteGraphJS.LiteGraph.createNode(menu+"/"+item.title);
-                  node_watch.pos = [width/2-40+global.graph.canvas.visible_area[0],height/2+global.graph.canvas.visible_area[1]];
-                  //console.log("looking in",,liteGraph,liteGraph._is_subgraph)
-                  global.graph.canvas.graph.add(node_watch);
-                }
+        if(global.customNodes[n].name=="Modules"){
+          extraTabs.push(
+            <div style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+              <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
-            }} style={style}>
-              {item.title}
+                  {global.customNodes[n].name}
+
+
+                  {items}
+
+              </div>
             </div>
-          </Dragger>
-        ])
+          )
+
+        }else if(global.customNodes[n].name=="Special"){
+
+        }else{
+          customNodes.push(
+            <Grid key={"girdder"+n} onMouseLeave={mouseLeave}  item xs={1} style={{zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+              <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+
+                  {global.customNodes[n].name}
+
+
+                  {items}
+
+              </div>
+            </Grid>
+          )
+        }
+
+
+      }else{
+        if(global.customNodes[n].name=="Modules"){
+          extraTabs.push(
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+
+                if(e.pageY<height-80){
+                  setMenu("")
+                }else{
+                  setMenu(global.customNodes[n].name)
+                }
+              }}>
+              <div style={{borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",color:"#222222",height:30,backgroundColor:"#"+global.customNodes[n].color,opacity:0.6}}>
+
+                  {global.customNodes[n].name}
+
+              </div>
+            </div>
+          )
+        }else if(global.customNodes[n].name=="Special"){
+
+        }else{
+          customNodes.push(
+            <Grid key={"grd"+n} onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)} item xs={1} style={{cursor:"pointer",letterSpacing:-5,fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+
+                if(e.pageY>60){
+                  setMenu("")
+                }else{
+                  setMenu(global.customNodes[n].name)
+                }
+              }}>
+              <div style={{borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",color:"#222222",height:30,backgroundColor:"#"+global.customNodes[n].color,opacity:0.6}}>
+
+                  {global.customNodes[n].name}
+
+              </div>
+            </Grid>
+          )
+        }
       }
 
-      customNodes.push(
-        <Grid key={"girdder"+n} onMouseLeave={mouseLeave}  item xs={1} style={{zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-          <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
-
-              {global.customNodes[n].name}
-
-
-              {items}
-
-          </div>
-        </Grid>
-      )
-    }else{
-      customNodes.push(
-        <Grid key={"grd"+n} onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)} item xs={1} style={{cursor:"pointer",letterSpacing:-5,fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
-
-            if(e.pageY>60){
-              setMenu("")
-            }else{
-              setMenu(global.customNodes[n].name)
-            }
-          }}>
-          <div style={{borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",color:"#222222",height:20,backgroundColor:"#"+global.customNodes[n].color,opacity:0.6}}>
-
-              {global.customNodes[n].name}
-
-          </div>
-        </Grid>
-      )
-    }
+    //}
 
   }
-
 }
 
 
 
+
 let clickawayscreen = ""
-if(menu){
+if(!showVideoLibrary && menu){
   clickawayscreen = (
     <div ref={drop}  style={{position:"absolute",left:0,top:0,zIndex:1,width:"100%",height:"100%"}} onClick={()=>{setMenu("");if(global.graph&&global.graph.canvas.search_box)  global.graph.canvas.search_box.close()}}></div>
   )
@@ -602,7 +650,7 @@ if(menu){
 
 let tools = ""
 
-if(global.graph&&global.graph.canvas){
+if(!showVideoLibrary && global.graph&&global.graph.canvas){
   //console.log("TOOLSm",selectToolActive)
   tools = (
     <div>
@@ -615,12 +663,13 @@ if(global.graph&&global.graph.canvas){
             global.graph.canvas.last_mouse_position[0] = e.clientX-209
             global.graph.canvas.last_mouse_position[1] = e.clientY
             global.graph.canvas.showSearchBox()
-            setMenu("search")
+            //setMenu("search")
+            setMenu("")
           }
           global.graph.canvas.last_mouse_position[0] = width/2
           global.graph.canvas.last_mouse_position[1] = height/2
         }}>
-        <Tooltip title="Add Item" style={{marginLeft:4,cursor:"pointer"}}>
+        <Tooltip title="Add Item [space bar]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
             add_circle_outline
           </Icon>
@@ -636,7 +685,7 @@ if(global.graph&&global.graph.canvas){
                 global.graph.canvas.setDirty(true);
                 global.graph.canvas.graph.change();
               }}>
-              <Tooltip title="Reorient" style={{marginLeft:4,cursor:"pointer"}}>
+              <Tooltip title="Reorient [esc key]" style={{marginLeft:4,cursor:"pointer"}}>
                 <Icon>
                   aspect_ratio
                 </Icon>
@@ -649,7 +698,7 @@ if(global.graph&&global.graph.canvas){
           global.graph.canvas.selectToolActive = !global.graph.canvas.selectToolActive
           setSelectToolActive(global.graph.canvas.selectToolActive)
         }}>
-        <Tooltip title="Select" style={{marginLeft:4,cursor:"pointer"}}>
+        <Tooltip title="Select [hold ctrl]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
             photo_size_select_small
           </Icon>
@@ -660,7 +709,7 @@ if(global.graph&&global.graph.canvas){
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.selectNodes()
         }}>
-        <Tooltip title="Select All" style={{marginLeft:4,cursor:"pointer"}}>
+        <Tooltip title="Select All [ctrl+a]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
             select_all
           </Icon>
@@ -674,7 +723,7 @@ if(global.graph&&global.graph.canvas){
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.deleteSelectedNodes()
         }}>
-        <Tooltip title="Delete Selected" style={{marginLeft:4,cursor:"pointer"}}>
+        <Tooltip title="Delete Selected [delete key]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
             delete
           </Icon>
@@ -690,18 +739,19 @@ if(global.graph&&global.graph.canvas){
   )
 }
 
-return (
-  <div className="App" style={{color:"#FFFFFF"}}>
+let extraMenus = ""
 
-    <div style={{zIndex:1,position:"fixed",right:0,top:"50%",width:40}}>
-      <div style={{borderRadius:"8px 0px 0px 8px",textAlign:"left",color:"#dddddd",height:220,right:0,top:0,width:475,backgroundColor:"#333333"}}>
-        <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
+if(!showVideoLibrary){
+  extraMenus = (
+    <div>
+      <div style={{zIndex:1,position:"fixed",right:0,top:"20%",width:50}}>
+        <div style={{borderRadius:"8px 0px 0px 8px",textAlign:"left",color:"#dddddd",height:220,right:0,top:0,width:475,backgroundColor:"#333333"}}>
+          <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
 
-          {tools}
+            {tools}
+          </div>
         </div>
       </div>
-    </div>
-
 
       <div style={{zIndex:2,marginRight:8,position:"fixed",width:width-16,left:8,top:0}} ref={drop2} >
         <Grid container spacing={3}>
@@ -709,8 +759,17 @@ return (
         </Grid>
       </div>
 
-      {clickawayscreen}
+      {extraTabs}
 
+      {clickawayscreen}
+    </div>
+  )
+}
+
+return (
+  <div className="App" style={{color:"#FFFFFF"}}>
+
+    {extraMenus}
 
     <AboutDialog/>
     <SaveDialog liteGraph={liteGraph}/>

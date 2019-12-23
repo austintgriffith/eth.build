@@ -20,7 +20,9 @@ function ObjectObject() {
     fontSize:16
   }
   this.size = [resetSizeX,resetSizeY];
-  this.value = null
+  this.value = {
+    "to":"alice","from":"bob","value":10
+  }
   this.currentTitleColor = defaultColor
   this.hasProcessedOnce = false
 }
