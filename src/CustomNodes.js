@@ -159,6 +159,16 @@ function addHelpers(obj){
     }
   }
 
+
+
+  obj.prototype.originalOnDblClick = obj.prototype.onDblClick
+  obj.prototype.onDblClick = function(e,location,canvas){
+    console.log("DBLCLICK",e,location,canvas)
+    console.log("THIS",this)
+    this.graph.canvas.processContextMenu(this, e);
+    if(typeof obj.prototype.originalOnDblClick == "function") obj.prototype.originalOnDblClick(e,location,canvas)
+  }
+
   obj.prototype.destory = function() {
     let possibleReactElement = document.getElementById(this.id+"_react_element")
     if(possibleReactElement){
@@ -218,20 +228,20 @@ const hexColor = (hex)=>{
 
 
 global.customNodes = [
-  {name:"Input",color:"3f51b5"},
-  {name:"Display",color:"357a38"},
-  {name:"Storage",color:"ff9800"},
-  {name:"Network",color:"b2a429"},
-  {name:"Crypto",color:"f44336"},
-  {name:"Web3",color:"03A9F4"},
-  {name:"Control",color:"a4a4a4"},
-  {name:"Utils",color:"b26500"},
-  {name:"Math",color:"7fa9cb"},
-  {name:"String",color:"6b6b6b"},
-  {name:"Object",color:"454545"},
-  {name:"Special",color:"278e79"},
-  {name:"System",color:"989898"},
-  {name:"Modules",color:"7e57c2"},
+  {name:"Input",color:"3f51b5",icon:"✏️"},
+  {name:"Display",color:"357a38",icon:"🖥"},
+  {name:"Storage",color:"ff9800",icon:"💾"},
+  {name:"Network",color:"b9a814",icon:"📡"},
+  {name:"Crypto",color:"f44336",icon:"🔐"},
+  {name:"Web3",color:"03A9F4",icon:"🦄"},
+  {name:"Control",color:"a4a4a4",icon:"⚙️"},
+  {name:"Math",color:"7fa9cb",icon:"🧮"},
+  {name:"Utils",color:"97784f",icon:"🔧"},
+  {name:"String",color:"6b6b6b",icon:"💬"},
+  {name:"Object",color:"454545",icon:"📑"},
+  {name:"Special",color:"278e79",icon:""},
+  {name:"System",color:"989898",icon:"🎛"},
+  {name:"Modules",color:"7e57c2",icon:"📦"},
 ]
 
 
