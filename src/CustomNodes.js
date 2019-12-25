@@ -238,10 +238,10 @@ global.customNodes = [
   {name:"Math",color:"7fa9cb",icon:"🧮"},
   {name:"Utils",color:"97784f",icon:"🔧"},
   {name:"String",color:"6b6b6b",icon:"💬"},
-  {name:"Object",color:"454545",icon:"📑"},
-  {name:"Special",color:"278e79",icon:""},
+  {name:"Object",color:"454545",icon:"📦"},
+  {name:"Components",color:"009688",icon:""},
   {name:"System",color:"989898",icon:"🎛"},
-  {name:"Modules",color:"7e57c2",icon:"📦"},
+  {name:"Modules",color:"7e57c2",icon:""},
 ]
 
 

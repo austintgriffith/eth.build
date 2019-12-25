@@ -10,6 +10,8 @@ import CustomNodes from './CustomNodes'
 import ICON from './icon.png'
 import StackGrid from "react-stack-grid";
 
+import QrReader from "react-qr-reader";
+
 import Dragger from './Dragger.js';
 import { useDrop } from 'react-dnd'
 
@@ -31,8 +33,10 @@ const useStyles = makeStyles({
   },
 });
 
-function touchHandler(event)
-{
+
+const touchHandler = (event)=>{
+
+  //console.log("global.showLibrary",global.showLibrary)
 
     var touches = event.changedTouches,
         first = touches[0],
@@ -40,7 +44,7 @@ function touchHandler(event)
     switch(event.type)
     {
         case "touchstart": type = "mousedown"; break;
-        case "touchmove":  type = "mousemove"; event.preventDefault();break;
+        case "touchmove":  type = "mousemove"; if(global.showLibrary==true){}else{event.preventDefault()};break;
         case "touchend":   type = "mouseup";   break;
         default:           return;
     }
@@ -85,16 +89,16 @@ function App() {
 //  var defaultPrevent=function(e){e.preventDefault();}
 //document.addEventListener("touchstart", defaultPrevent);
 //document.addEventListener("touchmove" , defaultPrevent);
+//
+//
 
-  document.addEventListener("touchstart", touchHandler, {passive: false});
-  document.addEventListener("touchmove", touchHandler, {passive: false});
-  document.addEventListener("touchend", touchHandler, {passive: false});
-  document.addEventListener("touchcancel", touchHandler, {passive: false});
 
   const classes = useStyles();
 
   const [snackbar, setSnackbar] = React.useState("");
   global.setSnackbar = setSnackbar
+
+  const [readQr, setReadQr] = React.useState(false);
 
   const [live, setLive] = React.useState();
   const [liteGraph, setLiteGraph] = React.useState();
@@ -104,12 +108,23 @@ function App() {
   const [openSaveDialog, setOpenSaveDialog] = React.useState(false);
 
   let showLibrary = localStorage.getItem("eth.build.showLibrary");
+  if(showLibrary=="true") showLibrary=true
+  else if(showLibrary=="false") showLibrary=false
   //console.log("showLibrary",showLibrary)
-  const [showVideoLibrary, setShowVideoLibrary] = React.useState(showLibrary=='true'||showLibrary==null);
-
+  const [showVideoLibrary, setShowVideoLibrary] = React.useState(showLibrary);
+  global.showLibrary=showLibrary
 
 
   const dynamicWidth = window.innerWidth/3
+
+
+
+
+
+    document.addEventListener("touchstart", touchHandler, {passive: false});
+    document.addEventListener("touchmove", touchHandler, {passive: false});
+    document.addEventListener("touchend", touchHandler, {passive: false});
+    document.addEventListener("touchcancel", touchHandler, {passive: false});
 
   function SaveDialog(props) {
     const { liteGraph } = props;
@@ -309,7 +324,7 @@ React.useEffect(()=>{
 
       window.history.pushState("", "", '/');
 
-      setShowVideoLibrary(false)
+      setShowVideoLibrary(false);global.showLibrary=false;
     })
   }else{
     var data = localStorage.getItem("litegraph");
@@ -445,7 +460,7 @@ allCards = lessons.map(lesson => {
               global.graph.configure( json )
               global.graph.stop()
               global.graph.start()
-              setShowVideoLibrary(false)
+              setShowVideoLibrary(false);global.showLibrary=false;
             })
           }}>
           Load
@@ -578,7 +593,7 @@ if(!showVideoLibrary){
         } else if( global.customNodes[n].name=="Modules"){
             extraTabs.push(
               <div style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                     {global.customNodes[n].name}
 
@@ -589,7 +604,34 @@ if(!showVideoLibrary){
               </div>
             )
 
-          }else if(global.customNodes[n].name=="Special"){
+        }else if(width < 1000 && global.customNodes[n].name=="Components"){
+          extraTabs.push(
+            <div style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+              <div style={{transform:"rotate(90deg)",transformOrigin:"46% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+
+                  {global.customNodes[n].name}
+
+
+                  {items}
+
+              </div>
+            </div>
+          )
+
+        } else if(global.customNodes[n].name=="Components"){
+
+            extraTabs.push(
+              <div style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+
+                    {global.customNodes[n].name}
+
+
+                    {items}
+
+                </div>
+              </div>
+            )
 
         }else{
           customNodes.push(
@@ -642,8 +684,40 @@ if(!showVideoLibrary){
               </div>
             </div>
           )
-        }else if(global.customNodes[n].name=="Special"){
+        }else if(width < 1000 && global.customNodes[n].name=="Components"){
+          extraTabs.push(
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{overflow:"hidden",position:"absolute",bottom:80,height:200,left:0,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
 
+                //if(e.pageY<height-80){
+                //  setMenu("")
+                //}else{
+                  setMenu(global.customNodes[n].name)
+                //}
+              }}>
+              <div style={{transform:"rotate(90deg)",transformOrigin:"22px 30px",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",color:"#222222",height:200,backgroundColor:"#"+global.customNodes[n].color,opacity:0.6}}>
+
+                  {global.customNodes[n].name}
+
+              </div>
+            </div>
+          )
+        }else if(global.customNodes[n].name=="Components"){
+          extraTabs.push(
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+
+                if(e.pageY<height-80){
+                  setMenu("")
+                }else{
+                  setMenu(global.customNodes[n].name)
+                }
+              }}>
+              <div style={{borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",color:"#222222",height:30,backgroundColor:"#"+global.customNodes[n].color,opacity:0.6}}>
+
+                  {global.customNodes[n].name}
+
+              </div>
+            </div>
+          )
         }else{
           customNodes.push(
             <Grid key={"grd"+n} onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)} item xs={1} style={{cursor:"pointer",letterSpacing:-3,fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
@@ -753,6 +827,7 @@ if(!showVideoLibrary && global.graph&&global.graph.canvas){
       <div style={{margin:5}} onClick={async ()=>{
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.deleteSelectedNodes()
+          console.log("global.graph.canvas",global.graph.canvas)
         }}>
         <Tooltip title="Delete Selected [delete key]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
@@ -797,8 +872,35 @@ if(!showVideoLibrary){
   )
 }
 
+let qrReader = ""
+if(readQr){
+  qrReader = (
+    <div style={{zIndex:5,position:"absolute",left:0,top:0,width:"100%",height:"100%",backgroundColor:"#111111",}} onClick={()=>{setReadQr(false)}}>
+      <QrReader
+        delay={500}
+        onError={(e)=>{
+          console.log("ERROR",e)
+        }}
+        onScan={(result)=>{
+          console.log("SCAN",result)
+          if(result){
+            if(result.indexOf("http")>=0){
+              window.location = result
+            }else{
+              window.location = "https://eth.build/"+result
+            }
+          }
+        }}
+        style={{ margin:"auto", maxWidth: "80%", maxHeight: "80%"}}
+        resolution={1200}
+      />
+    </div>
+  )
+}
+
 return (
   <div className="App" style={{color:"#FFFFFF"}}>
+    {qrReader}
 
     {extraMenus}
 
@@ -836,8 +938,8 @@ return (
             </Tooltip>
           </span>
 
-          <span onClick={()=>{setShowVideoLibrary(true);localStorage.setItem("eth.build.showLibrary",true);}}
-            onTouchStart={()=>{setShowVideoLibrary(true);localStorage.setItem("eth.build.showLibrary",true);}}
+          <span onClick={()=>{setShowVideoLibrary(true);global.showLibrary=true;localStorage.setItem("eth.build.showLibrary",true);}}
+            onTouchStart={()=>{setShowVideoLibrary(true);global.showLibrary=true;localStorage.setItem("eth.build.showLibrary",true);}}
           >
             <span style={{color:"#03a9f4"}}>eth</span>
             <span style={{position:'relative',left:-5,bottom:15,color:"#f44336",marginBottom:25}}>.</span>
@@ -873,7 +975,7 @@ return (
           </span>
 
           <span style={{margin:5,paddingLeft:10,borderLeft:"1px solid #cccccc",height:barHeight}} onClick={async ()=>{
-              alert("scan")
+              setReadQr(!readQr)
             }}>
             <Tooltip title="Scan" style={{marginLeft:10,cursor:"pointer"}}>
               <svg style={{width:24,height:24,opacity:0.95}} viewBox="0 0 24 24">
@@ -883,7 +985,7 @@ return (
           </span>
 
           <span style={{margin:5,borderLeft:"1px solid #cccccc",height:barHeight}} onClick={async ()=>{
-              setShowVideoLibrary(true);localStorage.setItem("eth.build.showLibrary",true)
+              setShowVideoLibrary(true);global.showLibrary=true;localStorage.setItem("eth.build.showLibrary",true)
             }}>
             <Tooltip title="Learn More" style={{marginLeft:10,cursor:"pointer"}}>
               <Icon>
@@ -953,12 +1055,12 @@ return (
           <div style={{cursor:"pointer",letterSpacing:-5,borderBottom:"1px solid #999999",borderLeft:"1px solid #999999",borderRight:"1px solid #999999",fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}
             onTouchStart={
               async ()=>{
-                setShowVideoLibrary(false)
+                setShowVideoLibrary(false);global.showLibrary=false;
                 localStorage.setItem("eth.build.showLibrary",false)
               }
             }
             onClick={async ()=>{
-              setShowVideoLibrary(false)
+              setShowVideoLibrary(false);global.showLibrary=false;
               localStorage.setItem("eth.build.showLibrary",false)
             }}>
             <span style={{color:"#03a9f4"}}>eth</span>
