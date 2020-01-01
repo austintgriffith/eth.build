@@ -24,6 +24,7 @@ DisplayList.prototype.onExecute = function() {
     this.list.push(input)
   }
   this.setOutputData(1,this.lastItem)
+  this.setOutputData(0,this.list)
 }
 
 DisplayList.prototype.onAction = function(action) {

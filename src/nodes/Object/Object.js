@@ -5,8 +5,8 @@ import { TextareaAutosize } from '@material-ui/core';
 let debounce
 
 const staticInputs = 1
-const resetSizeX = 320
-const resetSizeY = 100
+const resetSizeX = 440
+const resetSizeY = 180
 
 const defaultColor = "#5a5a5a"
 

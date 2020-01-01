@@ -324,7 +324,7 @@ Block.prototype.onDrawBackground = function(ctx) {
         toCell = (
           <TableCell style={rowStyle}>
           <Blockies
-            seed={tx.to?tx.to.toLowerCase():""}
+            seed={tx.to&&typeof tx.to.toLowerCase =="function"?tx.to.toLowerCase():""}
             size={8}
             scale={2}
 
@@ -346,10 +346,10 @@ Block.prototype.onDrawBackground = function(ctx) {
         <StyledTableRow>
           <TableCell style={rowStyle}>
             <Blockies
-              seed={tx.from?tx.from.toLowerCase():""}
+              seed={tx.from&&typeof tx.from.toLowerCase == "function"?tx.from.toLowerCase():""}
               size={8}
               scale={2}
-            /><span style={{marginLeft:4}}>{tx.from?tx.from.substr(0,8):""} {nonceDisplay}</span>
+            /><span style={{marginLeft:4}}>{tx.from&&typeof tx.from.substr == "function"?tx.from.substr(0,8):""} {nonceDisplay}</span>
           </TableCell>
           {valueCell}
           {toCell}

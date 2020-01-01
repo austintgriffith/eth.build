@@ -58,6 +58,7 @@ Module.prototype.onDrawTitle = function(ctx) {
 };
 
 Module.prototype.onDblClick = function(e, pos, graphcanvas) {
+  console.log("MODULE DBLCLICK")
   var that = this;
   setTimeout(function() {
     graphcanvas.openSubgraph(that.subgraph);
@@ -265,7 +266,7 @@ Module.prototype.onResize = function(size) {
 
 Module.prototype.serialize = function() {
   var data = global.LiteGraphJS.LGraphNode.prototype.serialize.call(this);
-  console.log("SERIALIZED",data)
+  //console.log("SERIALIZED",data)
   data.subgraph = this.subgraph.serialize();
   return data;
 };

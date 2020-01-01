@@ -118,15 +118,28 @@ function addHelpers(obj){
   obj.prototype.onInputDblClick = function(index,e){
     if(typeof obj.prototype.originalOnInputDblClick == "function")   obj.prototype.originalOnInputDblClick()
     if(this.inputs[index].type == -1){
-      //this is an action, let's attach a button to it automatically
-      var node_button = globalLiteGraphJS.LiteGraph.createNode("Input/Button");
-      node_button.pos = [e.canvasX-280,e.canvasY];
-      this.graph.add(node_button);
-      //i have no idea why, but I have to do this to make it work:
-      let that = this
-      setTimeout(()=>{
-        node_button.connect(0, that, index);
-      },1)
+      if(this.type == "Input/Button"){
+        //this is an action, let's attach a button to it automatically
+        var node_button = globalLiteGraphJS.LiteGraph.createNode("Control/Timer");
+        node_button.pos = [e.canvasX-280,e.canvasY];
+        this.graph.add(node_button);
+        //i have no idea why, but I have to do this to make it work:
+        let that = this
+        setTimeout(()=>{
+          node_button.connect(0, that, index);
+        },1)
+      }else{
+        //this is an action, let's attach a button to it automatically
+        var node_button = globalLiteGraphJS.LiteGraph.createNode("Input/Button");
+        node_button.pos = [e.canvasX-280,e.canvasY];
+        this.graph.add(node_button);
+        //i have no idea why, but I have to do this to make it work:
+        let that = this
+        setTimeout(()=>{
+          node_button.connect(0, that, index);
+        },1)
+      }
+
     }else if(this.inputs[index].type&& this.inputs[index].type.indexOf("string")==0){
       var node_text = globalLiteGraphJS.LiteGraph.createNode("Input/Text");
       node_text.pos = [e.canvasX-380,e.canvasY];
@@ -164,9 +177,13 @@ function addHelpers(obj){
   obj.prototype.originalOnDblClick = obj.prototype.onDblClick
   obj.prototype.onDblClick = function(e,location,canvas){
     console.log("DBLCLICK",e,location,canvas)
-    console.log("THIS",this)
-    this.graph.canvas.processContextMenu(this, e);
-    if(typeof obj.prototype.originalOnDblClick == "function") obj.prototype.originalOnDblClick(e,location,canvas)
+    if(this.graph.canvas.moreInfo){
+
+      console.log("THIS",this)
+      this.graph.canvas.processContextMenu(this, e);
+    }
+
+    if(typeof this.originalOnDblClick == "function") this.originalOnDblClick(e,location,canvas)
   }
 
   obj.prototype.destory = function() {
@@ -240,6 +257,7 @@ global.customNodes = [
   {name:"String",color:"6b6b6b",icon:"💬"},
   {name:"Object",color:"454545",icon:"📦"},
   {name:"Components",color:"009688",icon:""},
+  {name:"Special",color:"009688",icon:""},
   {name:"System",color:"989898",icon:"🎛"},
   {name:"Modules",color:"7e57c2",icon:""},
 ]

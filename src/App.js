@@ -34,7 +34,16 @@ const useStyles = makeStyles({
 });
 
 
+console.log("LOAD MODULES")
+let dynamicallyloadedis = require('./Modules')
+console.log("dynamicallyloadedis",dynamicallyloadedis);
+global.modules = {
+  "price": {"nodes":[{"type":"Modules/Module","pos":[280,310],"size":{"0":140,"1":46},"flags":{},"order":0,"mode":0,"outputs":[{"name":"price","type":0,"links":null}],"properties":{"enabled":"on","title":"Price","color":"7eccc2"},"subgraph":{"last_node_id":16,"last_link_id":21,"nodes":[{"id":3,"type":"Control/Timer","pos":[180,220],"size":{"0":140,"1":26},"flags":{},"order":0,"mode":0,"outputs":[{"name":"on_tick","type":-1,"links":[10],"label":"30000ms"}],"properties":{"interval":30000,"event":"tick"},"boxcolor":"#222"},{"id":7,"type":"Storage/Variable","pos":[1110,190],"size":{"0":140,"1":26},"flags":{},"order":8,"mode":0,"inputs":[{"name":"in","type":0,"link":19}],"outputs":[{"name":"out","links":[11]}],"properties":{"varname":"price","global":true}},{"id":10,"type":"Modules/Output","pos":[1130,310],"size":[180,40],"flags":{},"order":10,"mode":0,"inputs":[{"name":"","type":0,"link":11}],"properties":{"name":"price"}},{"id":11,"type":"Input/Text","pos":[80,360],"size":[300,50],"flags":{},"order":1,"mode":0,"inputs":[{"name":"","type":0,"link":null}],"outputs":[{"name":"","type":"string","links":[]}],"properties":{"blockieSize":50,"placeholder":"enter text here","title":"Text","value":"https://api.radarrelay.com/v2/markets/WETH-DAI/ticker"}},{"id":2,"type":"Input/Text","pos":[80,70],"size":[300,50],"flags":{},"order":2,"mode":0,"inputs":[{"name":"","type":0,"link":null}],"outputs":[{"name":"","type":"string","links":[12]}],"properties":{"blockieSize":50,"placeholder":"enter text here","title":"Text","value":"https://api.coinmarketcap.com/v1/ticker/ethereum/"}},{"id":1,"type":"Network/Request","pos":[430,160],"size":{"0":180,"1":46},"flags":{},"order":4,"mode":0,"inputs":[{"name":"[url]","type":"string","link":12},{"name":"request","type":-1,"link":10}],"outputs":[{"name":"output","type":"object","links":[14],"label":1}],"properties":{"url":"https://api.coinmarketcap.com/v1/ticker/ethereum/","debounce":1000}},{"id":14,"type":"Input/Number","pos":[540,360],"size":[190,50],"flags":{"collapsed":true},"order":3,"mode":0,"inputs":[{"name":"","type":0,"link":null}],"outputs":[{"name":"","type":"number","links":[15]}],"properties":{"placeholder":"#","title":"Number","value":"0"}},{"id":13,"type":"Object/index","pos":[650,320],"size":[190,60],"flags":{},"order":5,"mode":0,"inputs":[{"name":"obj","type":0,"link":14},{"name":"index","type":"number","link":15}],"outputs":[{"name":"value","type":"string,object,array","links":[17]},{"name":"index","type":"number","links":null}],"properties":{}},{"id":4,"type":"Object/property","pos":[670,190],"size":[190,30],"flags":{},"order":6,"mode":0,"inputs":[{"name":"obj","type":0,"link":17}],"outputs":[{"name":"","type":"","links":[18]}],"properties":{"value":"price_usd"}},{"id":6,"type":"Display/Watch","pos":[850,70],"size":[200,60],"flags":{},"order":9,"mode":0,"inputs":[{"name":"","type":0,"link":21,"label":""}],"properties":{}},{"id":16,"type":"Utils/To Float","pos":[900,220],"size":[170,30],"flags":{},"order":7,"mode":0,"inputs":[{"name":"","type":0,"link":18}],"outputs":[{"name":"","type":"number","links":[19,21]}],"properties":{}}],"links":[[10,3,0,1,1,-1],[11,7,0,10,0,0],[12,2,0,1,0,"string"],[14,1,0,13,0,0],[15,14,0,13,1,"number"],[17,13,0,4,0,0],[18,4,0,16,0,0],[19,16,0,7,0,0],[21,16,0,6,0,0]],"groups":[],"config":{},"version":0.4}}],"links":[]}
+}
+
 const touchHandler = (event)=>{
+
+
 
   //console.log("global.showLibrary",global.showLibrary)
 
@@ -65,8 +74,9 @@ const touchHandler = (event)=>{
 
 }
 
+
 function App() {
-  //console.log("APP")
+  console.log("APP")
 
   /*
   window.addEventListener("wheel", event => {
@@ -79,11 +89,7 @@ function App() {
 
   const [selectToolActive, setSelectToolActive] = React.useState(false);
 
-  document.addEventListener("keydown", (keydown)=>{
-    if(keydown.key=="Escape"){
-      setMenu("")
-    }
-  }, false);
+
 
 
 //  var defaultPrevent=function(e){e.preventDefault();}
@@ -91,7 +97,11 @@ function App() {
 //document.addEventListener("touchmove" , defaultPrevent);
 //
 //
+//
+  const [moreInfo, setMoreInfo] = React.useState(false);
 
+  const [drawing, setDrawing] = React.useState(false);
+  const [drawingColor, setDrawingColor] = React.useState("#03A9F4");
 
   const classes = useStyles();
 
@@ -116,15 +126,34 @@ function App() {
 
 
   const dynamicWidth = window.innerWidth/3
-
-
-
-
+  /*
+   document.ontouchstart = touchHandler
+   document.ontouchmove = touchHandler
+   document.ontouchend = touchHandler
+   document.ontouchcancel = touchHandler
+   */
 
     document.addEventListener("touchstart", touchHandler, {passive: false});
     document.addEventListener("touchmove", touchHandler, {passive: false});
     document.addEventListener("touchend", touchHandler, {passive: false});
     document.addEventListener("touchcancel", touchHandler, {passive: false});
+
+    //console.log("ADDING KEY DOWN!!!",document.onkeydown)
+    document.onkeydown = (keydown)=>{
+
+      //console.log("EVENT")
+      if(keydown.key=="Escape"){
+        setMenu("")
+        setDrawing("")
+        global.graph.canvas.drawing = false
+        global.graph.canvas.selectToolActive = false
+        setSelectToolActive(global.graph.canvas.selectToolActive)
+      }else{
+        console.log(keydown)
+      }
+
+    }
+
 
   function SaveDialog(props) {
     const { liteGraph } = props;
@@ -141,10 +170,12 @@ function App() {
     let link = window.location.protocol+"//"+window.location.host+"/"+compressed
 
 
-    let qrcode = "(too big for QR code)"
+    let qrcode = ""
     if(link && link.length<2580){
       qrcode = (
-        <QRCode size={dynamicWidth} value={link} style={{ border: '1px solid #dddddd',padding:5,margin:5}}/>
+        <div>
+          <QRCode size={dynamicWidth} value={link} style={{ border: '1px solid #dddddd',padding:5,margin:5}}/>
+        </div>
       )
     }
 
@@ -335,7 +366,7 @@ React.useEffect(()=>{
       setLiteGraph(graph)
       setLiteGraphCanvas(canvas)
     } else {
-      let defaultData = "wofCrGxhc3Rfbm9kZV9pZMONAcKJxIHEg8SFbGlua8SLxI0CFMKlxIfEiXPCnsKKwqLEjMSOe8KkdHlwZcKtQ29udHJvbC9UaW1lcsKjcG9zwpLDjQJSxI7CosKkc2l6ZcKCwqEww4zCjMKhMRrCpWbEgmdzwoHCqWPEscSCcHNlZMOCwqVvcsSJcgDCpG3EiGUAwqdvdXRwxaxzwpHChMKkbmHEtsWqbl90aWNrxKbEqGXDv8KlxJTElsWwxL4AxoJhYmVswqczMMaPMG1zwqpwxLDEqXLFumVzwoLCqMSVdMS3dmFsw411MMKlZXZlxK7EpsW7a8KoYm94xZdsxaDCpCMyxrjEocSjAV3FvsSpwq9DcsSodG8vS2V5IFBhacS4xLrEvMONAxjDjMOnxYPFhcWHxYnDikNTwpnCmsWNQsWQxZJzwoDFn8WhxLcHxaXFpwDCpsSVxa50xLzCg8WzxbXEqlvGlWnGocafIGvHiMa9xKfEqcKmxIRyxJVnwqTGg2vEjsOmx7HFtMS2wqhnxqrEt2HGn8a-xoDIhcSVa8OAxarFrMeuc8KTyIrHs8Krx7bHuGXHuseIyJPIgMSvyIPGgsiWc8KQyJ7EtsaUdWLElGPIpHnIpsiByKnIhsisyK5lwqdhZGRyxppzyLfIqG5nyKrGhMKTxI7Dp8SOw7_EvgLGlMaWxLfGmcWUyZLHt8iRZceHecOZQjB4ZjQzMzZhYTU0NDFlYzA2Y8mlN2RiYsmtNmViOTHJozk4YsaPyas2MmQzybM5YTk0YjYxZmY3MmPKicSJMjFhNMKJxKLEjQFeyJPCr0Rpc3DEgnkvQcmAyYJzc8S5xLvEvQQaw4zDkseWxYbEvQFUUMehYcWTx6TFoMWiCcepxInHq8etxa_Ckci8wqDIk8WkyIbJjMmSb8aXyZXChMKryLJvxbxpZVPHlzLIoMSCY2VoxLHFosKgwqXFunRsyL3Kp8mByYPCpcahbHVlw5kqyZ81MWM1YcmyyaIyYjVmNcmlZcqHODTJrjRkZsqNMTfMicmryatjN8mjxrrKm3rIk8KsV8m4My9CxqJhbsucyqzHkAMDxI7MksWExYbFiMWKw5LHn8q5yrvHpcWiCsuAxajHrG7Im8idx7LFtsi_y6jKqsmFyILJh8iVxJbJjsi8wqxby5LFvGNox4xux73Fv8inzLvIhMiGw4DIvMKlzYXJrMW9x77IlMuKAsWpxavFrcuExbLIi8i9YsyazJxlyKZudW3GinLJiWvGhQIExojGimzFicuMy47LlcabyL7KqMmDy6_Lscuzy7XLtzPLucu7y71hy79hzIHMg8yFzIfMiTfMi8mszI4zwqjGlW92xIzEt8OZPWh0xa1zOi8vbc2HbmV0LsSVZnVyYc6kx4V2zJdlNTljNDY0Y82_MsmhN2UyOTYzy7xmxo_Ovcm-zrpmOMqZxrt9yJPCqsqgyqLKpC9RUsyexL0FwpZayrNlyrXCkMSOwpDMqsejzKzEtwvMr8uCzLLNnMy1ZcuHzZXLiciWyZDNr8aLzbp4y7LLtMu2ZMu4y7rLvMu-zIDMgs6zzojMhs6KzozMjcmjzbPJlM21woHCpnFyy5fFhsSOGMyQxI5cyp7HgceDx4VNzqHFpm7Fu8-SxL46w4zDsM-XzKbHmjrKjsypxZHKus-eyr3EtwbPosyxzLPIvMKqW23QlcStxbvNice_yLjMvMuKAcO-yLzCp1vElcSJeNC0ZcKmzaXNp8S3zL3Il8i8yI3Ij86oyJLNlcO_0YfEvhDImc2bx6_Cksi8yKDIgsiiyLXMusi5yKvCkciI0YnQsGXQlsW70ZzJh82qzawT0ILGmNCEwqXQvmV4AM-HypvCiMiTwq3PjMqjYcqlV8iRzYXQmQF8bs-Xyq4JPM-dyrzHpnII0KrLg8evxbHPps-oxb_Pqsy-AhPPrWzCoNGryZXCgNCNAXfPilPJhmfKpm550b_ChsOMw7rQnsWJxYvQo8ei0ojFogXSjM-kx6_MtM2ewqFBy4jRkAHDu8i8wqFC0rrQuMO80r5D04HPq8Sa0ZPIm8uFz6bCps2ax67RpsmIyLrRn9C50prNtcKA0bPEjs-WzZXCrEnStC9VyqNvyL_PkkbPlsykz5jDjMOcVtKHz59yAc-i04nLhMuG05DRqNOTw7vTlcaawoHCpGZpy6XCont90p14yJPCrtOdx64vx4vKqnfKvc-SKMOMw6bSg8SOLDLTrNCncgLSs9OK07PPqdGHyJjTjtOy0pDTtNOSxI7DvNO4c8KDy5HGtMuUy5bLmMuaYcucy55sxaLOkMSDc9SLxaHLomnLpGXCqNSJ1LbKvdKdwonPitSGxazEs9GwdM-SHsSOStSRAdST1JXSiQPUmdSgzZ7SkcSp0pPIl9Ox0o7Um82K0LbTkdGexL4U1KbLkM2Da8uV0InOutSu1LDLn8S3wq_GqsafciDGn3h0IGjEt2XUudS7wqRU1YfLqsaiy63DgNKdwobMk9WEdMyYxazHhG7Rv3LEjnzSg8OMw4jUlNCkzKvUlgTVk9Wb1KHRjtSd1ZrHsNaaxb_GgdSjAhDVnMSpwqfGsMSxZcyb0ajDgNSmwoPVv8us1LxjyLNrIMS21brLpcKmQtaJxK3NkcWrxK4f05gBwoDRttG4z47RvHTRvsePyq50xI7CpNWN0oXVkMWiDdaYxbDNncez1ZbFqNGQAgXSl9KZzpHNtMaa0pzKmsSOf9SEVcW6bHMvRsSwbSDMlWnQmQQGxI5U0qvFisKgxY3Fj9aU0KbSiQzXldOLzZ7RrtK0zaTNps2o15sE1p3Ygsez043ImsWs2IbRhc2p1qIF1KbCgcKoxIljxLXGonMS0ajCncKWyIjQjgDEjl3Hq9We2KEByY3GvALEjl4AANipw7vTmdik0p7YsNipw7zEjtGxxI53AdixxI7Dvti82LVc2KfSotipyY_YrMyi2YXNjNihzZjEpNi1egLDv9mN2K3ZiQF92LfEvgTZitelx6vRhM2o2Y0F2Z3EjsKA2ZnWo8SOwobZg9mS2Y0T0I4BxI7CiNmmFMSOwonYtXfNmMKmZ8SwdcWawpDCpsWXbtO8Z8KAwqfGqXLFhMStw4s_w5nCmdqN2o3Cmg"
+      let defaultData = "wofCrGxhc3Rfbm9kZV9pZMONAcKZxIHEg8SFbGlua8SLxI0CH8KlxIfEiXPClsKKwqLEjMSOwobCpHR5cGXCrElucHV0L0LEr3RvbsKjcG9zwpI6YMKkc2l6ZcKSw4zDiDLCpWbEgmdzwoDCpW9yxIlyAMKkbcSIZQDCpsSVxK50c8KRwoPCpG5hbWXCoMSmxKhlw7_CpMSUxJbDgMKnb8SvxZrEusWexaDFosWkxKfEqcO_wqXFqmvFnMONAhDFssWhxaPFpcSpwqdib29sZWFuxbnElcW7w4DCqnByb8SpcnRpZXPCg8KldmFsdWXCqGdlbmVyYXRlwqXGl3TGicKmxLJ0xLTGjGPFrm50S8ShxKMBXcaDZcKvQ3LEqMS0L0tleSBQYWlyxLfEucKSZMOMw5zEvsWAZcKCwqEww4pDU8KZwprCoTFCxYfFicWLxY3Fj8amAsWTxZXFl8WZxK_FscWfxoHCrVvGkmnGncapIGvHhsa8xbZlwqbEhHLElWfFqcaOxI7DpsaAxaLGosakxqbGqGXGvcWoxbrFrMWudMWwwpPIhWXCq8eyx7Rlx7bHhsa9x7x0x75uZ8aNxJZzwpDIlMaRdWLElGPImnnInMe9x7_IosW7yKXHrsWiwqdhZGRyxplzyK7InsiwxbrEusW9AsW9FsaRxpPGlcaXxpnCgcmGx7PIiseFecOZQjB4MzdjY2I3MGM4ZMmdZDc3NWHJpGI1M2RhyZs2OWZiyZxkMDJhYzA1NmFmOGPJrmLJujAxMTI4M2PEiTdmNjJkYsKJxKLEjQHCkca9wq9EaXNwxIJ5L0HIuMi6c3PHjcmBAWjDjMOSx5PFgcKSxI5UUMehYcWKxYzFjsWQBceoxInHqsStx6zFnci0xoLHusWSxbrJhMmGxpTGpsmJc8KEwqvIqW9ja8aYU8eUMsiWxIJjZWjGiMWQwqDGq2nGrWXCp8qcyLnIu8acxp7GoMOZKsmTN2LJsjFmNMmzYTI0MzFjYWVkM8m_NWZmN2XLuWU4MDDJpDljy6UzxrnKkFzKk8eAx4JvL03GpcWUbmljyqHKqQE2ZMqnx5XHl8eZOsu4x57HoMWIyq7Ho8qxxqYByrTFlsWYyrfFm8iTyrrCqlttzI_EtcySx7nFpsidyJ_IgMiOyJTCp1vElcSJeMy0xKnCpm51bWLGpsiBxavIlMiHxqXGp8apyIzNiGvFvRDFrcWvx6zCksiUyJbHvsiYyKzIvcy3yLHFvAHIhMq6wqjMsGXMkMySzZ3Iv8aOxbwCE8uAyYjGmHPCgcKlzL1leADKjsa6wojGvcKtypXKl8qZL1fGqGNozJQyw5DCnMyZyqkDVTzKrcqvx6TFkAPMp8q2xbDCkcKEyrrFtcWmyr3Igs2txblhzYZswqDNr8uCzbHCgM25ypB9xr3Cqs2-yphhyppRUsyUw4zCqsSOwprOisSOwpDOuc6PzKPHpXIEzpTMqc6WzpjFs8q7zpvNkMmCzp_Oocuiy6TLpjLLqMuqyaTLrcuvy7HLs8u1y77Lt8u8y7zLvsyAYcyCzITOpMaWzbHCgcKmcXLLjMWBxI4YzZ_ClcKWyIPEjlwAxI5dxZfIr8igz64CyYPGu8-6fQAAz7gQxKTPsgFcAsO_z7gTz7ABxI7CiM--z7gWz7PPusKRz77CpmfGk3VwyKTCpsa0bmZpZ8KAwqd2xqbEv8S1w4s_w5nCmdCq0KrCmg"
       codec.decompress(defaultData).then(json => {
         global.graph.configure( json )
         //graph.start()
@@ -510,12 +541,30 @@ allCards = lessons.map(lesson => {
 
 let [width, height] = useWindowSize();
 
+const toggleDraw = (e)=>{
+    let currentDrawing = drawing
+    console.log("toggle draw",currentDrawing,drawingColor)
+    currentDrawing = !currentDrawing
+    if(currentDrawing){
+      currentDrawing = drawingColor
+      global.graph.canvas.drawing = drawingColor
+      global.graph.canvas.selectToolActive = false
+      setSelectToolActive(global.graph.canvas.selectToolActive)
+    }else{
+      global.graph.canvas.drawing = false
+    }
+
+    setDrawing(currentDrawing)
+    console.log("toggle draw is now",global.graph.canvas.drawing)
+
+}
+
 
 let spacing = 0
 
 const mouseEnter = (name,e)=>{
-  console.log(e.pageY,height)
-  if(e.pageY>60 && e.pageY<height-60){
+  //console.log(e.pageY,height)
+  if(e.pageY > 60 && e.pageY < height-60){
     setMenu("")
   }else{
     setMenu(name)
@@ -526,7 +575,7 @@ const mouseLeave = (e)=>{
   setMenu("")
 }
 
-
+const tabFontSize = 14
 
 let extraTabs = []
 //console.log("MENU:",menu)
@@ -537,20 +586,21 @@ if(!showVideoLibrary){
   for(let n in global.customNodes){
     //console.log("GRID",global.customNodes[n])
     //if(global.customNodes[n].name!="Special" && global.customNodes[n].name!="Modules"){
-      if(global.customNodes[n].name==menu){
+      if(!drawing && global.customNodes[n].name==menu){
+
+        let style = {borderBottom:'3px solid #888888',whiteSpace:"nowrap",letterSpacing:-1,fontSize:14,position:"absolute",margin:4,borderRadius:"8px 8px 8px 8px",padding:6,textAlign:"center",color:"#FFFFFF",backgroundColor:"#"+global.customNodes[n].color}
+        if(n < 6 ){
+          style.left = 0
+        }else{
+          style.right = 0
+        }
+
 
         let items = []
         let itemspace = 40
         for(let i in global.customNodeItems[global.customNodes[n].name]){
           let item = global.customNodeItems[global.customNodes[n].name][i]
           //console.log("Add item",item)
-          let style = {whiteSpace:"nowrap",letterSpacing:-1,fontSize:14,position:"absolute",top:50+itemspace*i,margin:4,borderRadius:"8px 8px 8px 8px",padding:6,textAlign:"center",color:"#FFFFFF",backgroundColor:"#"+global.customNodes[n].color}
-          if(n < 6 ){
-            style.left = 0
-          }else{
-            style.right = 0
-          }
-
           items.push([
             <Dragger key={"dragger"+n+"_"+i} name={item.title}  drop={(name,x,y)=>{
                 //console.log("DO A DROP AT ",name,x,y)
@@ -569,16 +619,93 @@ if(!showVideoLibrary){
                     global.graph.canvas.graph.add(node_watch);
                   }
 
-              }} style={style}>
+              }} style={{...style,top:50+itemspace*i}}>
                 {item.title}
               </div>
             </Dragger>
           ])
         }
 
+        if(global.customNodes[n].name=="Modules"){
+
+          /*
+          items.push(<div key={"bar4"} style={{padding:4,position:"absolute",bottom:itemspace*4,width:"80%",borderTop:"1px solid #888888"}}></div>)
+
+          let count = 3
+          for(let m in global.modules){
+            items.push(
+              <Dragger key={"draggercustom"+m} name={m}  drop={(name,x,y)=>{
+                  //console.log("DO A DROP AT ",name,x,y)
+                  setMenu("")
+
+                  localStorage.setItem("litegrapheditor_clipboard",JSON.stringify(global.modules[m]))
+                  global.graph.canvas.last_mouse_position[0] = width/2
+                  global.graph.canvas.last_mouse_position[1] = height/2
+                  global.graph.canvas.pasteFromClipboard()
+                  global.graph.canvas.setDirty(true);
+                  global.graph.canvas.graph.change();
+                }}>
+                  <div style={{...style,bottom:itemspace*count++}}>
+                    {m}
+                  </div>
+              </Dragger>
+            )
+          }
+
+          //items.push(<div key ={"bar3"} style={{padding:10,position:"absolute",bottom:itemspace*3,width:"100%",borderTop:"1px solid #999999"}}></div>)
+
+          items.push(<div key={"bar3"} style={{padding:4,position:"absolute",bottom:itemspace*2,width:"80%",borderTop:"1px solid #888888"}}></div>)
+
+          */
+
+
+
+          items.push(
+            <div onMouseUp={()=>{
+              global.graph.canvas.copyToClipboard()
+              let item = localStorage.getItem("litegrapheditor_clipboard")
+              console.log(item)
+
+              let webfile = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>URL</key>
+  <string>https://eth.build/`+codec.compress(item)+`</string>
+</dict>
+</plist>
+  `
+
+              var file = new Blob([item]);
+              var url = URL.createObjectURL( file );
+              var element = document.createElement("a");
+              element.setAttribute('href', url);
+              element.setAttribute('download', "eth.build.module" );
+              element.style.display = 'none';
+              if(document.body){
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+                setTimeout( function(){ URL.revokeObjectURL( url ); }, 1000*60 );
+                setOpenSaveDialog(false)
+              }
+            }} style={{...style,bottom:itemspace*1}}>
+              Save
+            </div>
+          )
+          items.push(
+            <div onMouseUp={()=>{
+              document.getElementById("moduleloader").click()
+            }} style={{...style,bottom:0}}>
+              Load
+            </div>
+          )
+        }
+
+
         if(width < 1000 && global.customNodes[n].name=="Modules"){
           extraTabs.push(
-            <div style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+            <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
               <div style={{transform:"rotate(90deg)",transformOrigin:"63% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {global.customNodes[n].name}
@@ -591,8 +718,11 @@ if(!showVideoLibrary){
           )
 
         } else if( global.customNodes[n].name=="Modules"){
+
+
+
             extraTabs.push(
-              <div style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+              <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
                 <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                     {global.customNodes[n].name}
@@ -606,7 +736,7 @@ if(!showVideoLibrary){
 
         }else if(width < 1000 && global.customNodes[n].name=="Components"){
           extraTabs.push(
-            <div style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+            <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
               <div style={{transform:"rotate(90deg)",transformOrigin:"46% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {global.customNodes[n].name}
@@ -618,10 +748,11 @@ if(!showVideoLibrary){
             </div>
           )
 
+
         } else if(global.customNodes[n].name=="Components"){
 
             extraTabs.push(
-              <div style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+              <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
                 <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                     {global.customNodes[n].name}
@@ -635,7 +766,7 @@ if(!showVideoLibrary){
 
         }else{
           customNodes.push(
-            <Grid key={"girdder"+n} onMouseLeave={mouseLeave}  item xs={1} style={{zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
+            <Grid key={"girdder"+n} onMouseLeave={mouseLeave}  item xs={1} style={{zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
               <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {width>800?global.customNodes[n].name:global.customNodes[n].icon}
@@ -650,9 +781,30 @@ if(!showVideoLibrary){
 
 
       }else{
-        if(width < 1000 && global.customNodes[n].name=="Modules"){
+        if(drawing){
+          if(global.customNodes[n].name!="Modules" && global.customNodes[n].name!="Special" && global.customNodes[n].name!="Components"){
+            customNodes.push(
+              <Grid key={"grd"+n} onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)} item xs={1} style={{cursor:"pointer",letterSpacing:-3,fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+                  //console.log("SET COLOR",global.customNodes[n].color)
+                  setDrawingColor("#"+global.customNodes[n].color)
+                  global.graph.canvas.drawing = "#"+global.customNodes[n].color
+                  setDrawing("#"+global.customNodes[n].color)
+                  global.graph.canvas.setDirty(true);
+                  global.graph.canvas.graph.change();
+
+                }}>
+                <div style={{borderRadius:"0px 0px 8px 8px",padding:6,paddingTop:16,paddingBottom:8,textAlign:"center",color:"#222222",height:20,backgroundColor:"#"+global.customNodes[n].color,opacity:0.6}}>
+
+                </div>
+              </Grid>
+            )
+
+          }
+
+          //setDrawingColor
+        }else if(width < 1000 && global.customNodes[n].name=="Modules"){
           extraTabs.push(
-            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{overflow:"hidden",position:"absolute",bottom:80,height:200,right:0,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{overflow:"hidden",position:"absolute",bottom:80,height:200,right:0,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
 
                 //if(e.pageY<height-80){
                 //  setMenu("")
@@ -669,7 +821,7 @@ if(!showVideoLibrary){
           )
         }else if(global.customNodes[n].name=="Modules"){
           extraTabs.push(
-            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
 
                 if(e.pageY<height-80){
                   setMenu("")
@@ -686,7 +838,7 @@ if(!showVideoLibrary){
           )
         }else if(width < 1000 && global.customNodes[n].name=="Components"){
           extraTabs.push(
-            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{overflow:"hidden",position:"absolute",bottom:80,height:200,left:0,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{overflow:"hidden",position:"absolute",bottom:80,height:200,left:0,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
 
                 //if(e.pageY<height-80){
                 //  setMenu("")
@@ -703,7 +855,7 @@ if(!showVideoLibrary){
           )
         }else if(global.customNodes[n].name=="Components"){
           extraTabs.push(
-            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+            <div  onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)}  style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
 
                 if(e.pageY<height-80){
                   setMenu("")
@@ -718,9 +870,11 @@ if(!showVideoLibrary){
               </div>
             </div>
           )
+        }else if( global.customNodes[n].name=="Special"){
+
         }else{
           customNodes.push(
-            <Grid key={"grd"+n} onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)} item xs={1} style={{cursor:"pointer",letterSpacing:-3,fontSize:18, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
+            <Grid key={"grd"+n} onMouseLeave={mouseLeave}  onMouseEnter={mouseEnter.bind(this,global.customNodes[n].name)} item xs={1} style={{cursor:"pointer",letterSpacing:-3,fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={(e)=>{
 
                 if(e.pageY>60){
                   setMenu("")
@@ -755,10 +909,12 @@ if(!showVideoLibrary && menu){
 
 let tools = ""
 
+
 if(!showVideoLibrary && global.graph&&global.graph.canvas){
   //console.log("TOOLSm",selectToolActive)
   tools = (
     <div>
+
 
       <div style={{margin:5}} onClick={async (e)=>{
           if(global.graph.canvas.search_box){
@@ -783,25 +939,39 @@ if(!showVideoLibrary && global.graph&&global.graph.canvas){
 
 
 
-            <div style={{margin:5}} onClick={async ()=>{
-                if(global.graph.canvas.search_box) global.graph.canvas.search_box.close()
-                global.graph.canvas.closeSubgraph()
-                global.graph.canvas.ds.reset()
-                global.graph.canvas.setDirty(true);
-                global.graph.canvas.graph.change();
-              }}>
-              <Tooltip title="Reorient [esc key]" style={{marginLeft:4,cursor:"pointer"}}>
-                <Icon>
-                  aspect_ratio
-                </Icon>
-              </Tooltip>
-            </div>
+      <div style={{margin:5}} onClick={async ()=>{
+          if(global.graph.canvas.search_box) global.graph.canvas.search_box.close()
+          global.graph.canvas.closeSubgraph()
+          global.graph.canvas.ds.reset()
+          global.graph.canvas.setDirty(true);
+          global.graph.canvas.graph.change();
+          setDrawing("")
+          global.graph.canvas.drawing = false
+          global.graph.canvas.selectToolActive = false
+          setSelectToolActive(global.graph.canvas.selectToolActive)
+        }}>
+        <Tooltip title="Reorient [esc key]" style={{marginLeft:4,cursor:"pointer"}}>
+          <Icon>
+            aspect_ratio
+          </Icon>
+        </Tooltip>
+      </div>
+
+      <div style={{margin:5,color:drawing?drawingColor:"#dddddd"}} onClick={toggleDraw}>
+        <Tooltip title="Draw" style={{marginLeft:4,cursor:"pointer"}}>
+          <Icon>
+            create
+          </Icon>
+        </Tooltip>
+      </div>
 
 
       <div style={{margin:5,color:selectToolActive?"#03A9F4":"#dddddd"}} onClick={async ()=>{
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.selectToolActive = !global.graph.canvas.selectToolActive
           setSelectToolActive(global.graph.canvas.selectToolActive)
+          setDrawing("")
+          global.graph.canvas.drawing = false
         }}>
         <Tooltip title="Select [hold ctrl]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
@@ -809,6 +979,47 @@ if(!showVideoLibrary && global.graph&&global.graph.canvas){
           </Icon>
         </Tooltip>
       </div>
+
+
+
+            <div style={{margin:5}} onClick={async ()=>{
+                try{
+                  global.graph.canvas.copyToClipboard()
+
+                }catch(e){console.log(e)}
+              }}>
+              <Tooltip title="Copy [ctrl+c]" style={{marginLeft:4,cursor:"pointer"}}>
+                <Icon>
+                  file_copy
+                </Icon>
+              </Tooltip>
+            </div>
+
+            <div style={{margin:5}} onClick={async ()=>{
+              global.graph.canvas.pasteFromClipboard()
+              global.graph.canvas.setDirty(true);
+              global.graph.canvas.graph.change();
+              }}>
+              <Tooltip title="Paste [ctrl+v]" style={{marginLeft:4,cursor:"pointer"}}>
+                <Icon>
+                  dynamic_feed
+                </Icon>
+              </Tooltip>
+            </div>
+
+
+            <div style={{margin:5,color:moreInfo?"#03A9F4":"#dddddd"}} onClick={async ()=>{
+              global.graph.canvas.moreInfo = !global.graph.canvas.moreInfo
+              setMoreInfo(global.graph.canvas.moreInfo)
+              console.log("global.graph.canvas.moreInfo",global.graph.canvas.moreInfo)
+              }}>
+              <Tooltip title="Properties" style={{marginLeft:4,cursor:"pointer"}}>
+                <Icon>
+                  more
+                </Icon>
+              </Tooltip>
+            </div>
+
 
       <div style={{margin:5}} onClick={async ()=>{
           //console.log(JSON.stringify(global.graph.canvas.graph))
@@ -827,7 +1038,14 @@ if(!showVideoLibrary && global.graph&&global.graph.canvas){
       <div style={{margin:5}} onClick={async ()=>{
           //console.log(JSON.stringify(global.graph.canvas.graph))
           global.graph.canvas.deleteSelectedNodes()
-          console.log("global.graph.canvas",global.graph.canvas)
+          //console.log("global.graph.canvas",global.graph.canvas)
+          global.LiteGraphJS.LiteGraph.closeAllContextMenus();
+          if(drawing){
+            //console.log("CLEAR INK FROM",global.graph.canvas)
+            global.graph.canvas.ink = []
+            global.graph.canvas.setDirty(true);
+            global.graph.canvas.graph.change();
+          }
         }}>
         <Tooltip title="Delete Selected [delete key]" style={{marginLeft:4,cursor:"pointer"}}>
           <Icon>
@@ -835,7 +1053,6 @@ if(!showVideoLibrary && global.graph&&global.graph.canvas){
           </Icon>
         </Tooltip>
       </div>
-
 
 
 
@@ -850,8 +1067,8 @@ let extraMenus = ""
 if(!showVideoLibrary){
   extraMenus = (
     <div>
-      <div style={{zIndex:1,position:"fixed",right:0,top:"20%",width:50}}>
-        <div style={{borderRadius:"8px 0px 0px 8px",textAlign:"left",color:"#dddddd",height:220,right:0,top:0,width:475,backgroundColor:"#333333"}}>
+      <div style={{zIndex:8,position:"fixed",right:0,top:"20%",width:50}}>
+        <div style={{borderRadius:"8px 0px 0px 8px",textAlign:"left",color:"#dddddd",height:400,right:0,top:0,width:475,backgroundColor:"#333333"}}>
           <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
 
             {tools}
@@ -1034,6 +1251,50 @@ return (
         </input>
       </span>
     </div>
+
+    <div style={{position:'absolute',bottom:-100000,left:-100000}}>
+      <span style={{border:'1px solid #777777',color:live?"#00ff00":"#0000ff",padding:5,cursor:"pointer"}}>
+        <input id="moduleloader" type="file" name="file" onChange={(e)=>{
+            console.log("FILE",e.target.files[0])
+            var reader = new FileReader();
+            reader.onload = (event) => {
+              let compressedString = event.target.result
+
+              /*
+              let loc = compressedString.indexOf("<string>")
+              if(loc>0){
+                loc += 8
+                let endloc = compressedString.indexOf("</string>",loc)
+                compressedString = compressedString.substr(loc,endloc-loc)
+                compressedString = compressedString.substr(compressedString.lastIndexOf("/")+1)
+              }
+              console.log("decompress:",compressedString)*/
+
+
+                if(compressedString){
+                  let json = compressedString
+                  //  codec.decompress(compressedString).then(json => {
+                      /////////
+                      console.log("CLIP:",json)
+                      localStorage.setItem("litegrapheditor_clipboard",json)
+                      global.graph.canvas.last_mouse_position[0] = width/2
+                      global.graph.canvas.last_mouse_position[1] = height/2
+                      global.graph.canvas.pasteFromClipboard()
+                      global.graph.canvas.setDirty(true);
+                      global.graph.canvas.graph.change();
+                  //  })
+
+                }
+
+            }
+            try{
+              reader.readAsText(e.target.files[0])
+            }catch(e){console.log(e)}
+          }}>
+        </input>
+      </span>
+    </div>
+
 
     <div id="mainCanvas" style={{position:"relative",overflow:'hidden',background:"#222",width:'100%',height:"100%"}}>
       <canvas id='main' width={Math.max(100,width)} height={Math.max(100,height)} tabIndex={10} style={{background:"#111111",outline: 'none',borderBottom:'1px solid #666666'}}></canvas>

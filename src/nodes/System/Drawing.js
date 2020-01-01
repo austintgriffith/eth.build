@@ -5,6 +5,7 @@ import {SketchField, Tools} from 'react-sketch';
 
 
 
+
 function Action() {
   this.addInput("",-1);
   this.properties = {
@@ -60,13 +61,13 @@ Action.prototype.onDrawBackground = function(ctx) {
     )
 
     this.render(
-      <div style={{marginLeft:-20,marginTop:20}}>
+      <div style={{marginLeft:-20,marginTop:20}} onTouchMove={touchHandler} onTouchStart={touchHandler} onTouchEnd={touchHandler}>
 
         <div style={{position:"absolute",left:0,top:0}}>
           {colors}
         </div>
 
-        <SketchField key={this.key} width={this.size[0]-5} height={this.size[1]-30}
+        <SketchField id={"somethinguniqdijfdsfr"} key={this.key} width={this.size[0]-5} height={this.size[1]-30}
                          tool={Tools.Pencil}
                          lineColor={this.color}
                          lineWidth={5}/>
@@ -80,3 +81,42 @@ Action.prototype.onDrawBackground = function(ctx) {
 };
 
 export default Action
+
+
+
+const touchHandler = (event)=>{
+
+  console.log("touchHandler",event.type)
+
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+    switch(event.type)
+    {
+        case "touchstart": type = "mousedown"; event.preventDefault();break;
+        case "touchmove":  type = "mousemove"; event.preventDefault();break;
+      //  case "touchend":   type = "mouseup";   event.preventDefault();break;
+        default:           return;
+    }
+
+    // initMouseEvent(type, canBubble, cancelable, view, clickCount,
+    //                screenX, screenY, clientX, clientY, ctrlKey,
+    //                altKey, shiftKey, metaKey, button, relatedTarget);
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                                  first.screenX, first.screenY,
+                                  first.clientX, first.clientY, false,
+                                  false, false, false, 0/*left*/, null);
+
+    event.target.dispatchEvent(simulatedEvent);
+
+
+    //let sketcher = event.target
+    console.log(event,simulatedEvent)
+    //if(sketcher){
+    //  console.log("dispatchEvent!!!!")
+    //  sketcher.dispatchEvent(simulatedEvent)
+    //}
+
+}
