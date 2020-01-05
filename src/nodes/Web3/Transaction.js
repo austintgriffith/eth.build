@@ -10,7 +10,7 @@ function Web3Transaction() {
   this.addInput("[to]","string")
   this.addInput("[value]","number,string")
   this.addInput("[data]","string")
-  this.addInput("[gas]","number,string")
+  this.addInput("[gasLimit]","number,string")
   this.addInput("[gasPrice]","number,string")
   this.addInput("[nonce]","number,string")
   this.addInput("sign",-1)

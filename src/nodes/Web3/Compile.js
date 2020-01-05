@@ -63,6 +63,9 @@ Compile.prototype.compile = function(name) {
     this.properties.compiled = response.data
 
     console.log("COMPILED:",this.properties.compiled)
+    if(this.properties.compiled.errors && this.properties.compiled.errors[0] && this.properties.compiled.errors[0].message){
+      global.setSnackbar(this.properties.compiled.errors[0].message)
+    }
 
     let compiledContractObject = this.properties.compiled.contracts[name+".sol"][name]
 

@@ -149,7 +149,7 @@ function App() {
         global.graph.canvas.selectToolActive = false
         setSelectToolActive(global.graph.canvas.selectToolActive)
       }else{
-        console.log(keydown)
+        //console.log(keydown)
       }
 
     }
@@ -587,12 +587,12 @@ if(!showVideoLibrary){
     //console.log("GRID",global.customNodes[n])
     //if(global.customNodes[n].name!="Special" && global.customNodes[n].name!="Modules"){
       if(!drawing && global.customNodes[n].name==menu){
-
-        let style = {borderBottom:'3px solid #888888',whiteSpace:"nowrap",letterSpacing:-1,fontSize:14,position:"absolute",margin:4,borderRadius:"8px 8px 8px 8px",padding:6,textAlign:"center",color:"#FFFFFF",backgroundColor:"#"+global.customNodes[n].color}
+        let positionStyle = {position:"absolute"}
+        let style = {borderBottom:'3px solid #888888',whiteSpace:"nowrap",letterSpacing:-1,fontSize:14,margin:4,borderRadius:"8px 8px 8px 8px",padding:6,textAlign:"center",color:"#FFFFFF",backgroundColor:"#"+global.customNodes[n].color}
         if(n < 6 ){
-          style.left = 0
+          positionStyle.left = 0
         }else{
-          style.right = 0
+          positionStyle.right = 0
         }
 
 
@@ -602,7 +602,8 @@ if(!showVideoLibrary){
           let item = global.customNodeItems[global.customNodes[n].name][i]
           //console.log("Add item",item)
           items.push([
-            <Dragger key={"dragger"+n+"_"+i} name={item.title}  drop={(name,x,y)=>{
+            <div style={{...positionStyle,top:50+itemspace*i}}>
+            <Dragger key={"dragger"+n+"_"+i} name={item.title} drop={(name,x,y)=>{
                 //console.log("DO A DROP AT ",name,x,y)
                 setMenu("")
                 var node_watch = global.LiteGraphJS.LiteGraph.createNode(menu+"/"+item.title);
@@ -619,10 +620,11 @@ if(!showVideoLibrary){
                     global.graph.canvas.graph.add(node_watch);
                   }
 
-              }} style={{...style,top:50+itemspace*i}}>
+              }} style={style}>
                 {item.title}
               </div>
             </Dragger>
+            </div>
           ])
         }
 
@@ -661,43 +663,47 @@ if(!showVideoLibrary){
 
 
           items.push(
-            <div onMouseUp={()=>{
-              global.graph.canvas.copyToClipboard()
-              let item = localStorage.getItem("litegrapheditor_clipboard")
-              console.log(item)
+            <div style={{...positionStyle,bottom:itemspace*1}}>
+              <div onMouseUp={()=>{
+                global.graph.canvas.copyToClipboard()
+                let item = localStorage.getItem("litegrapheditor_clipboard")
+                console.log(item)
 
-              let webfile = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>URL</key>
-  <string>https://eth.build/`+codec.compress(item)+`</string>
-</dict>
-</plist>
-  `
+                let webfile = `<?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+  <dict>
+    <key>URL</key>
+    <string>https://eth.build/`+codec.compress(item)+`</string>
+  </dict>
+  </plist>
+    `
 
-              var file = new Blob([item]);
-              var url = URL.createObjectURL( file );
-              var element = document.createElement("a");
-              element.setAttribute('href', url);
-              element.setAttribute('download', "eth.build.module" );
-              element.style.display = 'none';
-              if(document.body){
-                document.body.appendChild(element);
-                element.click();
-                document.body.removeChild(element);
-                setTimeout( function(){ URL.revokeObjectURL( url ); }, 1000*60 );
-                setOpenSaveDialog(false)
-              }
-            }} style={{...style,bottom:itemspace*1}}>
-              Save
+                var file = new Blob([item]);
+                var url = URL.createObjectURL( file );
+                var element = document.createElement("a");
+                element.setAttribute('href', url);
+                element.setAttribute('download', "eth.build.module" );
+                element.style.display = 'none';
+                if(document.body){
+                  document.body.appendChild(element);
+                  element.click();
+                  document.body.removeChild(element);
+                  setTimeout( function(){ URL.revokeObjectURL( url ); }, 1000*60 );
+                  setOpenSaveDialog(false)
+                }
+              }} style={{...style,bottom:itemspace*1}}>
+                Save
+              </div>
             </div>
           )
           items.push(
-            <div onMouseUp={()=>{
-              document.getElementById("moduleloader").click()
-            }} style={{...style,bottom:0}}>
-              Load
+            <div style={{...positionStyle,bottom:itemspace*2}}>
+              <div onMouseUp={()=>{
+                document.getElementById("moduleloader").click()
+              }} style={{...style,bottom:0}}>
+                Load
+              </div>
             </div>
           )
         }
@@ -706,7 +712,7 @@ if(!showVideoLibrary){
         if(width < 1000 && global.customNodes[n].name=="Modules"){
           extraTabs.push(
             <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-              <div style={{transform:"rotate(90deg)",transformOrigin:"63% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+              <div style={{transform:"rotate(90deg)",transformOrigin:"63% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {global.customNodes[n].name}
 
@@ -723,7 +729,7 @@ if(!showVideoLibrary){
 
             extraTabs.push(
               <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,right:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                     {global.customNodes[n].name}
 
@@ -737,7 +743,7 @@ if(!showVideoLibrary){
         }else if(width < 1000 && global.customNodes[n].name=="Components"){
           extraTabs.push(
             <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-              <div style={{transform:"rotate(90deg)",transformOrigin:"46% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+              <div style={{transform:"rotate(90deg)",transformOrigin:"46% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {global.customNodes[n].name}
 
@@ -753,7 +759,7 @@ if(!showVideoLibrary){
 
             extraTabs.push(
               <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+                <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"8px 8px 0px 0px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                     {global.customNodes[n].name}
 
@@ -767,7 +773,7 @@ if(!showVideoLibrary){
         }else{
           customNodes.push(
             <Grid key={"girdder"+n} onMouseLeave={mouseLeave}  item xs={1} style={{zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-              <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-5,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+              <div style={{height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {width>800?global.customNodes[n].name:global.customNodes[n].icon}
 

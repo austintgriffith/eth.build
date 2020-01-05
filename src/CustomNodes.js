@@ -247,7 +247,7 @@ const hexColor = (hex)=>{
 global.customNodes = [
   {name:"Input",color:"3f51b5",icon:"✏️"},
   {name:"Display",color:"357a38",icon:"🖥"},
-  {name:"Storage",color:"ff9800",icon:"💾"},
+  {name:"Storage",color:"c1790e",icon:"💾"},
   {name:"Network",color:"b9a814",icon:"📡"},
   {name:"Crypto",color:"f44336",icon:"🔐"},
   {name:"Web3",color:"03A9F4",icon:"🦄"},
