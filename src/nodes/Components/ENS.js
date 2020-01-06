@@ -4,7 +4,7 @@ var EthereumENS = require('ethereum-ens');
 const defaultProvider = "https://mainnet.infura.io/v3/e59c464c322f47e2963f5f00638be2f8"
 
 function ENS() {
-  this.addInput("","string")
+  this.addInput(".eth","string")
   this.addOutput("address","string")
   this.properties = { provider: defaultProvider };
   this.cached = false
@@ -32,10 +32,22 @@ ENS.prototype.connectWeb3 = function() {
 
 ENS.prototype.onExecute = async function() {
   let input = this.getInputData(0)
+  //console.log("input",input)
+  if(input && typeof input.indexOf == "function" && input.indexOf(".eth")>=0){
+    //do nothing, already has .eth
+  } else {
+    input = input + '.eth'
+  }
+  //console.log("now input",input)
+  if(input && (!this.cached || this.cached!=input)){
 
-  if(input && input.indexOf(".eth")>0 && (!this.cached || this.cached!=input)){
     this.cached = input
-    this.value = await this.ens.resolver(this.cached).addr()
+
+    //console.log("resolve",this.cached)
+
+    try{
+      this.value = await this.ens.resolver(this.cached).addr()
+    }catch(e){console.log(e)}
     if(this.value) this.value=this.value.toLowerCase()
   }
 

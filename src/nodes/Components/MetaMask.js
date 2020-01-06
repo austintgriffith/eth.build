@@ -1,12 +1,15 @@
 var Web3 = require('web3');
 
 function MetaMask() {
+  this.addInput("unlock",-1)
   this.addOutput("address","")
   this.addOutput("balance()","function")
   this.addOutput("sign()","function")
   this.addOutput("send()","function")
   this.properties = {};
+
   this.size[0] = 210
+  this.accounts = false
 }
 
 MetaMask.title = "MetaMask";
@@ -14,6 +17,11 @@ MetaMask.title_color = "#F79220";
 
 MetaMask.prototype.onAdded = async function() {
   this.connectWeb3()
+}
+
+MetaMask.prototype.onAction = async function() {
+  this.accounts = await window.ethereum.enable()
+
 }
 
 MetaMask.prototype.connectWeb3 = function() {
@@ -27,12 +35,22 @@ MetaMask.prototype.connectWeb3 = function() {
 }
 
 MetaMask.prototype.onExecute = async function() {
-  const accounts = await window.ethereum.enable()
-  this.setOutputData(0,accounts[0])
+
+  if(window.web3 && window.web3.eth && typeof window.web3.eth.getAccounts == "function"){
+    window.web3.eth.getAccounts((error,accounts)=>{
+      this.accounts = accounts
+    })
+  }
+  if(this.accounts){
+    this.setOutputData(0,this.accounts[0])
+  }
+
+
   this.setOutputData(1,{
     name:"balance",
     args:[{name:"address",type:"string"}],
     function:async (args)=>{
+      this.onAction()
       let currentWeb3 = new Web3(window.web3)
       let balance = await currentWeb3.eth.getBalance(args.address)
       return balance
@@ -43,6 +61,7 @@ MetaMask.prototype.onExecute = async function() {
     args:[{name:"message",type:"string"}],
     function:async (args)=>{
       return new Promise(function(resolve, reject) {
+        this.onAction()
         let currentWeb3 = new Web3(window.web3)
         window.ethereum.sendAsync({
           method: 'personal_sign',
@@ -68,6 +87,7 @@ MetaMask.prototype.onExecute = async function() {
     name:"send",
     args:[{name:"to",type:"string"},{name:"value",type:"number"},{name:"data",type:"string"},{name:"gasLimit",type:"number"},{name:"gasPrice",type:"number"}],
     function:async (args)=>{
+      this.onAction()
       let currentWeb3 = new Web3(window.web3)
 
       const transactionParameters = {
@@ -120,6 +140,7 @@ MetaMask.prototype.onExecute = async function() {
       return 0
     }
   })
+
 };
 
 MetaMask.prototype.onPropertyChanged = async function(name, value){
