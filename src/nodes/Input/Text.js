@@ -53,7 +53,6 @@ Text.prototype.onDrawBackground = function(ctx) {
       <div>
         <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
           <Input
-            autoFocus
             style={{width:"100%",height:40,color:"#FFFFFF",fontSize:this.properties.fontSize}}
             id={"react-input-"+this.id}
             label="Name"
