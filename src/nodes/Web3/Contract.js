@@ -129,7 +129,7 @@ Contract.prototype.onExecute = function() {
     //console.log("FUNCTION",this.functions)
     //console.log("setting output data of ",index)
     if(this.types[name]=="view"){
-      console.log(name,"view")
+      //console.log(name,"view")
       this.setOutputData(index++,{
         name:name,
         args:argArray,
@@ -145,7 +145,7 @@ Contract.prototype.onExecute = function() {
         }
       })
     }else{
-      console.log(name,"send")
+      //console.log(name,"send")
       this.setOutputData(index++,{
         name:name,
         args:argArray,

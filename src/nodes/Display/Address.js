@@ -40,7 +40,7 @@ Address.prototype.onDrawBackground = function(ctx) {
       <div style={{marginTop:10,textAlign:'left',marginLeft:55,fontSize:32}}>
         <div style={{position:'absolute',left:10,top:10}}>
           <Blockies
-            seed={this.properties.value?this.properties.value.toLowerCase():this.properties.value}
+            seed={this.properties.value&&this.properties.value.toLowerCase?this.properties.value.toLowerCase():this.properties.value}
             size={8}
             scale={5}
           />

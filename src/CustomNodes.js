@@ -105,10 +105,21 @@ function addHelpers(obj){
       this.graph.add(node_watch);
       this.connect(index, node_watch, 0 );
     }else{
-      var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Watch");
-      node_watch.pos = [e.canvasX+90,e.canvasY-25];
-      this.graph.add(node_watch);
-      this.connect(index, node_watch, 0 );
+
+
+      if(this.outputs[index] && this.outputs[index]._data && typeof this.outputs[index]._data.substr == "function" && this.outputs[index]._data.length == 42 && this.outputs[index]._data.substr(0,2)=="0x"){
+        var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Address");
+        node_watch.pos = [e.canvasX+90,e.canvasY-25];
+        this.graph.add(node_watch);
+        this.connect(index, node_watch, 0 );
+      }else{
+        var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Watch");
+        node_watch.pos = [e.canvasX+90,e.canvasY-25];
+        this.graph.add(node_watch);
+        this.connect(index, node_watch, 0 );
+      }
+
+
     }
 
   }

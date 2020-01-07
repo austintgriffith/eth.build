@@ -41,7 +41,7 @@ Blockie.prototype.onDrawBackground = function(ctx) {
 
               }}>
               <Blockies
-                seed={this.properties.value?this.properties.value.toLowerCase():this.properties.value}
+                seed={this.properties.value&this.properties.value.toLowerCase?this.properties.value.toLowerCase():this.properties.value}
                 size={8}
                 scale={5}
               />
