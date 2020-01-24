@@ -89,7 +89,7 @@ Blockchain.prototype.onExecute = function() {
         this.web3.eth.sendSignedTransaction(args.signed).on('transactionHash', function(hash){
             resolve(hash)
         }).on('error', (e)=>{
-          global.setSnackbar(e.toString())
+          global.setSnackbar({msg:e.toString()})
         });
       });
 

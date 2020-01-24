@@ -7,6 +7,7 @@ function Watch() {
   this.value = 0;
   this.size = [300, 60];
   this.autosized = false
+  this.properties = {title:"Watch"}
 }
 
 Watch.title = "Watch";
@@ -20,6 +21,9 @@ Watch.prototype.onExecute = function() {
 Watch.prototype.getTitle = function() {
   if (this.flags.collapsed) {
     return this.value;
+  }
+  if(this.properties.title&&this.properties.title!="Watch"){
+    return this.properties.title;
   }
   if(this.value){
     return (typeof this.value)

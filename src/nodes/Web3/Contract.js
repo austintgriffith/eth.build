@@ -1,15 +1,15 @@
 var Web3 = require('web3');
 
 const defaultProvider = "https://mainnet.infura.io/v3/e59c464c322f47e2963f5f00638be2f8"
-const staticOutputs = 0
+const staticOutputs = 1 // events()
 
 function Contract() {
   this.addInput("[blockchain]","string")
   this.addInput("address","string")
   this.addInput("abi","object")
-  this.addInput("debug",-1)
+  //this.addInput("debug",-1)//if you need to parse action manually
   //this.addOutput("[network]",0)
-  this.addOutput("someFunction()","function")
+  this.addOutput("events()","function")
 
   this.properties =  {
     title:"Contract",
@@ -118,7 +118,50 @@ Contract.prototype.onExecute = function() {
       this.onPropertyChanged("provider",defaultProvider)
     }
   }
+
+  this.setOutputData(0,{
+    name:"events",
+    args:[
+      {name:"eventName",type:"string"},
+      {name:"startBlock",type:"string,number"},
+      {name:"endBlock", type:"string,number"},
+      {name:"filter", type:"object"}
+    ],
+    function:async (args)=>{
+      //you create the contract and spread the args in it and the abiEncode and return that
+      let thisContract = new this.web3.eth.Contract(this.abi,this.address)
+      console.log("RGET EVENTS!!",args)
+
+      let thisStartBlock = 0
+      if(args['startBlock']){
+        thisStartBlock = args['startBlock']
+      }
+
+      let thisEndBlock = 'latest'
+      if(args['endBlock']){
+        thisEndBlock = args['endBlock']
+      }
+
+      let thisFilter = {}
+      if(args['filter']){
+        thisFilter = args['filter']
+      }
+
+      return thisContract.getPastEvents(args['eventName'], {
+        //{myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}
+          filter: thisFilter, // Using an array means OR: e.g. 20 or 23
+          fromBlock: thisStartBlock,
+          toBlock: thisEndBlock
+      })
+
+    }
+  })
+
+
   let index = staticOutputs
+
+
+
 
   for(let name in this.functions){
     let argArray = []
@@ -141,7 +184,11 @@ Contract.prototype.onExecute = function() {
           //you create the contract and spread the args in it and the abiEncode and return that
           let thisContract = new this.web3.eth.Contract(this.abi,this.address)
           console.log("RUN FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
-          return (thisContract.methods[name](...callArgs)).call()
+          try{
+            return (thisContract.methods[name](...callArgs)).call()
+          }catch(e){
+            return false
+          }
         }
       })
     }else{

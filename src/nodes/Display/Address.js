@@ -35,7 +35,7 @@ Address.prototype.onExecute = function() {
 Address.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
-  }else if(this.properties.value) {
+  }else if(this.properties.value && typeof this.properties.value.substr == "function") {
     this.render(
       <div style={{marginTop:10,textAlign:'left',marginLeft:55,fontSize:32}}>
         <div style={{position:'absolute',left:10,top:10}}>

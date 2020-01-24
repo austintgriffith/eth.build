@@ -71,7 +71,7 @@ MetaMask.prototype.onExecute = async function() {
 
           console.log("SEND MM CALLBACK",error,result)
           if(error&&error.message){
-            global.setSnackbar(error.message)
+            global.setSnackbar({msg:error.message})
             console.log("REJECT",result)
             reject(error)
           }else{
@@ -130,7 +130,7 @@ MetaMask.prototype.onExecute = async function() {
 
         console.log("SEND MM CALLBACK",error,result)
         if(error&&error.message){
-          global.setSnackbar(error.message)
+          global.setSnackbar({msg:error.message})
         }
 
       })

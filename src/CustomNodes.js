@@ -193,7 +193,7 @@ function addHelpers(obj){
   obj.prototype.originalOnDblClick = obj.prototype.onDblClick
   obj.prototype.onDblClick = function(e,location,canvas){
     console.log("DBLCLICK",e,location,canvas)
-    if(this.graph.canvas.moreInfo){
+    if(this.graph && this.graph.canvas && this.graph.canvas.moreInfo){
 
       console.log("THIS",this)
       this.graph.canvas.processContextMenu(this, e);

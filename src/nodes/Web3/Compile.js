@@ -59,21 +59,28 @@ Compile.prototype.compile = function(name) {
 
   axios.post('http://localhost:48452/',solcObject)
   .then((response) => {
-    console.log("response.data",response.data)
+    //console.log("response.data",response.data)
     this.properties.compiled = response.data
 
-    console.log("COMPILED:",this.properties.compiled)
+    //console.log("COMPILED:",this.properties.compiled)
     if(this.properties.compiled.errors && this.properties.compiled.errors[0] && this.properties.compiled.errors[0].message){
-      global.setSnackbar(this.properties.compiled.errors[0].message)
+      console.log("ERRORS:",this.properties.compiled.errors)
+      for(let e in this.properties.compiled.errors){
+        if(this.properties.compiled.errors[e].type != "Warning"){
+          global.setSnackbar({msg:this.properties.compiled.errors[e].message})
+          break;
+        }
+      }
     }
 
     let compiledContractObject = this.properties.compiled.contracts[name+".sol"][name]
 
-    console.log("compiledContractObject",compiledContractObject)
+    //console.log("compiledContractObject",compiledContractObject)
 
     if(compiledContractObject && compiledContractObject.evm ) {
       this.bytecode = compiledContractObject.evm.bytecode.object
       this.abi = compiledContractObject.abi
+      global.setSnackbar({msg:"✅ Compiled",color:"#64cb53"})
     }
   })
   .catch(function (error) {
