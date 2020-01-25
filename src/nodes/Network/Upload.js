@@ -24,7 +24,7 @@ Upload.prototype.onAction = async function() {
     if(typeof payload == "string"){
       payload = {"string":input}
     }
-    axios.post('http://localhost:4001/',payload).then((response) => {
+    axios.post('https://network.eth.build:44386/',payload).then((response) => {
       console.log("RESPONSE FROM POST:",response);
       if(response && response.data && response.data.response){
         this.key = response.data.response

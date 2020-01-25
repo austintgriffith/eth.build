@@ -24,7 +24,7 @@ Download.prototype.onAction = async function() {
   if(key){
     try{
       console.log("GETtting...")
-      axios.get('http://localhost:4001/?key='+key).then((response) => {
+      axios.get('https://network.eth.build:44386/?key='+key).then((response) => {
         console.log("RESPONSE FROM GET:",response);
         if(response && response.data){
           this.data = response.data.response
