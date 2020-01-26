@@ -7,7 +7,7 @@ var app = express()
 
 
 const { exec } = require('child_process');
-exec('ganache-cli -h 0.0.0.0 -p 46235', (err, stdout, stderr) => {
+exec('ganache-cli -h 0.0.0.0 -p 46235 > ganache.log', (err, stdout, stderr) => {
   if (err) {
     //some err occurred
     console.error(err)

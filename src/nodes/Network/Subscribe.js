@@ -10,7 +10,7 @@ function Subscribe() {
   this.addOutput("message", "string");
   this.addOutput("received", -1)
 
-  this.properties = { channel: defaultChannel, network: "https://network.eth.build:44386/"};
+  this.properties = { channel: defaultChannel, network: "http://network.eth.build:44386/"};
   this.size[0] = 240
   this.socket = socketIOClient(this.properties.network);
   this.subscribed = false

@@ -7,7 +7,7 @@ function Publish() {
   this.addInput("[channel]","string")
   this.addInput("message", "string");
   this.addInput("publish", -1);
-  this.properties = { channel: "network.eth.build", network: "https://network.eth.build:44386/"};
+  this.properties = { channel: "network.eth.build", network: "http://network.eth.build:44386/"};
   this.size[0] = 240
   this.socket = socketIOClient(this.properties.network);
   this.loadedNetwork = this.properties.network
@@ -27,6 +27,7 @@ Publish.prototype.onExecute = async function() {
 }
 
 Publish.prototype.onAction = async function() {
+  console.log("SENDING TO ",this.properties.channel)
   let message = this.getInputData(1)
   if(typeof message != "undefined" && message!=null){
     this.socket.emit("eth.build", this.properties.channel, message)

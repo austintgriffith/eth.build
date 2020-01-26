@@ -1,5 +1,10 @@
-const axios = require('axios').default;
-
+const axiosParent = require('axios').default;
+const https = require('https')
+const axios = axiosParent.create({
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false
+  })
+});
 
 function Compile() {
   this.addInput("name","string")
@@ -7,7 +12,7 @@ function Compile() {
   this.addInput("compile",-1)
   this.addOutput("bytecode","string")
   this.addOutput("abi","object")
-  this.properties = { };
+//  this.properties = { host: "https://solc.eth.build", port:"48451" };
   this.size[0] = 210
 }
 
@@ -57,7 +62,7 @@ Compile.prototype.compile = function(name) {
 
   console.log(" 🛠️  Compiling...",solcObject.sources)
 
-  axios.post('http://localhost:48452/',solcObject)
+  axios.post('https://solc.eth.build:48451/',solcObject)
   .then((response) => {
     //console.log("response.data",response.data)
     this.properties.compiled = response.data
@@ -86,6 +91,8 @@ Compile.prototype.compile = function(name) {
   .catch(function (error) {
     console.log(error);
   });
+
+
 
 
 }
