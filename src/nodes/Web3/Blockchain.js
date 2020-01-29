@@ -44,8 +44,12 @@ Blockchain.prototype.onExecute = function() {
     name:"balance",
     args:[{name:"address",type:"string"}],
     function:async (args)=>{
-      let balance = await this.web3.eth.getBalance(args.address)
-      return balance
+      if(args.address){
+        let balance = await this.web3.eth.getBalance(args.address)
+        return balance
+      }
+      return 0
+
     }
   })
   this.setOutputData(2,{

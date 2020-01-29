@@ -50,6 +50,7 @@ Contract.prototype.parseContract = function() {
       console.log(this.abi[i].name,this.abi[i].inputs)
       this.functions[this.abi[i].name] = this.abi[i].inputs
       this.types[this.abi[i].name] = this.abi[i].stateMutability
+      if(!this.types[this.abi[i].name] && this.abi[i].constant) this.types[this.abi[i].name] = "view"
     }
   }
 
@@ -129,6 +130,9 @@ Contract.prototype.onExecute = function() {
     ],
     function:async (args)=>{
       //you create the contract and spread the args in it and the abiEncode and return that
+      if(this.web3){
+        this.connectWeb3()
+      }
       let thisContract = new this.web3.eth.Contract(this.abi,this.address)
       console.log("RGET EVENTS!!",args)
 
@@ -160,16 +164,14 @@ Contract.prototype.onExecute = function() {
 
   let index = staticOutputs
 
-
-
-
   for(let name in this.functions){
     let argArray = []
     for(let a in this.functions[name]){
       //console.log("Adding argument ",this.functions[name][a])
-      argArray.push({name:this.functions[name][a].name,type:"string"})
+      argArray.push({name:this.functions[name][a].name,type:""})
     }
-    //console.log("FUNCTION",this.functions)
+
+
     //console.log("setting output data of ",index)
     if(this.types[name]=="view"){
       //console.log(name,"view")
@@ -179,11 +181,14 @@ Contract.prototype.onExecute = function() {
         function:async (args)=>{
           let callArgs = []
           for(let a in args){
-            callArgs.push(args[a])
+            callArgs.push(""+args[a])
+          }
+          if(this.web3){
+            this.connectWeb3()
           }
           //you create the contract and spread the args in it and the abiEncode and return that
           let thisContract = new this.web3.eth.Contract(this.abi,this.address)
-          console.log("RUN FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
+          //console.log("RUN FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
           try{
             return (thisContract.methods[name](...callArgs)).call()
           }catch(e){
@@ -201,9 +206,12 @@ Contract.prototype.onExecute = function() {
           for(let a in args){
             callArgs.push(args[a])
           }
+          if(this.web3){
+            this.connectWeb3()
+          }
           //you create the contract and spread the args in it and the abiEncode and return that
           let thisContract = new this.web3.eth.Contract(this.abi,this.address)
-          console.log("ENCODE FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
+          //console.log("ENCODE FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
           try{
             return (thisContract.methods[name](...callArgs)).encodeABI()
           }catch(e){console.log(e)}

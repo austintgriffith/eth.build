@@ -19,11 +19,7 @@ ToHex.prototype.onExecute = function() {
     if(!this.web3){
       this.web3 = new Web3()
     }
-    let strVal = ""+this.getInputData(0)
-    console.log("to hex of ",strVal)
-    let output = ""+this.web3.utils.toHex(strVal)
-    console.log(output)
-    this.setOutputData(0,output)
+    this.setOutputData(0,this.web3.utils.utf8ToHex(""+this.getInputData(0)))
   }else{
     this.setOutputData(0,null)
   }
