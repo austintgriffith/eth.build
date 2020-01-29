@@ -49,7 +49,6 @@ Blockchain.prototype.onExecute = function() {
         return balance
       }
       return 0
-
     }
   })
   this.setOutputData(2,{

@@ -114,15 +114,21 @@ Web3Transaction.prototype.onExecute = function() {
 
 
 Web3Transaction.prototype.onAction = async function(event, args) {
-  await this.craftTransaction()
-  const tx = new EthTx(this.transaction);
-  console.log(JSON.stringify(tx))
-  tx.sign(Buffer.from(this.properties.privateKey.replace("0x",""), 'hex'));
-  const serializedTx = tx.serialize();
-  const rawTx = '0x' + serializedTx.toString('hex');
-  this.signedTransaction = rawTx
-  console.log(" * * * SIGNED",JSON.stringify(tx))
-  this.signed = true
+  try{
+    await this.craftTransaction()
+    const tx = new EthTx(this.transaction);
+    console.log(JSON.stringify(tx))
+    tx.sign(Buffer.from(this.properties.privateKey.replace("0x",""), 'hex'));
+    const serializedTx = tx.serialize();
+    const rawTx = '0x' + serializedTx.toString('hex');
+    this.signedTransaction = rawTx
+    console.log(" * * * SIGNED",JSON.stringify(tx))
+    this.signed = true
+  }catch(e){
+    console.log(e)
+    global.setSnackbar(e.message)
+  }
+
 }
 
 

@@ -12,7 +12,6 @@ import { FileCopy } from '@material-ui/icons';
 function Address() {
   this.addInput("", 0);
   this.properties =  {blockieSize: 50,placeholder:"",title:"Address"}
-  this.value
   this.size = [340, 80];
 }
 

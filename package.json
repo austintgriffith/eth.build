@@ -19,6 +19,7 @@
     "dapparatus": "^1.0.96",
     "eth-crypto": "^1.5.0",
     "ethashjs": "^0.0.7",
+    "ethereum-checksum-address": "^0.0.5",
     "ethereum-ens": "^0.7.8",
     "ethereumjs-block": "^2.2.1",
     "ethereumjs-util": "^6.1.0",
