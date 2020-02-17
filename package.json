@@ -33,6 +33,7 @@
     "levelup": "^4.3.2",
     "litegraph.js": "austintgriffith/litegraph.js#messy",
     "memdown": "^5.1.0",
+    "opensea-js": "^0.7.1",
     "polished": "^3.4.1",
     "qrcode": "^1.4.2",
     "qrcode.react": "^0.9.3",
