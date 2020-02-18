@@ -1,29 +1,29 @@
 import React from "react";
 import ProfileHover from "profile-hover";
 
-function Address() {
+function ThreeBoxProfile() {
   this.addInput("", 0);
   this.properties = { blockieSize: 50, placeholder: "", title: "Address" };
   this.size = [340, 80];
 }
 
-Address.title = "3Box Profile";
+ThreeBoxProfile.title = "3Box Profile";
 
-Address.prototype.getTitle = function() {
+ThreeBoxProfile.prototype.getTitle = function() {
   if (this.flags.collapsed && this.value) {
     return this.value;
   }
   return "3Box Profile";
 };
 
-Address.prototype.onExecute = function() {
+ThreeBoxProfile.prototype.onExecute = function() {
   let input = this.getInputData(0);
   if (this.inputs[0] && typeof input != "undefined" && this.value != input) {
     this.value = input;
   }
 };
 
-Address.prototype.onDrawBackground = function(ctx) {
+ThreeBoxProfile.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
     this.destory(); ///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   } else if (this.value && typeof this.value.substr == "function") {
@@ -35,4 +35,4 @@ Address.prototype.onDrawBackground = function(ctx) {
   }
 };
 
-export default Address;
+export default ThreeBoxProfile;

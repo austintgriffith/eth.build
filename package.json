@@ -35,6 +35,7 @@
     "memdown": "^5.1.0",
     "opensea-js": "^0.7.1",
     "polished": "^3.4.1",
+    "profile-hover": "^1.1.1",
     "qrcode": "^1.4.2",
     "qrcode.react": "^0.9.3",
     "react": "^16.9.0",
