@@ -47,6 +47,7 @@
     "react-dnd-html5-backend": "^10.0.2",
     "react-dnd-touch-backend": "^10.0.2",
     "react-dom": "^16.9.0",
+    "react-hook-form": "^4.9.6",
     "react-player": "^1.13.0",
     "react-scripts": "3.1.2",
     "react-sketch": "^0.5.1",

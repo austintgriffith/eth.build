@@ -3,7 +3,13 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import "litegraph.js/css/litegraph.css";
 
-import { Icon, Button, CardActions, Divider } from "@material-ui/core";
+import {
+  Icon,
+  Button,
+  CardActions,
+  Divider,
+  TextField
+} from "@material-ui/core";
 
 var codec = require("json-url")("lzw");
 var QRCode = require("qrcode.react");
@@ -12,6 +18,14 @@ function SaveDialog(props) {
   const { liteGraph, setOpenSaveDialog, openSaveDialog, dynamicWidth } = props;
 
   const [compressed, setCompressed] = React.useState();
+
+  const [documentTitle, setDocumentTitle] = React.useState(global.title);
+
+  const [threeBoxStatus, setThreeBoxStatus] = React.useState(null);
+
+  const handleTitle = e => {
+    setDocumentTitle(e.target.value);
+  };
 
   React.useEffect(() => {
     if (liteGraph)
@@ -36,6 +50,19 @@ function SaveDialog(props) {
     );
   }
 
+  const saveTo3Box = async () => {
+    if (typeof window.web3 !== "undefined") {
+      let web3 = window.web3;
+      setThreeBoxStatus("Please enable the access to your metamask");
+      console.log("MetaMask is installed", web3);
+
+      let accounts = await window.ethereum.enable();
+      console.log(accounts);
+      setThreeBoxStatus("Account retrieved");
+    } else {
+      console.log("MetaMask is not installed");
+    }
+  };
   return (
     <Dialog
       onClose={() => {
@@ -49,8 +76,27 @@ function SaveDialog(props) {
         <span style={{ fontsize: 38, fontWeight: "bold" }}>Save</span>
       </DialogTitle>
       <Divider />
+      <div style={{ margin: 16 }}>
+        <TextField
+          fullWidth
+          name="title"
+          label="Title"
+          variant="outlined"
+          value={documentTitle}
+          onChange={handleTitle}
+          required
+        />
+
+        {/* <input name="title" defaultValue="test" /> */}
+      </div>
+
       <CardActions
-        style={{ justifyContent: "center", paddingTop: 30, paddingBottom: 10 }}
+        style={{
+          justifyContent: "center",
+          paddingTop: 10,
+          display: "flex",
+          paddingBottom: 10
+        }}
       >
         <Button
           variant="contained"
@@ -73,7 +119,7 @@ function SaveDialog(props) {
             var url = URL.createObjectURL(file);
             var element = document.createElement("a");
             element.setAttribute("href", url);
-            element.setAttribute("download", global.title + ".webloc");
+            element.setAttribute("download", documentTitle + ".webloc");
             element.style.display = "none";
             if (document.body) {
               document.body.appendChild(element);
@@ -88,6 +134,10 @@ function SaveDialog(props) {
         >
           Download
         </Button>
+        {/* <Button variant="contained" color="primary" onClick={saveTo3Box}>
+          Save to 3Box
+        </Button>
+        {threeBoxStatus !== null && <p>{threeBoxStatus}</p>} */}
       </CardActions>
 
       <CardActions style={{ justifyContent: "center" }}>{qrcode}</CardActions>
