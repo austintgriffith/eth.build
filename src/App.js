@@ -21,6 +21,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import lessons from './data/lessons';
 
 import SaveDialog from "./dialogs/SaveDialog";
+import html2canvas from 'html2canvas';
 
 var codec = require('json-url')('lzw');
 var QRCode = require('qrcode.react')
@@ -123,6 +124,15 @@ function App() {
   const [playing, setPlaying] = React.useState(true);
 
   const [openSaveDialog, setOpenSaveDialog] = React.useState(false);
+  const [currentScreenShot, setCurrentScreenShot] = React.useState(null);
+
+  const handleOpenSaveDialog = async () => {
+    let canvas = await html2canvas(document.body);
+    let canvasImg = canvas.toDataURL("image/png");
+    console.log({canvasImg});
+    setCurrentScreenShot(canvasImg);
+    setOpenSaveDialog(true);
+  }
 
   let showLibrary = localStorage.getItem("eth.build.showLibrary");
   if(showLibrary=="true") showLibrary=true
@@ -1020,7 +1030,7 @@ return (
     {extraMenus}
 
     <AboutDialog/>
-    <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth}/>
+    <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth} screenshot={currentScreenShot} />
     <div style={{zIndex:1,position:"fixed",height:barHeight,left:0,bottom:0,width:"100%"}}>
       <div style={{borderRadius:"8px 8px 0px 0px",paddingLeft:6,margin:"auto",textAlign:"left",color:"#222222",height:barHeight,left:0,bottom:0,width:525,backgroundColor:"#DFDFDF"}}>
         <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
@@ -1062,7 +1072,7 @@ return (
           </span>
 
           <span style={{margin:5,borderLeft:"1px solid #cccccc",height:barHeight}} onClick={()=>{
-              setOpenSaveDialog(true)
+              handleOpenSaveDialog()
             }}>
             <Tooltip title="Save" style={{marginLeft:10,cursor:"pointer"}}>
               <Icon>
