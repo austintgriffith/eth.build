@@ -11,44 +11,43 @@ import { FileCopy } from '@material-ui/icons';
 
 function Address() {
   this.addInput("", 0);
-  this.properties =  {blockieSize: 50,placeholder:"",title:"Address",value:null}
+  this.properties =  {blockieSize: 50,placeholder:"",title:"Address"}
   this.size = [340, 80];
 }
 
 Address.title = "Address";
 
 Address.prototype.getTitle = function() {
-  if (this.flags.collapsed && this.properties.value) {
-    return this.properties.value
+  if (this.flags.collapsed && this.value) {
+    return this.value
   }
   return "Address";
 };
 
 Address.prototype.onExecute = function() {
   let input = this.getInputData(0)
-  if (this.inputs[0] && typeof input != "undefined" && this.properties.value != input ) {
-    this.properties.value = input;
+  if (this.inputs[0] && typeof input != "undefined" && this.value != input ) {
+    this.value = input;
   }
-  //console.log("this.properties.value",this.properties.value)
 };
 
 Address.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
-  }else if(this.properties.value && typeof this.properties.value.substr == "function") {
+  }else if(this.value && typeof this.value.substr == "function") {
     this.render(
       <div style={{marginTop:10,textAlign:'left',marginLeft:55,fontSize:32}}>
         <div style={{position:'absolute',left:10,top:10}}>
           <Blockies
-            seed={this.properties.value&&this.properties.value.toLowerCase?this.properties.value.toLowerCase():this.properties.value}
+            seed={this.value&&this.value.toLowerCase?this.value.toLowerCase():this.value}
             size={8}
             scale={5}
           />
         </div>
-        {"0x"+this.properties.value.substr(2,4)+"..."+this.properties.value.substr(-4)}
+        {"0x"+this.value.substr(2,4)+"..."+this.value.substr(-4)}
         <div style={{float:"right"}}>
           <Tooltip title="Copy" style={{cursor:"pointer"}}>
-            <CopyToClipboard text={this.properties.value}
+            <CopyToClipboard text={this.value}
               onCopy={() => {
 
               }}>

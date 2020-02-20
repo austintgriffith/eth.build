@@ -114,28 +114,49 @@ Web3Transaction.prototype.onExecute = function() {
 
 
 Web3Transaction.prototype.onAction = async function(event, args) {
-  await this.craftTransaction()
-  const tx = new EthTx(this.transaction);
-  console.log(JSON.stringify(tx))
-  tx.sign(Buffer.from(this.properties.privateKey.replace("0x",""), 'hex'));
-  const serializedTx = tx.serialize();
-  const rawTx = '0x' + serializedTx.toString('hex');
-  this.signedTransaction = rawTx
-  console.log(" * * * SIGNED",JSON.stringify(tx))
-  this.signed = true
+  try{
+    await this.craftTransaction()
+    const tx = new EthTx(this.transaction);
+    console.log(JSON.stringify(tx))
+    tx.sign(Buffer.from(this.properties.privateKey.replace("0x",""), 'hex'));
+    const serializedTx = tx.serialize();
+    const rawTx = '0x' + serializedTx.toString('hex');
+    this.signedTransaction = rawTx
+    console.log(" * * * SIGNED",JSON.stringify(tx))
+    this.signed = true
+  }catch(e){
+    console.log(e)
+    global.setSnackbar(e.message)
+  }
+
 }
+
+
 
 Web3Transaction.prototype.craftTransaction = async function(){
   try{
+    console.log("Crafting a transaction...")
     this.connectWeb3()
     let nonce = this.properties.nonce
     //console.log("CRAFTING",nonce,this.properties.privateKey,"PROVIDER:",this.web3._provider.host)
     if((nonce == null || typeof nonce == "undefined" || typeof this.getInputData(7) == "undefined") && this.properties.privateKey && this.web3){
-      //console.log("================ > > > > >  LOADING NONCE")
+      console.log("================ > > > > >  LOADING NONCE")
       try{
         let publicAddress = "0x"+EthUtil.privateToAddress(this.properties.privateKey).toString('hex')
         //console.log("publicAddress",publicAddress)
-        nonce = await this.web3.eth.getTransactionCount(publicAddress)
+        if(this.debounced){
+          //waiting
+          nonce = this.debouncedNonce
+        }else{
+          nonce = await this.web3.eth.getTransactionCount(publicAddress)
+          this.debouncedNonce = nonce
+          //do a weird little debounce dance so you don't whale the RPC server
+          this.debounced = true
+          setTimeout(()=>{
+            this.debounced = false
+          },3000)
+        }
+
         //console.log("{{{{{{{{{{{{{{{{{{{{{{{{{{{"+nonce+"}}}}}}}}}}}}}}}}}}}}}}}}}}}")
       }catch(e){
 
@@ -162,9 +183,10 @@ Web3Transaction.prototype.craftTransaction = async function(){
 
 
 Web3Transaction.prototype.onPropertyChanged = async function(name, value){
-  this.properties[name] = value;
-
-  this.craftTransaction()
+  if(this.properties[name]!=value){
+    this.properties[name] = value;
+    this.craftTransaction()
+  }
 
   return true;
 };

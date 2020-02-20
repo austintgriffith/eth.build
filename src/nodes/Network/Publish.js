@@ -7,7 +7,7 @@ function Publish() {
   this.addInput("[channel]","string")
   this.addInput("message", "string");
   this.addInput("publish", -1);
-  this.properties = { channel: "network.eth.build", network: "http://network.eth.build:44386/"};
+  this.properties = { channel: "network.eth.build", network: "https://network.eth.build:44386/"};
   this.size[0] = 240
   this.socket = socketIOClient(this.properties.network);
   this.loadedNetwork = this.properties.network

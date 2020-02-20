@@ -5,7 +5,7 @@ function DisplayQR() {
     this.addInput("", 0, { label: "" });
     this.size = [400,400]
     this.value = "";
-    this.properties = {qrSize:280}
+    this.properties = {qrSize:280,light:false}
 }
 
 DisplayQR.title = "QR";
@@ -16,8 +16,8 @@ DisplayQR.prototype.onExecute = function() {
         if(this.value){
             //console.log("QR VALUE ",this.value)
             QRCode.toDataURL(this.value, {color: {
-              dark: '#EEE',
-              light: '#111',
+              dark: this.properties.light?'#111':'#eee',
+              light: this.properties.light?'#eee':'#111',
               width: this.size[0],
               height: this.size[1],
             }} , (err, url) => {
