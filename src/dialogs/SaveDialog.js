@@ -13,9 +13,12 @@ import {
 
 var codec = require("json-url")("lzw");
 var QRCode = require("qrcode.react");
+const axios = require('axios');
 
 function SaveDialog(props) {
   const { liteGraph, setOpenSaveDialog, openSaveDialog, dynamicWidth } = props;
+
+  const [shared, setShared] = React.useState();
 
   const [compressed, setCompressed] = React.useState();
 
@@ -32,7 +35,7 @@ function SaveDialog(props) {
       codec.compress(liteGraph.serialize()).then(data => {
         setCompressed(data);
       });
-  }, [liteGraph]);
+  });
 
   let link =
     window.location.protocol + "//" + window.location.host + "/" + compressed;
@@ -102,6 +105,9 @@ function SaveDialog(props) {
           variant="contained"
           color="primary"
           onClick={() => {
+
+            console.log("SAVING COMPRESSED",compressed)
+
             let webfile =
               `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -119,7 +125,7 @@ function SaveDialog(props) {
             var url = URL.createObjectURL(file);
             var element = document.createElement("a");
             element.setAttribute("href", url);
-            element.setAttribute("download", documentTitle + ".webloc");
+            element.setAttribute("download", (documentTitle?documentTitle:"eth.build") + ".webloc");
             element.style.display = "none";
             if (document.body) {
               document.body.appendChild(element);
@@ -138,7 +144,54 @@ function SaveDialog(props) {
           Save to 3Box
         </Button>
         {threeBoxStatus !== null && <p>{threeBoxStatus}</p>} */}
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={async () => {
+
+            console.log("share",compressed)
+
+            let result = await axios.post("https://network.eth.build:44386/build", {compressed});
+
+            console.log("share result",result)
+
+            if(result && result.data && result.data.key){
+              console.log("SET SHARED:",result.data.key)
+              setShared(result.data.key)
+              console.log("SHARED AS:",shared)
+            }
+              //setTimeout(function() {
+              //  URL.revokeObjectURL(url);
+              //}, 1000 * 60);
+              //setOpenSaveDialog(false);
+          }}
+        >
+          Share
+        </Button>
+
+
+
       </CardActions>
+
+      <div>
+        {shared?
+          <div style={{margin:"0 auto",width:"100%",textAlign:"center",fontSize:12,color:"#000000"}}>
+
+             <a href={"https://eth.build/build#"+shared}>{"https://eth.build/build#"+shared}</a>
+
+               <div>
+                 <QRCode
+                   size={dynamicWidth}
+                   value={"https://eth.build/build#"+shared}
+                   style={{ border: "1px solid #dddddd", padding: 20, margin: 5 }}
+                 />
+               </div>
+
+          </div>:""
+        }
+
+      </div>
 
       <CardActions style={{ justifyContent: "center" }}>{qrcode}</CardActions>
       <CardActions style={{ justifyContent: "center" }}>

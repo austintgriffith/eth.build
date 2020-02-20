@@ -1,3 +1,7 @@
+**/ganache*
+**/gamesaves
+**proxy/rpc*
+**/faucetPrivateKey*
 **/ganache.log
 **/mnemonic*
 **/server.key

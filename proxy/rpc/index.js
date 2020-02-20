@@ -4,56 +4,59 @@ const express = require('express')
 const fs = require('fs')
 var cors = require('cors')
 var app = express()
-
 const Web3 = require('web3')
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:46235"));
 
 const EthereumTx = require('ethereumjs-tx').Transaction
+let pk = fs.readFileSync("./faucetPrivateKey.txt")
+pk = pk.toString().trim()
+let address = fs.readFileSync("./faucetAddress.txt")
+address = address.toString().trim()
+console.log("firing up faucet at address ",address)
 const privateKey = Buffer.from(
-  '161a0889751bed7f5997c82233d2383073c9cfbfb6a7fa17f1f6c91864292412',
+  pk.replace("0x",""),
   'hex',
 )
-
-let mnemonic = fs.readFileSync("mnemonic.txt")
-
-const { exec } = require('child_process');
-console.log("STARTING GANACHE...")
-exec('ganache-cli -h 0.0.0.0 -p 46235 -m "'+mnemonic+'" > ganache.log', (err, stdout, stderr) => {
-  if (err) {
-    //some err occurred
-    console.error(err)
-  } else {
-   // the *entire* stdout and stderr (buffered)
-   console.log(`stdout: ${stdout}`);
-   console.log(`stderr: ${stderr}`);
-  }
-});
-
-
-
 
 app.use(cors())
 
 var proxy = httpProxy.createProxyServer();
 
+proxy.on('error', function (err, req, res) {
+  console.log(err)
+  res.writeHead(500, {
+    'Content-Type': 'text/plain'
+  });
+  res.end('sad trombone');
+});
+
 app.post('/', (req, res) => {
-  console.log("hit!")
-  proxy.web(req, res, {
-      //target: 'http://10.0.0.237:8545'
-      target: 'http://0.0.0.0:46235'
-      //target: 'http://10.0.0.188:8545'
-    });
-    console.log("served!")
+  try{
+    //console.log("hit!")
+    proxy.web(req, res, {
+        //target: 'http://10.0.0.237:8545'
+        target: 'http://0.0.0.0:46235'
+        //target: 'http://10.0.0.188:8545'
+      });
+      console.log("served POST!")
+  }catch(e){
+    console.log(e)
+  }
 })
 
 app.get('/', (req, res) => {
-  console.log("hit!")
-  proxy.web(req, res, {
-      //target: 'http://10.0.0.237:8545'
-      target: 'http://0.0.0.0:46235'
-      //target: 'http://10.0.0.188:8545'
-    });
-    console.log("served!")
+  try{
+    //console.log("hit!")
+    proxy.web(req, res, {
+        //target: 'http://10.0.0.237:8545'
+        target: 'http://0.0.0.0:46235'
+        //target: 'http://10.0.0.188:8545'
+      });
+      console.log("served GET!")
+  }catch(e){
+    console.log(e)
+  }
+
 })
 
 app.get('/faucet', (req, res) => {
@@ -77,7 +80,7 @@ app.get('/faucet', (req, res) => {
 
   console.log("serializedTx",serializedTx)*/
 
-  web3.eth.getTransactionCount("0x7fc7e2a9564a8eaf0942907c6d323087fed5ea19", function (err, nonce) {
+  web3.eth.getTransactionCount(address, function (err, nonce) {
 
     console.log("nonce:",nonce)
     var tx =  new EthereumTx({
@@ -93,10 +96,11 @@ app.get('/faucet', (req, res) => {
     var raw = '0x' + tx.serialize().toString('hex');
     web3.eth.sendSignedTransaction(raw, function (err, transactionHash) {
       console.log(transactionHash);
+      res.send(transactionHash)
     });
   });
 
-  res.send('0x0000')
+
 })
 
 
