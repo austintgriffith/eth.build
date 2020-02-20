@@ -72,7 +72,7 @@ Text.prototype.onDrawBackground = function(ctx) {
   if (this.flags.collapsed) {
     this.destory(); ///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   } else {
-    console.log(this.properties);
+    //console.log(this.properties);
     this.render(
       <div>
         <FormControl style={{ marginTop: 8, width: "100%", color: "#FFFFFF", fontSize: this.properties.fontSize }}>

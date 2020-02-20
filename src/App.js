@@ -160,7 +160,7 @@ function App() {
     }
 
 
-  
+
   const [openAboutDialog, setOpenAboutDialog] = React.useState(false);
 
   function AboutDialog(props) {
@@ -521,6 +521,7 @@ if(!showVideoLibrary){
           items.push(
             <div style={{...positionStyle,bottom:itemspace*1}}>
               <div onMouseUp={()=>{
+                  console.log("copying global to canvas")
                 global.graph.canvas.copyToClipboard()
                 let item = localStorage.getItem("litegrapheditor_clipboard")
                 console.log(item)
