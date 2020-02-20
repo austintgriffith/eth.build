@@ -24,6 +24,8 @@ import SaveDialog from "./dialogs/SaveDialog";
 
 var codec = require('json-url')('lzw');
 var QRCode = require('qrcode.react')
+const axios = require('axios');
+
 
 const useStyles = makeStyles({
   card: {
@@ -258,22 +260,55 @@ React.useEffect(()=>{
   CustomNodes(LiteGraphJS)
 
   let url = window.location.pathname
+  console.log("URL",url)
   if(url&&url.length>1){
     url = url.substring(1)
-    console.log("decompressing",url)
-    codec.decompress(url).then(json => {
-      console.log("configure graph with:",json)
-      graph.configure( json );
-      //graph.start()
-      graph.canvas = canvas
 
-      setLiteGraph(graph)
-      setLiteGraphCanvas(canvas)
+    if(url.indexOf("wof")==0){
+      console.log("decompressing",url)
+      codec.decompress(url).then(json => {
+        console.log("configure graph with:",json)
+        graph.configure( json );
+        //graph.start()
+        graph.canvas = canvas
 
-      window.history.pushState("", "", '/');
+        setLiteGraph(graph)
+        setLiteGraphCanvas(canvas)
 
-      setShowVideoLibrary(false);global.showLibrary=false;
-    })
+        window.history.pushState("", "", '/');
+
+        setShowVideoLibrary(false);global.showLibrary=false;
+      })
+    }else if(url.indexOf("build")==0){
+      console.log("THIS IS A BUILD")
+      let key = window.location.hash.replace("#","")
+
+      //let result = await axios.get("https://network.eth.build:44386/build",{})
+      axios.get('https://network.eth.build:44386/build', {
+        params: {
+          key
+        }
+      }).then((result)=>{
+        console.log("GET BUILD RESULT",result)
+        let compressed = result.data.compressed
+        codec.decompress(compressed).then(json => {
+          console.log("configure graph with:",json)
+          graph.configure( json );
+          //graph.start()
+          graph.canvas = canvas
+
+          setLiteGraph(graph)
+          setLiteGraphCanvas(canvas)
+
+          window.history.pushState("", "", '/');
+
+          setShowVideoLibrary(false);global.showLibrary=false;
+        })
+      })
+
+    }
+
+
   }else{
     var data = localStorage.getItem("litegraph");
     if(data) {
