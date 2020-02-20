@@ -1251,6 +1251,7 @@ return (
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
+        style={{marginBottom:100}}
         message={<span id="message-id" style={{fontFamily: "monospace",color:snackbar.color?snackbar.color:"#d33535",fontSize:22}}>{snackbar.msg}</span>}
       />
   </div>

@@ -176,7 +176,7 @@ function SaveDialog(props) {
 
       <div>
         {shared?
-          <div style={{margin:"0 auto",width:"100%",textAlign:"center"}}>
+          <div style={{margin:"0 auto",width:"100%",textAlign:"center",fontSize:12,color:"#000000"}}>
 
              <a href={"https://eth.build/build#"+shared}>{"https://eth.build/build#"+shared}</a>
 
