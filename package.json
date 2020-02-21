@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "3box": "^1.17.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.5",
@@ -25,6 +26,7 @@
     "ethereumjs-util": "^6.1.0",
     "ethereumjs-wallet": "^0.6.3",
     "hex-rgb": "^4.1.0",
+    "html2canvas": "^1.0.0-rc.5",
     "ipfs": "^0.39.0",
     "ipfs-pubsub-room": "^1.4.1",
     "json-url": "^2.4.2",
