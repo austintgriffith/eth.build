@@ -130,7 +130,7 @@ Contract.prototype.onExecute = function() {
     ],
     function:async (args)=>{
       //you create the contract and spread the args in it and the abiEncode and return that
-      if(this.web3){
+      if(!this.web3){
         this.connectWeb3()
       }
       let thisContract = new this.web3.eth.Contract(this.abi,this.address)
@@ -181,9 +181,9 @@ Contract.prototype.onExecute = function() {
         function:async (args)=>{
           let callArgs = []
           for(let a in args){
-            callArgs.push(""+args[a])
+            callArgs.push(args[a]?""+args[a]:"")
           }
-          if(this.web3){
+          if(!this.web3){
             this.connectWeb3()
           }
           //you create the contract and spread the args in it and the abiEncode and return that
@@ -205,9 +205,9 @@ Contract.prototype.onExecute = function() {
           console.log("send called",args)
           let callArgs = []
           for(let a in args){
-            callArgs.push(args[a].toString())
+            callArgs.push(args[a]?""+args[a]:"")
           }
-          if(this.web3){
+          if(!this.web3){
             this.connectWeb3()
           }
           //you create the contract and spread the args in it and the abiEncode and return that
