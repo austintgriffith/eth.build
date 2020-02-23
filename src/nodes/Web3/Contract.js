@@ -197,14 +197,15 @@ Contract.prototype.onExecute = function() {
         }
       })
     }else{
-      //console.log(name,"send")
+      //console.log("SEND MFUNCTION ",name,"send")
       this.setOutputData(index++,{
         name:name,
         args:argArray,
         function:(args)=>{
+          console.log("send called",args)
           let callArgs = []
           for(let a in args){
-            callArgs.push(args[a])
+            callArgs.push(args[a].toString())
           }
           if(this.web3){
             this.connectWeb3()
