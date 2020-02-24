@@ -110,11 +110,11 @@ function SaveDialog(props) {
       });
     }
 
-    console.log({
-      isLoggedIn: web3Connect.address
-        ? Box.isLoggedIn(web3Connect.address)
-        : "n/a"
-    });
+    // console.log({
+    //   isLoggedIn: web3Connect.address
+    //     ? Box.isLoggedIn(web3Connect.address)
+    //     : "n/a"
+    // });
 
     let space = getSpace();
     let box = getBox();
