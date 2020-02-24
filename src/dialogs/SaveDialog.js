@@ -1,28 +1,48 @@
 import React from "react";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
+// import DialogTitle from "@material-ui/core/DialogTitle";
 import "litegraph.js/css/litegraph.css";
 import { makeStyles } from "@material-ui/core/styles";
-// import ThreeBoxIcon from "../assets/3box.svg";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
 import {
-  Icon,
   Button,
   CardActions,
-  Divider,
   TextField,
   SvgIcon,
   Typography,
-  Tooltip
+  Tooltip,
+  // Switch,
+  // FormControlLabel,
+  Link
 } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ShareIcon from "@material-ui/icons/Share";
 import CropFreeIcon from "@material-ui/icons/CropFree";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
+import useWeb3Connect from "../utils/useWeb3Connect";
+import {
+  open3Box,
+  logout3Box,
+  getSpace,
+  getBox,
+  isFetching
+} from "../utils/3BoxManager";
+
+import moment from "moment";
 
 import Box from "3box";
+import ProfileHover from "profile-hover";
+import {
+  BOX_SPACE,
+  getDocumentInfo,
+  saveDocument
+} from "../utils/Documents3BoxSpace";
+
+const STORAGE_3BOX_DOCUMENT = "eth.build.documentTitle3Box";
 
 var codec = require("json-url")("lzw");
 var QRCode = require("qrcode.react");
@@ -31,7 +51,6 @@ const axios = require("axios");
 const useStyles = makeStyles({
   button: {
     width: 200
-    // height: 200
   }
 });
 
@@ -62,25 +81,76 @@ function SaveDialog(props) {
 
   const [compressed, setCompressed] = React.useState();
 
-  const [documentTitle, setDocumentTitle] = React.useState(global.title);
+  const [documentTitle, setDocumentTitle] = React.useState("");
+  // const [publicDocument, setPublicDocument] = React.useState(false);
+  const [currentDocumentInfo, setCurrentDocumentInfo] = React.useState(null);
+  // const [lastCheckedTitle, setLastCheckedTitle] = React.useState(null);
+  const [updateTimer, setUpdateTimer] = React.useState(null);
+
+  const web3Connect = useWeb3Connect();
+  // const [box, threeBoxSpace, open3Box, fetching3Box, logout3Box] = use3Box(
+  //   web3Connect.address,
+  //   web3Connect.provider
+  // );
+  const connected = web3Connect.connected;
 
   const [threeBoxStatus, setThreeBoxStatus] = React.useState(null);
+  const [threeBoxConnectionStep, setThreeBoxConnectionStep] = React.useState(0);
+  const [saving, setSaving] = React.useState(false);
 
   const handleClose = () => {
-    setSaveType(null);
     setOpenSaveDialog(false);
-  };
-  const handleTitle = e => {
-    setDocumentTitle(e.target.value);
+    setSaveType(null);
+    setThreeBoxStatus(null);
+    setThreeBoxConnectionStep(0);
+    clearTimeout(updateTimer);
+    setUpdateTimer(null);
+    setSaving(false);
   };
 
   React.useEffect(() => {
-    if (liteGraph)
+    if (liteGraph) {
       codec.compress(liteGraph.serialize()).then(data => {
         setCompressed(data);
       });
+    }
+
+    console.log({
+      isLoggedIn: web3Connect.address
+        ? Box.isLoggedIn(web3Connect.address)
+        : "n/a"
+    });
+
+    let space = getSpace();
+    let box = getBox();
+    let fetching = isFetching();
+
+    if (
+      web3Connect.address &&
+      Box.isLoggedIn(web3Connect.address) &&
+      !box &&
+      !space &&
+      !fetching
+    ) {
+      console.log("OPENING 3BOX from useEffect");
+      open3Box(web3Connect.address, web3Connect.provider, console.log);
+    }
   });
 
+  React.useEffect(() => {
+    let space = getSpace();
+    let box = getBox();
+    let fetching = isFetching();
+
+    if (
+      saveType === "3BOX_SCREEN" &&
+      box !== null &&
+      space !== null &&
+      !fetching
+    ) {
+      changeTo3BoxSavePage();
+    }
+  }, [saveType]);
   let link =
     window.location.protocol + "//" + window.location.host + "/" + compressed;
 
@@ -96,7 +166,14 @@ function SaveDialog(props) {
       </div>
     );
   }
-
+  const changeTo3BoxSavePage = () => {
+    let savedTitle = localStorage.getItem(STORAGE_3BOX_DOCUMENT);
+    setDocumentTitle(savedTitle ? savedTitle : "");
+    if (savedTitle) {
+      updateDocumentInfo(savedTitle);
+    }
+    setSaveType("3BOX_SAVE");
+  };
   const download = async () => {
     console.log("SAVING COMPRESSED", compressed);
 
@@ -153,27 +230,57 @@ function SaveDialog(props) {
     //setOpenSaveDialog(false);
   };
 
-  const saveTo3Box = async () => {
-    if (typeof window.web3 !== "undefined") {
-      let web3 = window.web3;
-      setThreeBoxStatus("Please enable the access to your wallet");
-      console.log("Web3 is installed", web3);
+  const connectTo3Box = async () => {
+    try {
+      let { space } = await open3Box(
+        web3Connect.address,
+        web3Connect.provider,
+        setThreeBoxStatus
+      );
 
-      let accounts = await window.ethereum.enable();
-      console.log(accounts);
-      let address = accounts[0];
-      setThreeBoxStatus("Approve access to your 3Box");
+      let savedTitle = localStorage.getItem(STORAGE_3BOX_DOCUMENT);
+      setDocumentTitle(savedTitle ? savedTitle : "");
 
-      const box = await Box.openBox(address, window.ethereum);
-      setThreeBoxStatus("Synchronizing with 3Box");
-      await box.syncDone;
-      setThreeBoxStatus("Opening eth.build space on your 3Box");
-      const space = await box.openSpace("myApp");
-      setThreeBoxStatus("Synchronizing with your 3Box space");
-      await space.syncDone;
-    } else {
-      console.log("MetaMask is not installed");
+      let documentInfo = await getDocumentInfo(space, savedTitle);
+      setCurrentDocumentInfo(documentInfo.metadata ? documentInfo : null);
+
+      setSaveType("3BOX_SAVE");
+    } catch (error) {
+      setThreeBoxStatus(error);
     }
+  };
+
+  const updateDocumentInfo = async fileName => {
+    let space = getSpace();
+    if (space) {
+      let documentInfo = await getDocumentInfo(space, fileName);
+      console.log("Updated DocumentInfo: ", documentInfo);
+      setCurrentDocumentInfo(documentInfo.metadata ? documentInfo : null);
+    } else {
+      console.log("NO 3BOX SPACE");
+    }
+  };
+
+  const logout = async () => {
+    await logout3Box();
+    await web3Connect.resetApp();
+    setThreeBoxStatus(null);
+    setThreeBoxConnectionStep(0);
+    setSaveType("3BOX_SCREEN");
+  };
+
+  const handleTitle = e => {
+    let title = e.target.value;
+    setDocumentTitle(title);
+    if (updateTimer) {
+      clearTimeout(updateTimer);
+    }
+    setUpdateTimer(
+      setTimeout(() => {
+        console.log("Running timer for ", title);
+        updateDocumentInfo(title);
+      }, 500)
+    );
   };
 
   return (
@@ -182,14 +289,13 @@ function SaveDialog(props) {
         handleClose();
       }}
       open={openSaveDialog}
-      // maxWidth={Math.round(dynamicWidth * 1.1)}
       maxWidth="md"
     >
-      <DialogTitle id="save-dialog" style={{ textAlign: "center" }}>
+      {/* <DialogTitle id="save-dialog" style={{ textAlign: "center" }}>
         <Icon style={{ verticalAlign: "middle" }}>save</Icon>
         <span style={{ fontsize: 38, fontWeight: "bold" }}>Save</span>
       </DialogTitle>
-      <Divider />
+      <Divider /> */}
 
       {saveType === null && (
         <>
@@ -197,9 +303,9 @@ function SaveDialog(props) {
             container
             spacing={3}
             justify="center"
-            style={{ margin: 0, width: "100%", padding: 32 }}
+            style={{ margin: 0, width: "100%", padding: "32px 32px 0 32px" }}
           >
-            <Grid item style={{ width: 220 }}>
+            {/* <Grid item style={{ width: 220 }}>
               <Tooltip title="QR code for this eth.build">
                 <Button
                   variant="contained"
@@ -211,6 +317,20 @@ function SaveDialog(props) {
                   startIcon={<CropFreeIcon />}
                 >
                   QR Code
+                </Button>
+              </Tooltip>
+            </Grid> */}
+
+            <Grid item style={{ width: 220 }}>
+              <Tooltip title="Download a local file">
+                <Button
+                  variant="contained"
+                  className={classes.button}
+                  color="primary"
+                  onClick={download}
+                  startIcon={<GetAppIcon />}
+                >
+                  Download
                 </Button>
               </Tooltip>
             </Grid>
@@ -251,29 +371,43 @@ function SaveDialog(props) {
                   variant="contained"
                   className={classes.button}
                   color="primary"
-                  onClick={saveTo3Box}
+                  onClick={() => {
+                    setSaveType("3BOX_SCREEN");
+                    if (connected && threeBoxConnectionStep === 0) {
+                      setThreeBoxConnectionStep(1);
+                    }
+                    let fetching = isFetching();
+                    if (fetching) {
+                      setThreeBoxStatus(
+                        "Connection to 3Box already in progress"
+                      );
+                      let checkCompletion = () => {
+                        let fetching3Box = isFetching();
+                        if (!fetching3Box) {
+                          changeTo3BoxSavePage();
+                        } else {
+                          setTimeout(checkCompletion, 1000);
+                        }
+                      };
+                      setTimeout(checkCompletion, 1000);
+                    }
+                    let box = getBox();
+                    let space = getSpace();
+                    if (box && space) {
+                      console.log("3BOX is already open and available");
+                      changeTo3BoxSavePage();
+                    }
+                  }}
                   startIcon={<ThreeBoxIcon />}
-                  disabled
                 >
                   Save to 3Box
                 </Button>
               </Tooltip>
             </Grid>
-
-            <Grid item style={{ width: 220 }}>
-              <Tooltip title="Download a local file">
-                <Button
-                  variant="contained"
-                  className={classes.button}
-                  color="primary"
-                  onClick={download}
-                  startIcon={<GetAppIcon />}
-                >
-                  Download
-                </Button>
-              </Tooltip>
-            </Grid>
           </Grid>
+          <CardActions style={{ justifyContent: "center" }}>
+            {qrcode}
+          </CardActions>
         </>
       )}
 
@@ -287,7 +421,7 @@ function SaveDialog(props) {
 
       {saveType === "SHARE" && (
         <>
-          <div>
+          <div style={{ padding: 32 }}>
             {shared ? (
               <div
                 style={{
@@ -335,33 +469,6 @@ function SaveDialog(props) {
         </>
       )}
 
-      {/* <div style={{ margin: 16 }}>
-        <TextField
-          fullWidth
-          name="title"
-          label="Title"
-          variant="outlined"
-          value={documentTitle}
-          onChange={handleTitle}
-          required
-        />
-
-      </div> 
-
-      <CardActions
-        style={{
-          justifyContent: "center",
-          paddingTop: 10,
-          display: "flex",
-          paddingBottom: 10
-        }}
-      ></CardActions>
-      {threeBoxStatus !== null && (
-        <div style={{ display: "box" }}>
-          <p>{threeBoxStatus}</p>
-        </div>
-      )}
-      */}
       {saveType === "COPY" && (
         <>
           <CardActions style={{ justifyContent: "center", padding: 32 }}>
@@ -392,7 +499,170 @@ function SaveDialog(props) {
           </CardActions>
         </>
       )}
-      {/* <img src={screenshot} alt="screenshot" /> */}
+
+      {saveType === "3BOX_SCREEN" && (
+        <>
+          <div
+            style={{
+              justifyContent: "center",
+              padding: 32,
+              textAlign: "center"
+            }}
+          >
+            <Stepper alternativeLabel activeStep={threeBoxConnectionStep}>
+              <Step>
+                <StepLabel>Sign in with your wallet</StepLabel>
+              </Step>
+              <Step>
+                <StepLabel>Connect to 3Box</StepLabel>
+              </Step>
+            </Stepper>
+
+            {threeBoxConnectionStep === 0 && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={async () => {
+                  setOpenSaveDialog(false);
+                  await web3Connect.triggerConnect();
+                  setOpenSaveDialog(true);
+                  setThreeBoxConnectionStep(1);
+                }}
+                style={{ margin: 16 }}
+              >
+                Choose Wallet
+              </Button>
+            )}
+            {threeBoxConnectionStep === 1 && (
+              <div>
+                <ProfileHover
+                  address={web3Connect.address}
+                  showName={true}
+                  orientation="bottom"
+                  displayFull={true}
+                />
+                <div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={connectTo3Box}
+                    style={{ margin: 8 }}
+                    disabled={isFetching()}
+                  >
+                    Connect
+                  </Button>
+                  <Typography
+                    style={{ marginTop: 8, height: 24 }}
+                    display="block"
+                    variant="caption"
+                  >
+                    {threeBoxStatus ? threeBoxStatus : ""}
+                  </Typography>
+                </div>
+              </div>
+            )}
+            <Link
+              component="button"
+              variant="body2"
+              onClick={logout}
+              style={{
+                display: "block",
+                margin: "auto"
+              }}
+            >
+              Logout
+            </Link>
+          </div>
+        </>
+      )}
+      {saveType === "3BOX_SAVE" && (
+        <>
+          <div style={{ padding: 32, textAlign: "center" }}>
+            <Typography variant="button">Save to 3Box</Typography>
+            <Typography
+              variant="caption"
+              style={{
+                marginTop: 16,
+                marginBottom: 16,
+                maxWidth: 300,
+                textAlign: "justify"
+              }}
+              display="block"
+            >
+              You can save your eth.build file directly to your 3Box private
+              space. This means that it is saved encrypted on IPFS and only you
+              can access to it.
+            </Typography>
+            <TextField
+              fullWidth
+              name="title"
+              label="File Name"
+              variant="outlined"
+              value={documentTitle}
+              onChange={handleTitle}
+              required
+              style={{ marginTop: 16 }}
+            />
+
+            {/* <FormControlLabel
+              control={
+                <Switch
+                  checked={publicDocument}
+                  onChange={event => setPublicDocument(event.target.checked)}
+                  value="publicDocument"
+                  color="primary"
+                />
+              }
+              label="Public"
+            /> */}
+
+            <Typography variant="caption" display="block">
+              {currentDocumentInfo !== null
+                ? `Last saved ${moment
+                    .unix(currentDocumentInfo.metadata.timestamp)
+                    .fromNow()}`
+                : ""}
+            </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={async () => {
+                setSaving(true);
+                let space = getSpace();
+                await saveDocument(
+                  space,
+                  documentTitle,
+                  compressed,
+                  screenshot
+                );
+                updateDocumentInfo(documentTitle);
+                localStorage.setItem(STORAGE_3BOX_DOCUMENT, documentTitle);
+                setSaving(false);
+              }}
+              style={{ margin: 16 }}
+              disabled={
+                (currentDocumentInfo &&
+                  currentDocumentInfo.document.data === compressed) ||
+                saving
+              }
+            >
+              Save
+            </Button>
+            <Link
+              component="button"
+              variant="body2"
+              onClick={logout}
+              style={{
+                display: "block",
+                margin: "auto"
+              }}
+            >
+              Logout
+            </Link>
+          </div>
+        </>
+      )}
     </Dialog>
   );
 }
