@@ -21,7 +21,6 @@ import {
 } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ShareIcon from "@material-ui/icons/Share";
-import CropFreeIcon from "@material-ui/icons/CropFree";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import useWeb3Connect from "../utils/useWeb3Connect";
 import {
@@ -36,11 +35,7 @@ import moment from "moment";
 
 import Box from "3box";
 import ProfileHover from "profile-hover";
-import {
-  BOX_SPACE,
-  getDocumentInfo,
-  saveDocument
-} from "../utils/Documents3BoxSpace";
+import { getDocumentInfo, saveDocument } from "../utils/Documents3BoxSpace";
 
 const STORAGE_3BOX_DOCUMENT = "eth.build.documentTitle3Box";
 
@@ -535,12 +530,14 @@ function SaveDialog(props) {
             )}
             {threeBoxConnectionStep === 1 && (
               <div>
-                <ProfileHover
-                  address={web3Connect.address}
-                  showName={true}
-                  orientation="bottom"
-                  displayFull={true}
-                />
+                {web3Connect.address !== null && (
+                  <ProfileHover
+                    address={web3Connect.address}
+                    showName={true}
+                    orientation="bottom"
+                    displayFull={true}
+                  />
+                )}
                 <div>
                   <Button
                     variant="contained"
