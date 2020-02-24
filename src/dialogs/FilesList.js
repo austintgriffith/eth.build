@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import Typography from "@material-ui/core/Typography";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import IconButton from "@material-ui/core/IconButton";
@@ -56,6 +57,9 @@ export default function FilesList({ files, onClick }) {
             />
           </GridListTile>
         ))}
+        {files.length === 0 && (
+          <Typography variant="caption" align="center" style={{margin: "auto", marginTop: 32}}>No files available</Typography>
+        )}
       </GridList>
     </div>
   );
