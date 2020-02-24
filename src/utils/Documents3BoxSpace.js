@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const keccak256 = require("keccak256");
 
 export const BOX_SPACE = "eth_build";
@@ -27,4 +29,18 @@ export const saveDocument = async (space, fileName, document, screenshot) => {
   };
 
   await space.private.set(key, documentStruct);
+};
+
+export const loadDocuments = async space => {
+  console.log("LOADING DOCUMENTS");
+  let files = await space.private.all({ metadata: true });
+  console.log(files);
+  let documents = Object.values(files).map(file => ({
+    timestamp: file.timestamp,
+    timestampStr: moment.unix(file.timestamp).fromNow(),
+    ...file.value
+  }));
+  documents.sort((fileA, fileB) => fileB.timestamp - fileA.timestamp);
+  console.log(documents);
+  return documents;
 };
