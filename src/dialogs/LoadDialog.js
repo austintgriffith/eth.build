@@ -4,24 +4,10 @@ import Dialog from "@material-ui/core/Dialog";
 import "litegraph.js/css/litegraph.css";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import {
-  Button,
-  CardActions,
-  TextField,
-  SvgIcon,
-  Typography,
-  Tooltip,
-  // Switch,
-  // FormControlLabel,
-  Link
-} from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
-import ShareIcon from "@material-ui/icons/Share";
-import CropFreeIcon from "@material-ui/icons/CropFree";
+import { Button, SvgIcon, Typography, Tooltip, Link } from "@material-ui/core";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import useWeb3Connect from "../utils/useWeb3Connect";
 import {
@@ -32,22 +18,14 @@ import {
   isFetching
 } from "../utils/3BoxManager";
 
-import moment from "moment";
-
 import Box from "3box";
 import ProfileHover from "profile-hover";
-import {
-  BOX_SPACE,
-  getDocumentInfo,
-  loadDocuments
-} from "../utils/Documents3BoxSpace";
+import { loadDocuments } from "../utils/Documents3BoxSpace";
 import FilesList from "./FilesList";
 
 const STORAGE_3BOX_DOCUMENT = "eth.build.documentTitle3Box";
 
 var codec = require("json-url")("lzw");
-var QRCode = require("qrcode.react");
-const axios = require("axios");
 
 const useStyles = makeStyles({
   button: {
@@ -67,26 +45,11 @@ const ThreeBoxIcon = props => {
 };
 
 function LoadDialog(props) {
-  const {
-    liteGraph,
-    setOpenLoadDialog,
-    openLoadDialog,
-    dynamicWidth,
-    live
-  } = props;
+  const { liteGraph, setOpenLoadDialog, openLoadDialog, live } = props;
 
   const classes = useStyles();
 
   const [loadType, setLoadType] = React.useState(null);
-  const [shared, setShared] = React.useState();
-
-  const [compressed, setCompressed] = React.useState();
-
-  const [documentTitle, setDocumentTitle] = React.useState("");
-  // const [publicDocument, setPublicDocument] = React.useState(false);
-  const [currentDocumentInfo, setCurrentDocumentInfo] = React.useState(null);
-  // const [lastCheckedTitle, setLastCheckedTitle] = React.useState(null);
-  const [updateTimer, setUpdateTimer] = React.useState(null);
 
   const web3Connect = useWeb3Connect();
 
@@ -158,14 +121,8 @@ function LoadDialog(props) {
         web3Connect.provider,
         setThreeBoxStatus
       );
-
-      let savedTitle = localStorage.getItem(STORAGE_3BOX_DOCUMENT);
-      setDocumentTitle(savedTitle ? savedTitle : "");
-
-      let documentInfo = await getDocumentInfo(space, savedTitle);
-      setCurrentDocumentInfo(documentInfo.metadata ? documentInfo : null);
-      setLoadType("3BOX_LOAD");
       setDocuments(await loadDocuments(space));
+      setLoadType("3BOX_LOAD");
     } catch (error) {
       setThreeBoxStatus(error);
     }
@@ -380,12 +337,14 @@ function LoadDialog(props) {
               )}
               {threeBoxConnectionStep === 1 && (
                 <div>
-                  <ProfileHover
-                    address={web3Connect.address}
-                    showName={true}
-                    orientation="bottom"
-                    displayFull={true}
-                  />
+                  {web3Connect.address !== null && (
+                    <ProfileHover
+                      address={web3Connect.address}
+                      showName={true}
+                      orientation="bottom"
+                      displayFull={true}
+                    />
+                  )}
                   <div>
                     <Button
                       variant="contained"

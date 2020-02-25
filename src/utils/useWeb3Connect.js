@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Web3 from "web3";
 import Web3Connect from "web3connect";
@@ -63,15 +63,48 @@ function useWeb3Connect() {
   const [networkId, setNetworkId] = useState(null);
   const [network, setNetwork] = useState(null);
   const [fetching, setFetching] = useState(false);
-  const [error, setError] = useState(false);
 
   // console.log({ connected, address, chainId, networkId, fetching, error });
+  const onConnect = async () => {
+    const providerInited = await web3Connect.connect();
+
+    await subscribeProvider(providerInited);
+
+    const web3Inited = new Web3(providerInited);
+
+    await web3Inited.eth.extend({
+      methods: [
+        {
+          name: "chainId",
+          call: "eth_chainId",
+          outputFormatter: web3Inited.utils.hexToNumber
+        }
+      ]
+    });
+
+    const accounts = await web3Inited.eth.getAccounts();
+
+    const addressTemp = accounts[0];
+
+    const networkIdTemp = await web3Inited.eth.net.getId();
+
+    const chainIdTemp = await web3Inited.eth.chainId();
+
+    setProvider(providerInited);
+    setWeb3(web3Inited);
+    setConnected(true);
+    setAddress(addressTemp);
+    setChainId(chainIdTemp);
+    setNetworkId(networkIdTemp);
+    setNetwork(getNetworkByChainId(networkIdTemp));
+    setFetching(true);
+  };
 
   useEffect(() => {
-    if (web3Connect.cachedProvider) {
+    if (web3Connect.cachedProvider && !connected) {
       onConnect();
     }
-  }, [web3Connect]);
+  });
 
   const resetApp = async () => {
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
@@ -114,41 +147,6 @@ function useWeb3Connect() {
     });
   };
 
-  const onConnect = async () => {
-    const providerInited = await web3Connect.connect();
-
-    await subscribeProvider(providerInited);
-
-    const web3Inited = new Web3(providerInited);
-
-    await web3Inited.eth.extend({
-      methods: [
-        {
-          name: "chainId",
-          call: "eth_chainId",
-          outputFormatter: web3Inited.utils.hexToNumber
-        }
-      ]
-    });
-
-    const accounts = await web3Inited.eth.getAccounts();
-
-    const addressTemp = accounts[0];
-
-    const networkIdTemp = await web3Inited.eth.net.getId();
-
-    const chainIdTemp = await web3Inited.eth.chainId();
-
-    setProvider(providerInited);
-    setWeb3(web3Inited);
-    setConnected(true);
-    setAddress(addressTemp);
-    setChainId(chainIdTemp);
-    setNetworkId(networkIdTemp);
-    setNetwork(getNetworkByChainId(networkIdTemp));
-    setFetching(true);
-  };
-
   return {
     connected,
     address,
@@ -156,7 +154,6 @@ function useWeb3Connect() {
     networkId,
     network,
     fetching,
-    error,
     triggerConnect: onConnect,
     web3,
     web3Connect,

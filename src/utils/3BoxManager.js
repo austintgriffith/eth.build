@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import Box from "3box";
 import { BOX_SPACE } from "./Documents3BoxSpace";
 
