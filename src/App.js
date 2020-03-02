@@ -264,7 +264,7 @@ React.useEffect(()=>{
     canvas.draw(true);
   };
 
-  window.onbeforeunload = function(){
+  window.onpagehide = function(){
     var data = JSON.stringify( graph.serialize() );
     localStorage.setItem("litegraph", data );
   }
