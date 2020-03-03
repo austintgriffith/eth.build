@@ -60,7 +60,7 @@ MetaMask.prototype.onExecute = async function() {
     name:"sign",
     args:[{name:"message",type:"string"}],
     function:async (args)=>{
-      return new Promise(function(resolve, reject) {
+      return new Promise((resolve, reject) => {
         this.onAction()
         let currentWeb3 = new Web3(window.web3)
         window.ethereum.sendAsync({

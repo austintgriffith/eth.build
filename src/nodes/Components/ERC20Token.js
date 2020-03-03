@@ -255,7 +255,7 @@ ERC20Token.prototype.onExecute = async function() {
       this.parseContract()
   }
 
-  console.log("setting output",this.address)
+  //console.log("setting output",this.address)
   this.setOutputData(0,this.address)
 
 

@@ -1,6 +1,9 @@
 var RLP = require('rlp');
 
-function UtilsFromWei() {
+function RLPEncode() {
+  this.addInput("", "");
+  this.addInput("", "");
+  this.addInput("", "");
   this.addInput("", "");
   this.addInput("", "");
   this.addInput("", "");
@@ -8,9 +11,9 @@ function UtilsFromWei() {
   this.size[0] = 190
 }
 
-UtilsFromWei.title = "RLP Encode";
+RLPEncode.title = "RLP Encode";
 
-UtilsFromWei.prototype.onExecute = function() {
+RLPEncode.prototype.onExecute = function() {
 
   let dataArray = []
 
@@ -26,8 +29,25 @@ UtilsFromWei.prototype.onExecute = function() {
     dataArray.push(this.getInputData(2))
   }
 
-  this.setOutputData(0,RLP.encode(dataArray))
+  if (typeof this.getInputData(3) != "undefined" && this.getInputData(3) != null) {
+    dataArray.push(this.getInputData(3))
+  }
+
+  if (typeof this.getInputData(4) != "undefined" && this.getInputData(4) != null) {
+    dataArray.push(this.getInputData(4))
+  }
+
+  if (typeof this.getInputData(5) != "undefined" && this.getInputData(5) != null) {
+    dataArray.push(this.getInputData(5))
+  }
+
+  try{
+    this.setOutputData(0,RLP.encode(dataArray).toString('hex'))
+  }catch(e){
+    console.log(e)
+  }
+
   //var address = ("0x"+keccak256().toString('hex')).slice(12).substring(14)
 };
 
-export default UtilsFromWei
+export default RLPEncode
