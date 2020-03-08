@@ -1,7 +1,7 @@
 const BurnerProvider = require('burner-provider');
 const Web3 = require('web3');
 
-const defaultProvider = "https://austingriffith.com" //some junk url because you don't need a provider to sign messages but web3.js still needs a provider
+const defaultProvider = "https://rpc.eth.build:46234" //some junk url because you don't need a provider to sign messages but web3.js still needs a provider
 
 function Web3Sign() {
   this.addInput("[privatekey]","string")
