@@ -6,6 +6,7 @@ function MetaMask() {
   this.addOutput("balance()","function")
   this.addOutput("sign()","function")
   this.addOutput("send()","function")
+  this.addOutput("signedTypedData()","function")
   this.properties = {};
 
   this.size[0] = 210
@@ -20,8 +21,11 @@ MetaMask.prototype.onAdded = async function() {
 }
 
 MetaMask.prototype.onAction = async function() {
-  this.accounts = await window.ethereum.enable()
-
+  try{
+    this.accounts = await window.ethereum.enable()
+  }catch(e){
+    console.log(e)
+  }
 }
 
 MetaMask.prototype.connectWeb3 = function() {
@@ -50,17 +54,21 @@ MetaMask.prototype.onExecute = async function() {
     name:"balance",
     args:[{name:"address",type:"string"}],
     function:async (args)=>{
-      this.onAction()
-      let currentWeb3 = new Web3(window.web3)
-      let balance = await currentWeb3.eth.getBalance(args.address)
-      return balance
+      try{
+        this.onAction()
+        let currentWeb3 = new Web3(window.web3)
+        let balance = await currentWeb3.eth.getBalance(args.address)
+        return balance
+      }catch(e){
+        console.log(e)
+      }
     }
   })
   this.setOutputData(2,{
     name:"sign",
     args:[{name:"message",type:"string"}],
     function:async (args)=>{
-      return new Promise(function(resolve, reject) {
+      return new Promise((resolve, reject) => {
         this.onAction()
         let currentWeb3 = new Web3(window.web3)
         window.ethereum.sendAsync({
@@ -138,6 +146,36 @@ MetaMask.prototype.onExecute = async function() {
       console.log("THIS IS GETTING CALLED?!?!?")
 
       return 0
+    }
+  })
+
+  this.setOutputData(4,{
+    name:"signedTypedData",
+    args:[{name:"typedData",type:"object"}],
+    function:async (args)=>{
+      return new Promise((resolve, reject) => {
+        this.onAction()
+        let currentWeb3 = new Web3(window.web3)
+        window.ethereum.sendAsync({
+          id: 1,
+          method: "eth_signTypedData_v3",
+          params: [window.ethereum.selectedAddress, args.typedData],
+          from: window.ethereum.selectedAddress
+        }, (error,result)=>{
+          console.log("SEND MM CALLBACK",error,result)
+          if(error&&error.message){
+            global.setSnackbar({msg:error.message})
+            console.log("REJECT",result)
+            reject(error)
+          }else{
+            console.log("RESOLVE",result)
+            const r = result.result.slice(0,66)
+            const s = '0x' + result.result.slice(66,130)
+            const v = Number('0x' + result.result.slice(130,132))
+            resolve(result.result)
+          }
+        })
+      });
     }
   })
 

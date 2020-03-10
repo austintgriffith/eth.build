@@ -1,7 +1,7 @@
 const BurnerProvider = require('burner-provider');
 const Web3 = require('web3');
 
-const defaultProvider = "https://austingriffith.com"
+const defaultProvider = "https://rpc.eth.build:46234"
 
 function Web3Recover() {
   this.addInput("[message]","string")

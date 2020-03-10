@@ -12,6 +12,7 @@ function Function() {
   this.size[0] = initialWidth
 
   this.inputValues = []
+  this.cleanedInputs = []
 }
 
 Function.title = "Call";
@@ -44,16 +45,22 @@ Function.prototype.onExecute = function() {
       this.function = input
       if(input.name != this.properties.name){
         this.properties.name = input.name
+        //console.log("CLEAINING INPUITES WTF")
         this.cleanInputs()
-        //console.log("UPDATE FUNCTIONS",input.args,this.inputs)
+        //console.log("UPDATE FUNCTIONS with LINKS",input.args,this.inputs)
         for(let a in input.args){
           let arg = input.args[a]
-          console.log("ADD ARG",a,arg)
+          //console.log("ADD ARG",a,arg)
           this.addInput(arg.name,arg.type)
+          if(this.cleanedInputs && this.cleanedInputs[a]){
+            //console.log("this guy is a link to ",this.cleanedInputs[a])
+            let originalNode = this.graph.getNodeById(this.cleanedInputs[a].origin_id)
+            //console.log("HOOK UP originalNode",originalNode)
+            originalNode.connect(this.cleanedInputs[a].origin_slot,this,this.cleanedInputs[a].target_slot)
+            //394 0 376 5
+          }
         }
         this.size[0] = initialWidth
-
-      ////  this.encode()
       }
     }
   }else{
@@ -87,9 +94,11 @@ Function.prototype.cleanInputs = function() {
   let overflow = this.inputs.length-staticInputs
   while(overflow>0){
     let index = this.inputs.length-1
-    console.log("removing input ",index)
+    console.log("removing input ",index,this.inputs[index].link)
+    this.cleanedInputs[overflow-1] = this.graph.links[this.inputs[index].link]
     this.removeInput(index)
     overflow--
   }
+  console.log("===final cleanedInputs",this.cleanedInputs)
 }
 export default Function

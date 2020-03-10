@@ -21,6 +21,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import lessons from './data/lessons';
 
 import SaveDialog from "./dialogs/SaveDialog";
+import LoadDialog from "./dialogs/LoadDialog";
+import html2canvas from 'html2canvas';
 
 var codec = require('json-url')('lzw');
 var QRCode = require('qrcode.react')
@@ -123,6 +125,16 @@ function App() {
   const [playing, setPlaying] = React.useState(true);
 
   const [openSaveDialog, setOpenSaveDialog] = React.useState(false);
+  const [openLoadDialog, setOpenLoadDialog] = React.useState(false);
+  const [currentScreenShot, setCurrentScreenShot] = React.useState(null);
+
+  const handleOpenSaveDialog = async () => {
+    let canvas = await html2canvas(document.body);
+    let canvasImg = canvas.toDataURL("image/png", 0.35);
+    console.log({canvasImg});
+    setCurrentScreenShot(canvasImg);
+    setOpenSaveDialog(true);
+  }
 
   let showLibrary = localStorage.getItem("eth.build.showLibrary");
   if(showLibrary=="true") showLibrary=true
@@ -252,7 +264,7 @@ React.useEffect(()=>{
     canvas.draw(true);
   };
 
-  window.onbeforeunload = function(){
+  window.onpagehide = function(){
     var data = JSON.stringify( graph.serialize() );
     localStorage.setItem("litegraph", data );
   }
@@ -1020,7 +1032,8 @@ return (
     {extraMenus}
 
     <AboutDialog/>
-    <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth}/>
+    <SaveDialog liteGraph={liteGraph} setOpenSaveDialog={setOpenSaveDialog} openSaveDialog={openSaveDialog} dynamicWidth={dynamicWidth} screenshot={currentScreenShot} />
+    <LoadDialog liteGraph={liteGraph} setOpenLoadDialog={setOpenLoadDialog} openLoadDialog={openLoadDialog} dynamicWidth={dynamicWidth} live={live} />
     <div style={{zIndex:1,position:"fixed",height:barHeight,left:0,bottom:0,width:"100%"}}>
       <div style={{borderRadius:"8px 8px 0px 0px",paddingLeft:6,margin:"auto",textAlign:"left",color:"#222222",height:barHeight,left:0,bottom:0,width:525,backgroundColor:"#DFDFDF"}}>
         <div style={{cursor:"pointer",letterSpacing:-5,fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}>
@@ -1062,7 +1075,7 @@ return (
           </span>
 
           <span style={{margin:5,borderLeft:"1px solid #cccccc",height:barHeight}} onClick={()=>{
-              setOpenSaveDialog(true)
+              handleOpenSaveDialog()
             }}>
             <Tooltip title="Save" style={{marginLeft:10,cursor:"pointer"}}>
               <Icon>
@@ -1071,7 +1084,8 @@ return (
             </Tooltip>
           </span>
           <span style={{margin:5,borderLeft:"1px solid #cccccc",height:barHeight}} onClick={async ()=>{
-              document.getElementById("loadjsonfile").click()
+              // document.getElementById("loadjsonfile").click()
+              setOpenLoadDialog(true);
             }}>
             <Tooltip title="Load" style={{marginLeft:10,cursor:"pointer"}}>
               <Icon>
@@ -1117,7 +1131,7 @@ return (
 
 
 
-    <div style={{position:'absolute',bottom:-100000,left:-100000}}>
+    {/* <div style={{position:'absolute',bottom:-100000,left:-100000}}>
       <span style={{border:'1px solid #777777',color:live?"#00ff00":"#0000ff",padding:5,cursor:"pointer"}}>
         <input id="loadjsonfile" type="file" name="file" onChange={(e)=>{
             console.log("FILE",e.target.files[0])
@@ -1148,7 +1162,7 @@ return (
           }}>
         </input>
       </span>
-    </div>
+    </div> */}
 
     <div style={{position:'absolute',bottom:-100000,left:-100000}}>
       <span style={{border:'1px solid #777777',color:live?"#00ff00":"#0000ff",padding:5,cursor:"pointer"}}>
@@ -1251,6 +1265,7 @@ return (
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
+        style={{marginBottom:100}}
         message={<span id="message-id" style={{fontFamily: "monospace",color:snackbar.color?snackbar.color:"#d33535",fontSize:22}}>{snackbar.msg}</span>}
       />
   </div>
