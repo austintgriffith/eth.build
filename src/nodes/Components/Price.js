@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const url = "https://api.coinmarketcap.com/v1/ticker/"
+const url = "https://network.eth.build:44386/price?symbol="
 
 function Price() {
   this.addInput("[symbol]","string")
@@ -22,14 +22,17 @@ Price.prototype.onAdded = async function() {
 Price.prototype.loadPrice = async function() {
   try{
     //get price
-    let result = await axios.get(url)
+    let result = await axios.get(url+this.symbol)
     //console.log("result",result)
     if(result && result.data){
       for(let i in result.data){
-        //console.log(result.data[i])
-        if(result.data[i].symbol.toLowerCase()==this.symbol.toLowerCase()){
+        console.log("PRICE DATA",result.data[i])
+        /*if(result.data[i].symbol.toLowerCase()==this.symbol.toLowerCase()){
           this.value = result.data[i].price_usd
-        }
+        }*/
+        try{
+          this.value = result.data[i].quote.USD.price
+        }catch(e){console.log(e)}
       }
 
     }
