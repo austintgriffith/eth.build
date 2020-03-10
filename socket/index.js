@@ -23,6 +23,44 @@ app.get("/", (req, res) => {
   res.send({ response: value }).status(200);
 })
 
+app.get("/price", (req, res) => {
+  console.log("GET PRICE!",req.query)
+
+  let symbol = "ETH"
+  if(req.query && req.query.symbol){
+    symbol = req.query.symbol
+  }
+
+  const rp = require('request-promise');
+  const requestOptions = {
+    method: 'GET',
+    uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest',
+    qs: {
+      symbol: symbol
+    },
+    headers: {
+      'X-CMC_PRO_API_KEY': fs.readFileSync("coinmarketcap.key").toString().trim()
+    },
+    json: true,
+    gzip: true
+  };
+
+  rp(requestOptions).then(response => {
+    console.log('API call response:', response.data);
+    res.send(response.data).status(200);
+  }).catch((err) => {
+    console.log('API call error:', err.message);
+    res.send("Failed to get data from coinmarketcap").status(400);
+  });
+
+
+
+
+
+
+
+})
+
 app.post("/", (req, res) => {
   console.log("POST",req.body)
   if(req.body && req.body.string){
