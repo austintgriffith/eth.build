@@ -14,6 +14,10 @@ const fs = require('fs');
 
 let storage = {}
 
+
+let coinmarketcapBuffer = {}
+let coinmarketcapBufferTimestamp = {}
+
 app.use(bodyParser.json())
 app.use(cors())
 
@@ -21,6 +25,53 @@ app.get("/", (req, res) => {
   console.log("GET!",req.query)
   let value = storage[req.query.key]
   res.send({ response: value }).status(200);
+})
+
+app.get("/price", (req, res) => {
+  console.log("GET PRICE!",req.query)
+
+  let symbol = "ETH"
+  if(req.query && req.query.symbol){
+    symbol = req.query.symbol
+  }
+
+  if(!coinmarketcapBuffer[symbol] || !coinmarketcapBufferTimestamp[symbol] || coinmarketcapBufferTimestamp[symbol]+30000 < Date.now()){
+    console.log("getting price data for "+symbol+" and reseting buffer time to ",coinmarketcapBufferTimestamp[symbol])
+    coinmarketcapBufferTimestamp[symbol] = Date.now()
+    const rp = require('request-promise');
+    const requestOptions = {
+      method: 'GET',
+      uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest',
+      qs: {
+        symbol: symbol
+      },
+      headers: {
+        'X-CMC_PRO_API_KEY': fs.readFileSync("coinmarketcap.key").toString().trim()
+      },
+      json: true,
+      gzip: true
+    };
+
+    rp(requestOptions).then(response => {
+      console.log('API call response:', response.data);
+      coinmarketcapBuffer[symbol] = response.data
+      res.send(response.data).status(200);
+    }).catch((err) => {
+      console.log('API call error:', err.message);
+      res.send("Failed to get data from coinmarketcap").status(400);
+    });
+
+  }else{
+    res.send(coinmarketcapBuffer[symbol]).status(200)
+  }
+
+
+
+
+
+
+
+
 })
 
 app.post("/", (req, res) => {

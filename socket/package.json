@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "http": "0.0.0",
     "keccak256": "^1.0.0",
+    "request-promise": "^4.2.5",
     "socket.io": "^2.3.0"
   }
 }

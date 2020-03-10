@@ -42,6 +42,16 @@ app.get('/', (req, res) => {
     console.log("served!")
 })
 
+app.get('/price', (req, res) => {
+  console.log("hit price!")
+  proxy.web(req, res, {
+      //target: 'http://10.0.0.237:8545'
+      target: 'http://localhost:44387/'
+      //target: 'http://10.0.0.188:8545'
+    });
+    console.log("served!")
+})
+
 app.get('/build', (req, res) => {
   console.log("build get hit!")
   proxy.web(req, res, {
