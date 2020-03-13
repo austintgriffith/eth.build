@@ -10,6 +10,7 @@ function Blockchain() {
   this.addOutput("blockNumber()","function")
   this.addOutput("transaction()","function")
   this.addOutput("send()","function")
+  this.addOutput("receipt()","function")
   this.properties = { address: "", provider: defaultProvider };
   this.size[0] = 210
 }
@@ -99,6 +100,25 @@ Blockchain.prototype.onExecute = function() {
       console.log("sent...",transactionHash)
 
       return transactionHash
+    }
+  })
+
+  this.setOutputData(6,{
+    name:"receipt",
+    args:[{name:"hash",type:"string"}],
+    function:async (args)=>{
+
+      console.log("getting receipt...",args)
+
+      let result = await new Promise((resolve, reject) => {
+        this.web3.eth.getTransactionReceipt(args.hash,(a,b)=>{
+        //  console.log("GOTBACK",a,b)
+            resolve(b)
+        })
+      });
+
+
+      return result
     }
   })
 };
