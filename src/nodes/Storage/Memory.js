@@ -17,10 +17,8 @@ Memory.prototype.onAction = function() {
 
 Memory.prototype.onExecute = function() {
   let nextValue = this.getInputData(0)
-  if(nextValue && nextValue != this.properties.value){
-    if(nextValue.length>0){
-      this.properties.value = nextValue
-    }
+  if(typeof nextValue != "undefined" && nextValue != this.properties.value){
+    this.properties.value = nextValue
   }
   this.setOutputData(0,this.properties.value)
 };

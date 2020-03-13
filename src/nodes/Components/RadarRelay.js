@@ -14,7 +14,7 @@ function RadarRelayPriceAPI() {
   setInterval(this.loadPrice.bind(this),45000)
 }
 
-RadarRelayPriceAPI.title = "RR WETH/DAI";
+RadarRelayPriceAPI.title = "RR WETH-DAI";
 
 RadarRelayPriceAPI.prototype.onAdded = async function() {
   this.loadPrice()

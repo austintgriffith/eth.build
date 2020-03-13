@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 function Button() {
   this.addInput("", -1);
   this.addOutput("", -1);
-  this.addOutput("", "boolean");
+  this.addOutput("", "number,boolean");
   this.properties =  {value:"click me",title:"Button",count:0}
   this.size = [200, 50];
 }

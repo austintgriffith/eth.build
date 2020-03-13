@@ -4,10 +4,10 @@ var EthereumENS = require("ethereum-ens");
 const defaultProvider = "https://mainnet.infura.io/v3/e59c464c322f47e2963f5f00638be2f8";
 
 function ENS() {
-  this.addInput(".eth", "string");
+  this.addInput("name", "string");
   this.addInput("address", "string");
   this.addOutput("address", "string");
-  this.addOutput(".eth", "string");
+  this.addOutput("name", "string");
   this.properties = { provider: defaultProvider };
   this.cached = false;
   this.cachedAddress = false;
@@ -37,23 +37,24 @@ ENS.prototype.onExecute = async function() {
   let input = this.getInputData(0);
 
   if (input && typeof input.indexOf == "function" && input.indexOf(".eth") >= 0) {
-    //do nothing, already has .eth
-  } else {
-    input = input + ".eth";
-  }
 
-  if (input && (!this.cached || this.cached != input)) {
-    this.cached = input;
+    //FORCE THEM TO TYPE THE .ETH AT THE END FOR NOW ... IT WAS FAILING AND COULDN'T BE CAUGHT IF NOT
 
-    try {
-      let res = await this.ens.resolver(this.cached);
-      this.value = await this.ens.resolver(this.cached).addr();
-    } catch (e) {
-      console.log(e);
-      this.value("");
+    if (input && (!this.cached || this.cached != input)) {
+      this.cached = input;
+
+      try {
+        let res = await this.ens.resolver(this.cached);
+        this.value = await this.ens.resolver(this.cached).addr();
+      } catch (e) {
+        console.log(e);
+        this.value = null;
+      }
+      if (this.value) this.value = this.value.toLowerCase();
     }
-    if (this.value) this.value = this.value.toLowerCase();
   }
+
+
   this.setOutputData(0, this.value);
 
   // resolve address

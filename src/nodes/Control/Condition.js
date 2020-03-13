@@ -3,9 +3,9 @@ function Condition() {
       this.addInput("B", "string,number");
       this.addOutput("true", "boolean");
       this.addOutput("event", -1);
-      this.properties = {"A":1,"B":1}
+      this.properties = {"A":0,"B":0}
       this.addProperty("OP", "==", "enum", { values: Condition.values });
-
+      this.triggered = true
       this.size[0] = 130
   }
 

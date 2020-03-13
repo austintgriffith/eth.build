@@ -22,6 +22,7 @@ MetaMask.prototype.onAdded = async function() {
 
 MetaMask.prototype.onAction = async function() {
   try{
+    console.log("CALLING ENABLE ON METAMASK!!!")
     this.accounts = await window.ethereum.enable()
   }catch(e){
     console.log(e)
