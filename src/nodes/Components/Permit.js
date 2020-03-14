@@ -4,7 +4,7 @@ function Permit() {
   this.addInput("spender","string")
   this.addInput("nonce","string,number")
   this.addInput("expiry","string,number")
-  this.addInput("allowed","string")
+  this.addInput("allowed","string,number")
   this.addInput("",-1)
   this.addOutput("typedData","object")
   this.size[0] = 190
@@ -20,10 +20,10 @@ Permit.prototype.onAction = async function () {
         spender: this.spender,
         nonce: this.nonce,
         expiry: this.expiry,
-        allowed: this.allowed
+        allowed: this.allowed=='true' || this.allowed==1 || this.allowed=='1' ? 'true' : 'false'
     }
 
-    const typedData = JSON.stringify({
+    this.typedData = {
         types: {
             EIP712Domain: [{
                     name: 'name',
@@ -72,9 +72,8 @@ Permit.prototype.onAction = async function () {
             verifyingContract: "0x6B175474E89094C44Da98b954EedeAC495271d0F",//DAI ADDRESS
         },
         message: message
-    });
+    }
 
-    this.typedData = typedData
     /* = {
         typedData,
         message
@@ -85,11 +84,20 @@ Permit.prototype.onAction = async function () {
 
 
 Permit.prototype.onExecute = function() {
-  this.holder = this.getInputData(0)
+  let changed = false
+
+  let holder = this.getInputData(0)
+  if(holder!=this.holder){
+    this.holder=holder
+    changed=true
+  }
   this.spender = this.getInputData(1)
   this.nonce = this.getInputData(2)
   this.expiry = this.getInputData(3)
   this.allowed = this.getInputData(4)
+  if(changed) {
+    this.onAction()
+  }
   this.setOutputData(0,this.typedData)
 };
 

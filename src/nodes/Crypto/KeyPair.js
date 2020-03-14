@@ -37,6 +37,9 @@ Web3KeyPair.prototype.onExecute = function() {
 };
 
 Web3KeyPair.prototype.onAdded = async function(){
+  if(!this.privateKey){
+    this.onAction()
+  }
   this.updateAddress()
 }
 

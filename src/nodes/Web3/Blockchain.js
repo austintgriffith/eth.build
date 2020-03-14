@@ -56,10 +56,13 @@ Blockchain.prototype.onExecute = function() {
     name:"nonce",
     args:[{name:"address",type:"string"}],
     function:async (args)=>{
-      //console.log(this.web3.eth)
-      let count = await this.web3.eth.getTransactionCount(args.address)
-      //console.log("count of ",args.address,count)
-      return count
+      if(args.address){
+        //console.log(this.web3.eth)
+        let count = await this.web3.eth.getTransactionCount(args.address)
+        //console.log("count of ",args.address,count)
+        return count
+      }
+
     }
   })
   this.setOutputData(3,{
@@ -76,10 +79,13 @@ Blockchain.prototype.onExecute = function() {
     name:"transaction",
     args:[{name:"hash",type:"string"}],
     function:async (args)=>{
-      //console.log(this.web3.eth)
-      let count = await this.web3.eth.getTransaction(args.hash)
-      //console.log("count of ",args.address,count)
-      return count
+      if(args.hash){
+        //console.log(this.web3.eth)
+        let count = await this.web3.eth.getTransaction(args.hash)
+        //console.log("count of ",args.address,count)
+        return count
+      }
+
     }
   })
   this.setOutputData(5,{
@@ -88,18 +94,20 @@ Blockchain.prototype.onExecute = function() {
     function:async (args)=>{
 
       console.log("sending...",args)
-
-      let transactionHash = await new Promise((resolve, reject) => {
-        this.web3.eth.sendSignedTransaction(args.signed).on('transactionHash', function(hash){
-            resolve(hash)
-        }).on('error', (e)=>{
-          global.setSnackbar({msg:e.toString()})
+      if(args.signed){
+        let transactionHash = await new Promise((resolve, reject) => {
+          this.web3.eth.sendSignedTransaction(args.signed).on('transactionHash', function(hash){
+              resolve(hash)
+          }).on('error', (e)=>{
+            global.setSnackbar({msg:e.toString()})
+          });
         });
-      });
 
-      console.log("sent...",transactionHash)
+        console.log("sent...",transactionHash)
 
-      return transactionHash
+        return transactionHash
+      }
+
     }
   })
 
@@ -109,16 +117,19 @@ Blockchain.prototype.onExecute = function() {
     function:async (args)=>{
 
       console.log("getting receipt...",args)
+      if(args.hash){
+        let result = await new Promise((resolve, reject) => {
+          this.web3.eth.getTransactionReceipt(args.hash,(a,b)=>{
+          //  console.log("GOTBACK",a,b)
+              resolve(b)
+          })
+        });
 
-      let result = await new Promise((resolve, reject) => {
-        this.web3.eth.getTransactionReceipt(args.hash,(a,b)=>{
-        //  console.log("GOTBACK",a,b)
-            resolve(b)
-        })
-      });
+
+        return result
+      }
 
 
-      return result
     }
   })
 };
