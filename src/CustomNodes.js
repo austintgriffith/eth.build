@@ -150,6 +150,19 @@ function addHelpers(obj){
             this.connect(index, node_from_wei, 0 );
             node_from_wei.connect(0,node_watch,0)
             node_watch.pos = [e.canvasX+230,e.canvasY-10];
+          }else{
+            value = new BigNumber(this.outputs[index]._data)
+            value = value.div(10**9)
+            console.log("GUESSING GWEI VALUYE IS",value)
+            if(value>0.01&&value<9999){
+              //do a conversion to wei
+              var node_from_wei = globalLiteGraphJS.LiteGraph.createNode("Utils/From Gwei");
+              node_from_wei.pos = [e.canvasX+40,e.canvasY];
+              this.graph.add(node_from_wei);
+              this.connect(index, node_from_wei, 0 );
+              node_from_wei.connect(0,node_watch,0)
+              node_watch.pos = [e.canvasX+245,e.canvasY-10];
+            }
           }
         }catch(e){
 
