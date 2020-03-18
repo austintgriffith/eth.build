@@ -39,11 +39,11 @@ function Ledger() {
     title:"Ledger",
     requireNonce: false,
     difficulty: 0,
-    requireTo: true,
+    requireTo: false,
     valueType: "float",
-    decimals: 0,
-    showGas: false,
-    limit: 25,
+    decimals: 18,
+    showGas: true,
+    limit: 20,
   }
   this.size = [640, 360];
   this.showingTo = this.properties.requireTo

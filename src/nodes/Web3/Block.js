@@ -7,6 +7,7 @@ const defaultProvider = "https://mainnet.infura.io/v3/e59c464c322f47e2963f5f0063
 function Web3Balance() {
   this.addInput("number","string,number")
   this.addInput("[blockchain]","string")
+  this.addOutput("block","object")
   this.addInput("check",-1)
   this.addOutput("number","number")
   this.addOutput("hash","string")
@@ -66,7 +67,7 @@ Web3Balance.prototype.onAction = async function() {
           //if(this.value.hash == hash){
 
           //console.log("VALID")
-          this.outputs[0].label = "#"+this.value.number
+          this.outputs[1].label = "#"+this.value.number
 
           this.transactions = this.value.transactions
 
@@ -171,9 +172,12 @@ Web3Balance.prototype.onExecute = function() {
     this.outputs[0].label = this.balance
   }*/
   if(this.value){
-    this.setOutputData(0,this.value.number)
-    this.setOutputData(1,this.value.hash)
-    this.setOutputData(2,this.transactions)
+    this.setOutputData(0,this.value)
+    this.setOutputData(1,this.value.number)
+    this.setOutputData(2,this.value.hash)
+    this.setOutputData(3,this.transactions)
+
+
     /*this.setOutputData(3,{
       name:"transaction",
       args:[{name:"hash",type:"string"}],
