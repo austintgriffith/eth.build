@@ -1,5 +1,5 @@
 function UtilsFromWei() {
-  this.addInput("input", "number");
+  this.addInput("input", "number,string");
   this.addOutput("output", "number")
   this.properties = {decimals: 18}
   this.size[0] = 180
