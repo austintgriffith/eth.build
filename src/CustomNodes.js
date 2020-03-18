@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 const hexRgb = require('hex-rgb');
+const BigNumber = require('bignumber.js');
 
 function addHelpers(obj){
 
@@ -82,7 +83,7 @@ function addHelpers(obj){
   obj.prototype.onOutputDblClick = function(index,e){
     if(typeof   obj.prototype.originalOnOutputDblClick == "function")   obj.prototype.originalOnOutputDblClick()
 
-    console.log("DOUBLECKICK OUTTY")
+    console.log("DOUBLECKICK OUTTY",this.outputs[index])
 
     if(this.outputs[index].type == -1){
       var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Action");
@@ -117,11 +118,58 @@ function addHelpers(obj){
         node_watch.pos = [e.canvasX+90,e.canvasY-25];
         this.graph.add(node_watch);
         this.connect(index, node_watch, 0 );
+      }else if(this.outputs[index] && this.outputs[index]._data && typeof this.outputs[index]._data == "object") {
+        var node_object = globalLiteGraphJS.LiteGraph.createNode("Object/Object");
+        node_object.pos = [e.canvasX+90,e.canvasY-25];
+        this.graph.add(node_object);
+        this.connect(index, node_object, 0 );
+
+        let ySize = Object.keys(this.outputs[index]._data).length * 20 + 60
+        node_object.size[1] = ySize
+        node_object.size[0] = ySize*3
+
       }else{
+
+        console.log("DATA TYPE",typeof this.outputs[index]._data)
+
+
         var node_watch = globalLiteGraphJS.LiteGraph.createNode("Display/Watch");
         node_watch.pos = [e.canvasX+90,e.canvasY-25];
         this.graph.add(node_watch);
         this.connect(index, node_watch, 0 );
+
+        try{
+          let value = new BigNumber(this.outputs[index]._data)
+          value = value.div(10**18)
+          console.log("VALUE IN ETH",value.toNumber())
+          if(value>0.0001&&value<1000000000){
+            //do a conversion to wei
+            var node_from_wei = globalLiteGraphJS.LiteGraph.createNode("Utils/From Wei");
+            node_from_wei.pos = [e.canvasX+40,e.canvasY];
+            this.graph.add(node_from_wei);
+            this.connect(index, node_from_wei, 0 );
+            node_from_wei.connect(0,node_watch,0)
+            node_watch.pos = [e.canvasX+230,e.canvasY-10];
+          }else{
+            value = new BigNumber(this.outputs[index]._data)
+            value = value.div(10**9)
+            console.log("GUESSING GWEI VALUYE IS",value)
+            if(value>0.01&&value<9999){
+              //do a conversion to wei
+              var node_from_wei = globalLiteGraphJS.LiteGraph.createNode("Utils/From Gwei");
+              node_from_wei.pos = [e.canvasX+40,e.canvasY];
+              this.graph.add(node_from_wei);
+              this.connect(index, node_from_wei, 0 );
+              node_from_wei.connect(0,node_watch,0)
+              node_watch.pos = [e.canvasX+245,e.canvasY-10];
+            }
+          }
+        }catch(e){
+
+        }
+
+
+
       }
 
 
@@ -135,6 +183,7 @@ function addHelpers(obj){
     if(typeof obj.prototype.originalOnInputDblClick == "function")   obj.prototype.originalOnInputDblClick()
     if(this.inputs[index].type == -1){
       if(this.type == "Input/Button"){
+        console.log("DOUBLECLICK INPUT ACTION")
         //this is an action, let's attach a button to it automatically
         var node_button = globalLiteGraphJS.LiteGraph.createNode("Control/Timer");
         node_button.pos = [e.canvasX-280,e.canvasY];
@@ -146,12 +195,25 @@ function addHelpers(obj){
         },1)
       }else{
         //this is an action, let's attach a button to it automatically
+
         var node_button = globalLiteGraphJS.LiteGraph.createNode("Input/Button");
-        node_button.pos = [e.canvasX-280,e.canvasY];
+        node_button.pos = [e.canvasX-60,e.canvasY+20];
         this.graph.add(node_button);
+
+        node_button.collapse()
+
+        var node_timer = globalLiteGraphJS.LiteGraph.createNode("Control/Timer");
+        node_timer.pos = [e.canvasX-40,e.canvasY+20];
+        this.graph.add(node_timer);
+
+        node_timer.collapse()
+
+
+
         //i have no idea why, but I have to do this to make it work:
         let that = this
         setTimeout(()=>{
+          node_timer.connect(0, node_button, 0);
           node_button.connect(0, that, index);
         },1)
       }

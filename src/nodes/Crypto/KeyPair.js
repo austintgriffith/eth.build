@@ -37,13 +37,16 @@ Web3KeyPair.prototype.onExecute = function() {
 };
 
 Web3KeyPair.prototype.onAdded = async function(){
+  if(!this.privateKey){
+    this.onAction()
+  }
   this.updateAddress()
 }
 
 Web3KeyPair.prototype.updateAddress = async function(){
   try{
     if(this.privateKey){
-      console.log("PK",this.privateKey)
+      //console.log("PK",this.privateKey)
       this.publicKey = "0x"+EthUtil.privateToPublic(this.privateKey).toString('hex')
       this.address = "0x"+EthUtil.privateToAddress(this.privateKey).toString('hex')
     }else{

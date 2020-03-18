@@ -160,7 +160,7 @@ MetaMask.prototype.onExecute = async function() {
         window.ethereum.sendAsync({
           id: 1,
           method: "eth_signTypedData_v3",
-          params: [window.ethereum.selectedAddress, args.typedData],
+          params: [window.ethereum.selectedAddress, JSON.stringify(args.typedData)],
           from: window.ethereum.selectedAddress
         }, (error,result)=>{
           console.log("SEND MM CALLBACK",error,result)

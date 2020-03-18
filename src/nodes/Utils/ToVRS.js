@@ -14,10 +14,12 @@ ToVRS.prototype.onExecute = function() {
   let sig = this.getInputData(0)
   if (sig && this.sig != sig) {
     this.sig = sig
+    if(sig && sig.substr){
+      this.r = sig.substr(0,66) ;
+      this.s = "0x" + sig.substr(66,64) ;
+      this.v = 28 ;
+    }
 
-    this.r = sig.substr(0,66) ;
-    this.s = "0x" + sig.substr(66,64) ;
-    this.v = 28 ;
   }
 
   this.setOutputData(0,this.v)

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import { TextareaAutosize } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 let debounce
 
@@ -219,7 +219,7 @@ ObjectObject.prototype.onDrawBackground = function(ctx) {
   }else{
     this.render(
       <div key={"object_"+this.id} style={{marginLeft:0}}>
-        <TextareaAutosize style={{background:"#333333",color:"#bbbbbb",border:"none",fontSize:this.properties.fontSize,letterSpacing:1,width:this.size[0]-160,height:this.size[1]-10}} rows={3} placeholder="{'key':'value'}" value={this.properties.value} onChange={(e)=>{
+        <textarea style={{background:"#333333",color:"#bbbbbb",border:"none",fontSize:this.properties.fontSize,letterSpacing:1,width:this.size[0]-160,height:this.size[1]-10}} rows={3} placeholder="{'key':'value'}" value={this.properties.value} onChange={(e)=>{
           this.properties.value = e.target.value
           clearTimeout(debounce)
           this.title_color = "#5e5f2d";
