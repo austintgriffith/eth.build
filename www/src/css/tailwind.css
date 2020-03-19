@@ -1,13 +1,23 @@
 @tailwind base;
 
 .btn {
-  @apply font-bold py-2 px-4 rounded;
+  @apply inline-block text-xl text-white py-3 px-6 rounded;
 }
-.btn-blue {
-  @apply bg-blue-500 text-white;
+.btn-primary {
+  @apply bg-blue-500;
 }
-.btn-blue:hover {
+.btn-primary:hover {
   @apply bg-blue-700;
+}
+.btn-secondary {
+  @apply bg-purple-600;
+}
+.btn-secondary:hover {
+  @apply bg-purple-700;
+}
+
+.aspect-16x9 {
+  padding-bottom: 56.25%;
 }
 
 @tailwind components;
