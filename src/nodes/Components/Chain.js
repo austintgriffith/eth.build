@@ -13,7 +13,7 @@ const INFURA_KEY = "32f4c2933abd4a74a383747ccf2d7003";
 
 const availableChains = [
   { label: "Main Ethereum Chain", value: `https://mainnet.infura.io/v3/${INFURA_KEY}` },
-  { label: "Ropsten Test Chain", value: `https://rinkeby.infura.io/v3/${INFURA_KEY}` },
+  { label: "Ropsten Test Chain", value: `https://ropsten.infura.io/v3/${INFURA_KEY}` },
   { label: "Kovan Test Chain", value: `https://kovan.infura.io/v3/${INFURA_KEY}` },
   { label: "Rinkeby Test Chain", value: `https://rinkeby.infura.io/v3/${INFURA_KEY}` },
   { label: "Goerli Test Chain", value: `https://goerli.infura.io/v3/${INFURA_KEY}` },

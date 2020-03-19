@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import Blockies from 'react-blockies';
 const keccak256 = require('keccak256')
-
+var Web3 = require('web3');
 
 const topPadding = 90
 const rowStyle = {fontSize:20,letterSpacing:-1}
@@ -39,11 +39,11 @@ function Ledger() {
     title:"Ledger",
     requireNonce: false,
     difficulty: 0,
-    requireTo: true,
+    requireTo: false,
     valueType: "float",
-    decimals: 0,
-    showGas: false,
-    limit: 25,
+    decimals: 18,
+    showGas: true,
+    limit: 20,
   }
   this.size = [640, 360];
   this.showingTo = this.properties.requireTo
@@ -63,6 +63,12 @@ Ledger.prototype.processTx = function(tx) {
   try{
     if((!this.properties.requireTo || tx.to)&&tx.from&&typeof tx.value !="undefined"){
       if(this.properties.valueType=="float"){
+        if(tx.value.indexOf("0x")>=0){
+          if(!this.web3){
+            this.web3 = new Web3()
+          }
+          tx.value = ""+this.web3.utils.hexToNumberString(tx.value)
+        }
         tx.value = parseFloat(tx.value)
         this.balances[tx.from] = this.balances[tx.from]?this.balances[tx.from]-tx.value:-tx.value
       }

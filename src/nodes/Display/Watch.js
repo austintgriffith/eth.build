@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 
 function Watch() {
   this.addInput("", 0, { label: "" });
+  this.addOutput("", 0, { label: "" });
   this.value = 0;
   this.size = [300, 60];
   this.autosized = false
@@ -16,6 +17,7 @@ Watch.prototype.onExecute = function() {
   if (this.inputs[0]) {
     this.value = this.getInputData(0);
   }
+  this.setOutputData(0,this.value)
 };
 
 Watch.prototype.getTitle = function() {
