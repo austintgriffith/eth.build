@@ -17,6 +17,7 @@ function Web3Transaction() {
   this.addOutput("transaction", "object");
   this.addOutput("signed", "string");
   this.addOutput("signed",-1)
+  this.addOutput("hash","string")
   this.properties = { value: 0, nonce: null, data: "0x", gas: 23000, gasPrice: 4100000000, provider: defaultProvider, privateKey: ""  };
   this.size[0]=240
   this.signed = false
@@ -110,6 +111,7 @@ Web3Transaction.prototype.onExecute = function() {
     this.signed = false
     this.trigger("signed",this.signedTransaction)
   }
+  this.setOutputData(3,this.hash)
 };
 
 
@@ -124,6 +126,11 @@ Web3Transaction.prototype.onAction = async function(event, args) {
     this.signedTransaction = rawTx
     console.log(" * * * SIGNED",JSON.stringify(tx))
     this.signed = true
+
+    const raw = serializedTx.toString('hex')
+    const fake = new EthTx(raw);
+    this.hash = "0x"+fake.hash(true).toString('hex')
+
   }catch(e){
     console.log(e)
     global.setSnackbar(e.message)
