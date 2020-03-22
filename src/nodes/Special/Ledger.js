@@ -63,7 +63,7 @@ Ledger.prototype.processTx = function(tx) {
   try{
     if((!this.properties.requireTo || tx.to)&&tx.from&&typeof tx.value !="undefined"){
       if(this.properties.valueType=="float"){
-        if(tx.value.indexOf("0x")>=0){
+        if(tx&&tx.value&&tx.value.indexOf&&tx.value.indexOf("0x")>=0){
           if(!this.web3){
             this.web3 = new Web3()
           }

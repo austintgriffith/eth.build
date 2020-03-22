@@ -72,7 +72,7 @@ Compile.prototype.compile = function(name) {
       console.log("ERRORS:",this.properties.compiled.errors)
       for(let e in this.properties.compiled.errors){
         if(this.properties.compiled.errors[e].type != "Warning"){
-          global.setSnackbar({msg:this.properties.compiled.errors[e].message})
+          global.setSnackbar({msg:this.properties.compiled.errors[e].formattedMessage})
           break;
         }
       }

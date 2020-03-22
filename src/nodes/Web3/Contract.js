@@ -133,31 +133,34 @@ Contract.prototype.onExecute = function() {
       if(!this.web3){
         this.connectWeb3()
       }
-      let thisContract = new this.web3.eth.Contract(this.abi,this.address)
-      console.log("RGET EVENTS!!",args)
+      if(this.abi && this.address){
+        let thisContract = new this.web3.eth.Contract(this.abi,this.address)
+        console.log("RGET EVENTS!!",args)
 
-      let thisStartBlock = 0
-      if(args['startBlock']){
-        thisStartBlock = args['startBlock']
+        let thisStartBlock = 0
+        if(args['startBlock']){
+          thisStartBlock = args['startBlock']
+        }
+
+        let thisEndBlock = 'latest'
+        if(args['endBlock']){
+          thisEndBlock = args['endBlock']
+        }
+
+        let thisFilter = {}
+        if(args['filter']){
+          thisFilter = args['filter']
+        }
+        try{
+          return thisContract.getPastEvents(args['eventName'], {
+            //{myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}
+              filter: thisFilter, // Using an array means OR: e.g. 20 or 23
+              fromBlock: thisStartBlock,
+              toBlock: thisEndBlock
+          })
+        }catch(e){console.log(e)}
+
       }
-
-      let thisEndBlock = 'latest'
-      if(args['endBlock']){
-        thisEndBlock = args['endBlock']
-      }
-
-      let thisFilter = {}
-      if(args['filter']){
-        thisFilter = args['filter']
-      }
-
-      return thisContract.getPastEvents(args['eventName'], {
-        //{myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}
-          filter: thisFilter, // Using an array means OR: e.g. 20 or 23
-          fromBlock: thisStartBlock,
-          toBlock: thisEndBlock
-      })
-
     }
   })
 
@@ -186,13 +189,15 @@ Contract.prototype.onExecute = function() {
           if(!this.web3){
             this.connectWeb3()
           }
-          //you create the contract and spread the args in it and the abiEncode and return that
-          let thisContract = new this.web3.eth.Contract(this.abi,this.address)
-          console.log("RUN FUNCTION "+name+" BUT IN THIS CONTEXT!",this.address,args,callArgs)
-          try{
-            return (thisContract.methods[name](...callArgs)).call()
-          }catch(e){
-            return false
+          if(this.abi && this.address){
+            //you create the contract and spread the args in it and the abiEncode and return that
+            let thisContract = new this.web3.eth.Contract(this.abi,this.address)
+            console.log("RUN FUNCTION "+name+" BUT IN THIS CONTEXT!",this.address,args,callArgs)
+            try{
+              return (thisContract.methods[name](...callArgs)).call()
+            }catch(e){
+              return false
+            }
           }
         }
       })

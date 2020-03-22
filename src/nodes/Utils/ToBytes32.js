@@ -14,19 +14,20 @@ ToBytes32.prototype.onExecute = function() {
     this.value = "0x0000000000000000000000000000000000000000000000000000000000000000"
   }else{
 
-    if(input.substr(0,2)!="0x"){
+    if(input.substr && input.substr(0,2)!="0x"){
       if(!this.web3){
         this.web3 = new Web3()
       }
       input = this.web3.utils.utf8ToHex(input)
+      let pad = 66 - input.length
+      while(pad>0){
+        pad--
+        input = input+"0"
+      }
+      this.value = input
     }
 
-    let pad = 66 - input.length
-    while(pad>0){
-      pad--
-      input = input+"0"
-    }
-    this.value = input
+
   }
 
 
