@@ -12,6 +12,142 @@ function addHelpers(obj){
   }
 
 
+  //check if this is a smart contract block with a hardcoded abi to parse automatically
+  console.log("CHECKING IF OBJECT HAS prototype abi",obj.prototype.abi)
+  if(obj.prototype.abi){
+    console.log("parseContract needs to be a function....")
+    obj.prototype.parseContract = function() {
+      this.functions = {}
+      this.types = {}
+      for(let i in this.abi){
+        if(this.abi[i].type == "function"){
+          console.log(this.abi[i].name,this.abi[i].inputs)
+          this.functions[this.abi[i].name] = this.abi[i].inputs
+          this.types[this.abi[i].name] = this.abi[i].stateMutability
+          if(!this.types[this.abi[i].name] && this.abi[i].constant) this.types[this.abi[i].name] = "view"
+        }
+      }
+
+      try{
+        let index = this.staticOutputs
+        let outputs = []
+        let links = []
+        let correct = true
+        for(let name in this.functions){
+          console.log("ADDING OUTPUT FOR ",name,this.functions[name])
+          let currentLinks = null
+          if(!this.outputs[index] || this.outputs[index].name || this.outputs[index].name != name){
+            if(this.outputs[index] && this.outputs[index].links){
+              currentLinks = this.outputs[index].links
+            }
+            correct = false
+          }
+          outputs.push([name+"()",this.types[name]=="view"?"contractCall":"contractFunction",null])
+          let linksArray = []
+          for(let l in currentLinks){
+            let link_info = this.graph.links[currentLinks[l]];
+            linksArray.push(link_info)
+          }
+          links.push(linksArray)
+          index++
+        }
+
+        console.log("correct:",correct)
+        console.log("links",links)
+        console.log("outputs",outputs)
+
+        if(!correct){
+          let max = this.outputs.length
+          for(let l=this.staticOutputs;l < max;l++) {
+            console.log("REMOVING OUTPUT",l,"at",this.staticOutputs)
+            this.removeOutput(this.staticOutputs)
+          }
+          this.addOutputs(outputs)
+          let linkIndex = this.staticOutputs
+          for(let i in links){
+            let thisIndex = linkIndex++
+            if(links[i]){
+              for(let l in links[i]){
+                let link_info = links[i][l]
+                let target_node = this.graph.getNodeById(link_info.target_id)
+                console.log("CONNECT",link_info)
+                this.connect(thisIndex,target_node,link_info.target_slot)
+              }
+            }
+          }
+          //this.size = resetSize;
+        }
+        this.properties.value = JSON.stringify(this.value,null,2)
+        //this.onDrawBackground()
+      }catch(e){
+        console.log(e)
+      }
+    }
+
+    //AND YOU NEED A FUNCTION TO BUILD THE OUTPUTS CORRECTLY ON EXECUTE:
+    obj.prototype.buildABIOutputs = function() {
+      let index = this.staticOutputs
+
+      for(let name in this.functions){
+        let argArray = []
+        for(let a in this.functions[name]){
+          //console.log("Adding argument ",this.functions[name][a])
+          argArray.push({name:this.functions[name][a].name,type:""})
+        }
+
+        //console.log("setting output data of ",index)
+        if(this.types[name]=="view"){
+          //console.log(name,"view")
+          this.setOutputData(index++,{
+            name:name,
+            args:argArray,
+            function:async (args)=>{
+              let callArgs = []
+              for(let a in args){
+                callArgs.push(args[a]?""+args[a]:"")
+              }
+              if(!this.web3){
+                this.connectWeb3()
+              }
+              //you create the contract and spread the args in it and the abiEncode and return that
+              let thisContract = new this.web3.eth.Contract(this.abi,this.address)
+              //console.log("RUN FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
+              try{
+                return (thisContract.methods[name](...callArgs)).call()
+              }catch(e){
+                return false
+              }
+            }
+          })
+        }else{
+          //console.log("SEND MFUNCTION ",name,"send")
+          this.setOutputData(index++,{
+            name:name,
+            args:argArray,
+            function:(args)=>{
+              console.log("send called",args)
+              let callArgs = []
+              for(let a in args){
+                callArgs.push(args[a]?""+args[a]:"")
+              }
+              if(!this.web3){
+                this.connectWeb3()
+              }
+              //you create the contract and spread the args in it and the abiEncode and return that
+              let thisContract = new this.web3.eth.Contract(this.abi,this.address)
+              //console.log("ENCODE FUNCTION "+name+" BUT IN THIS CONTEXT!",args)
+              try{
+                return (thisContract.methods[name](...callArgs)).encodeABI()
+              }catch(e){console.log(e)}
+            }
+          })
+        }
+
+      }
+    }
+
+  }
+
 
   obj.prototype.render = function(reactElement) {
     //console.log("REACT RENDER!")

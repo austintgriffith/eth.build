@@ -1197,19 +1197,14 @@ const erc20abi = [
 const staticOutputs = 1
 
 
-function
-Uniswap() {
+function Uniswap() {
+  this.addInput("[blockchain]","string")
   this.addInput("[address]","string")
   this.addOutput("address","string")
   this.addOutput("tokenAddress()","function")
   this.addOutput("price()","function")
   this.addOutput("tokenToEth()","function")
   this.addOutput("ethToToken()","function")
-
-
-  this.properties =  {
-    provider: defaultProvider
-  }
 
   this.size[0] = 210
   this.abi = abi
@@ -1224,22 +1219,27 @@ Uniswap.prototype.onAdded = async function() {
 }
 
 Uniswap.prototype.connectWeb3 = function() {
-  if(this.properties.provider){
-    try{
-      this.web3 = new Web3(this.properties.provider)
-    }catch(e){
-      console.log(e)
-    }
+  try{
+    this.web3 = new Web3(this.provider?this.provider:defaultProvider)
+  }catch(e){
+    console.log(e)
   }
 }
 
 Uniswap.prototype.onExecute = async function() {
 
-  let address = this.getInputData(0)
+  let provider = this.getInputData(0)
+  if(provider && provider!=this.provider){
+    this.provider=provider
+    this.connectWeb3()
+  }
+
+  let address = this.getInputData(1)
   if(address && address!=this.address){
     this.address=address
     this.connectWeb3()
   }
+
 
   this.setOutputData(0,this.address)
 
