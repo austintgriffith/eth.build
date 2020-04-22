@@ -1,7 +1,5 @@
 const Web3 = require("web3");
 const EthWallet = require("ethereumjs-wallet");
-const hdkey = require("ethereumjs-wallet/hdkey");
-const bip39 = require("bip39");
 const EthUtil = require("ethereumjs-util");
 
 const defaultProvider =
@@ -16,10 +14,15 @@ function Wallet() {
   this.addOutput("balance", "string");
   this.addOutput("tx", "string");
   this.addOutput("send()", "function");
-  this.addOutput("sign()", "function");
+  this.addOutput("sign()", -1);
 
   this.properties = {
     title: "Wallet",
+    value: 0,
+    nonce: null,
+    data: "0x",
+    gas: 23000,
+    gasPrice: 4100000000,
   };
 
   this.privatekey = "";
@@ -56,9 +59,39 @@ Wallet.prototype.onExecute = async function () {
     } catch (error) {
       console.log("error ", error);
     }
+    // this.transactions();
   } else {
     this.privatekey = "";
   }
+  this.setOutputData(4, {
+    name: "transaction",
+    args: [{ name: "hash", type: "string" }],
+    function: async (args) => {
+      if (args.hash) {
+        let count = await this.web3.eth.getTransaction(args.hash);
+        return count;
+      }
+    },
+  });
+  this.setOutputData(5, {
+    name: "send",
+    args: [{ name: "signed", type: "string" }],
+    function: async (args) => {
+      if (args.signed) {
+        let transactionHash = await new Promise((resolve, reject) => {
+          this.web3.eth
+            .sendSignedTransaction(args.signed)
+            .on("transactionHash", function (hash) {
+              resolve(hash);
+            })
+            .on("error", (e, f) => {
+              global.setSnackbar({ msg: e.toString() });
+            });
+        });
+        return transactionHash;
+      }
+    },
+  });
 };
 
 Wallet.prototype.connectWeb3 = async function () {
@@ -80,8 +113,24 @@ Wallet.prototype.onAction = function () {
 };
 
 Wallet.prototype.checkBalance = async function () {
-  const balance = await this.web3.eth.getBalance(this.address);
-  this.setOutputData(3, balance);
+  if (this.address) {
+    const balance = await this.web3.eth.getBalance(this.address);
+    this.setOutputData(3, balance);
+  }
 };
+
+// Wallet.prototype.transactions = async function () {
+//   if (this.address && this.privatekey) {
+//     this.transaction = {
+//       value: parseInt(this.properties.value),
+//       data: "" + this.properties.data,
+//       gas: parseInt(this.properties.gas),
+//       gasPrice: parseInt(this.properties.gasPrice),
+//       nonce: this.properties.nonce,
+//     };
+//     console.log("WalletAction: ", this.transaction);
+//     this.setOutputData(4, this.transaction);
+//   }
+// };
 
 export default Wallet;
