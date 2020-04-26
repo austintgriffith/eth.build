@@ -11,10 +11,10 @@ function Wallet() {
   this.addOutput("blockchain", "string");
   this.addOutput("privatekey", "string");
   this.addOutput("address", "string");
-  this.addOutput("balance", "string");
   this.addOutput("tx", "string");
+  this.addOutput("balance()", "function");
+  this.addOutput("sign()", "function");
   this.addOutput("send()", "function");
-  this.addOutput("sign()", -1);
 
   this.properties = {
     title: "Wallet",
@@ -59,11 +59,10 @@ Wallet.prototype.onExecute = async function () {
     } catch (error) {
       console.log("error ", error);
     }
-    // this.transactions();
   } else {
     this.privatekey = "";
   }
-  this.setOutputData(4, {
+  this.setOutputData(3, {
     name: "transaction",
     args: [{ name: "hash", type: "string" }],
     function: async (args) => {
@@ -73,23 +72,116 @@ Wallet.prototype.onExecute = async function () {
       }
     },
   });
-  this.setOutputData(5, {
-    name: "send",
-    args: [{ name: "signed", type: "string" }],
+  this.setOutputData(4, {
+    name: "balance",
+    args: [{ name: "address", type: "string" }],
     function: async (args) => {
-      if (args.signed) {
-        let transactionHash = await new Promise((resolve, reject) => {
-          this.web3.eth
-            .sendSignedTransaction(args.signed)
-            .on("transactionHash", function (hash) {
-              resolve(hash);
-            })
-            .on("error", (e, f) => {
-              global.setSnackbar({ msg: e.toString() });
-            });
-        });
-        return transactionHash;
+      try {
+        this.onAction();
+        let currentWeb3 = new Web3(window.web3);
+        let balance = await currentWeb3.eth.getBalance(args.address);
+        return balance;
+      } catch (e) {
+        console.log(e);
       }
+    },
+  });
+  this.setOutputData(5, {
+    name: "sign",
+    args: [{ name: "message", type: "string" }],
+    function: async (args) => {
+      return new Promise((resolve, reject) => {
+        this.onAction();
+        let currentWeb3 = new Web3(window.web3);
+        window.ethereum.sendAsync(
+          {
+            method: "personal_sign",
+            params: [args.message, window.ethereum.selectedAddress],
+            from: window.ethereum.selectedAddress,
+          },
+          (error, result) => {
+            console.log("SEND MM CALLBACK", error, result);
+            if (error && error.message) {
+              global.setSnackbar({ msg: error.message });
+              console.log("REJECT", result);
+              reject(error);
+            } else {
+              console.log("RESOLVE", result);
+              resolve(result.result);
+            }
+          }
+        );
+      });
+    },
+  });
+  this.setOutputData(6, {
+    name: "send",
+    args: [
+      { name: "to", type: "string" },
+      { name: "value", type: "number" },
+      { name: "data", type: "string" },
+      { name: "gasLimit", type: "number" },
+      { name: "gasPrice", type: "number" },
+    ],
+    function: async (args) => {
+      return new Promise((resolve, reject) => {
+        this.onAction();
+        let currentWeb3 = new Web3(window.web3);
+
+        const transactionParameters = {
+          //gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+          //gas: '0x2710',  // customizable by user during MetaMask confirmation.
+          //to: args.to, // Required except during contract publications.
+          from: window.ethereum.selectedAddress, // must match user's active address.
+          //value: ""+args.value, // Only required to send ether to the recipient from the initiating external account.
+          //data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057', // Optional, but used for defining smart contract creation and interaction.
+          //chainId: 3 // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+        };
+
+        if (typeof args.to != "undefined" && args.to != null) {
+          transactionParameters.to = args.to;
+        }
+
+        if (typeof args.value != "undefined" && args.value != null) {
+          transactionParameters.value =
+            "" + currentWeb3.utils.toHex(args.value);
+        }
+
+        if (typeof args.data != "undefined" && args.data != null) {
+          transactionParameters.data = args.data;
+        }
+
+        if (typeof args.gasLimit != "undefined" && args.gasLimit != null) {
+          transactionParameters.gas =
+            "" + currentWeb3.utils.toHex(args.gasLimit);
+        }
+
+        if (typeof args.gasPrice != "undefined" && args.gasPrice != null) {
+          transactionParameters.gasPrice =
+            "" + currentWeb3.utils.toHex(args.gasPrice);
+        }
+
+        console.log("transactionParameters", transactionParameters);
+
+        window.ethereum.sendAsync(
+          {
+            method: "eth_sendTransaction",
+            params: [transactionParameters],
+            from: window.ethereum.selectedAddress,
+          },
+          (error, result) => {
+            console.log("SEND MM CALLBACK", error, result);
+            if (error && error.message) {
+              global.setSnackbar({ msg: error.message });
+            }
+            if (result && result.result) {
+              resolve(result.result);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      });
     },
   });
 };
@@ -98,7 +190,6 @@ Wallet.prototype.connectWeb3 = async function () {
   if (this.provider) {
     try {
       this.web3 = new Web3(this.provider);
-      this.checkBalance();
     } catch (e) {
       console.log(e);
     }
@@ -112,25 +203,5 @@ Wallet.prototype.onAction = function () {
   this.setOutputData(2, this.address);
 };
 
-Wallet.prototype.checkBalance = async function () {
-  if (this.address) {
-    const balance = await this.web3.eth.getBalance(this.address);
-    this.setOutputData(3, balance);
-  }
-};
-
-// Wallet.prototype.transactions = async function () {
-//   if (this.address && this.privatekey) {
-//     this.transaction = {
-//       value: parseInt(this.properties.value),
-//       data: "" + this.properties.data,
-//       gas: parseInt(this.properties.gas),
-//       gasPrice: parseInt(this.properties.gasPrice),
-//       nonce: this.properties.nonce,
-//     };
-//     console.log("WalletAction: ", this.transaction);
-//     this.setOutputData(4, this.transaction);
-//   }
-// };
 
 export default Wallet;
