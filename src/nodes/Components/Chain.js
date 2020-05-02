@@ -21,7 +21,7 @@ const availableChains = [
   { label: "Sokol Test Chain (POA)", value: "https://sokol.poa.network" },
   { label: "Ethbuild Testnet", value: "https://rpc.eth.build:46234" },
   { label: "Ethbuild Mainnet", value: `https://rpc.eth.build:48544` },
-  { label: "Localhost", value: `https://localhost:8545` },
+  { label: "Localhost", value: `http://localhost:8545` },
   { label: "Custom Chain", value: "CUSTOM" }
 ];
 

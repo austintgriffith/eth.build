@@ -17,6 +17,7 @@
     "base64url": "^3.0.1",
     "bip39": "^3.0.2",
     "burner-provider": "^1.0.6",
+    "chart.js": "^2.9.3",
     "chess": "^0.4.2",
     "color-mixer": "^1.0.0",
     "dapparatus": "^1.0.96",
