@@ -39,14 +39,20 @@ Charts.prototype.getTitle = function () {
 Charts.prototype.onExecute = function () {
   if (this.inputs[0] && this.getInputData(0)) {
     try {
-      this.onDrawBackgroun();
+    if (this.getInputData(1)) {
+        this.labels = this.getInputData(1).split(",")
+    }
+      if (this.getInputData(2)) {
+        this.data = this.getInputData(2).split(",")
+      }
+      this.onDrawBackground();
     } catch (error) {
       console.log("error ", error);
     }
   }
 };
 
-Charts.prototype.onDrawBackgroun = function (ctx) {
+Charts.prototype.onDrawBackground = function (ctx) {
   this.render(
     <div
       style={{
@@ -64,8 +70,6 @@ Charts.prototype.onDrawBackgroun = function (ctx) {
       {this.getInputData(0) === "polar" && this.PolarChart()}
     </div>
   );
-  this.labels.push(this.getInputData(1));
-  this.data.push(this.getInputData(2));
 };
 
 Charts.prototype.LineChart = function () {
@@ -98,7 +102,7 @@ Charts.prototype.LineChart = function () {
   return (
     <div>
       <h2>Line Chart</h2>
-      <Line data={this.data} />
+      <Line data={data} />
     </div>
   );
 };
@@ -149,7 +153,6 @@ Charts.prototype.ScatterChart = function () {
       },
     ],
   };
-  console.log(data);
   return (
     <div>
       <h2>Scatter Chart</h2>
