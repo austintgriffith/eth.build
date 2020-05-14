@@ -17,7 +17,8 @@ defaults.global.animation = false;
 function Charts() {
   this.addInput("component type", "string");
   this.addInput("labels", "array,object");
-  this.addInput("data", "array,object");
+  this.addInput("first dataset", "array,json");
+  this.addInput("second dataset", "array,object");
   this.value = "";
   this.size = [600, 532];
 
@@ -27,6 +28,7 @@ function Charts() {
 
   this.data = [];
   this.labels = [];
+  this.secondData = []; // required for radar charts
 }
 
 Charts.title = "Charts Display";
@@ -42,10 +44,20 @@ Charts.prototype.onExecute = function () {
     if (this.getInputData(1)) {
         this.labels = this.getInputData(1).split(",")
     }
-      if (this.getInputData(2)) {
-        this.data = this.getInputData(2).split(",")
-      }
-      this.onDrawBackground();
+    if (this.getInputData(2)) {
+        if (this.getInputData(0) === 'scatter') {
+            // disable scatter charts. It doesn't work!
+            // if (this.getInputData(2).length > 0) {
+            //     this.data.push(...this.getInputData(2))
+            // }
+        } else {
+            this.data = this.getInputData(2).split(",")
+        }
+    }
+    if (this.getInputData(3)) {
+        this.secondData = this.getInputData(3).split(",")
+    }
+    this.onDrawBackground();
     } catch (error) {
       console.log("error ", error);
     }
@@ -63,6 +75,7 @@ Charts.prototype.onDrawBackground = function (ctx) {
       }}
     >
       {this.getInputData(0) === "bar" && this.BarChart()}
+      {this.getInputData(0) === "line" && this.LineChart()}
       {this.getInputData(0) === "doughnut" && this.DoughnutChart()}
       {this.getInputData(0) === "scatter" && this.ScatterChart()}
       {this.getInputData(0) === "pie" && this.PieChart()}
@@ -124,8 +137,6 @@ Charts.prototype.DoughnutChart = function () {
       <h2>Doughnut Chart</h2>
       <Doughnut
         data={data}
-        width={400}
-        height={50}
         options={{
           maintainAspectRatio: false,
         }}
@@ -134,35 +145,32 @@ Charts.prototype.DoughnutChart = function () {
   );
 };
 Charts.prototype.ScatterChart = function () {
-  let data = {
+  const data = {
     labels: this.labels,
     datasets: [
-      {
+        {
+        label: 'My First dataset',
         fill: false,
-        backgroundColor: "rgba(75,192,192,0.4)",
-        pointBorderColor: "rgba(75,192,192,1)",
-        pointBackgroundColor: "#fff",
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        pointBorderColor: 'rgba(75,192,192,1)',
+        pointBackgroundColor: '#fff',
         pointBorderWidth: 1,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-        pointHoverBorderColor: "rgba(220,220,220,1)",
+        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+        pointHoverBorderColor: 'rgba(220,220,220,1)',
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: this.data,
-      },
-    ],
-  };
+        data: this.data
+        }
+    ]
+};
+
   return (
     <div>
       <h2>Scatter Chart</h2>
       <Scatter
         data={data}
-        width={400}
-        height={50}
-        options={{
-          maintainAspectRatio: false,
-        }}
       />
     </div>
   );
@@ -183,8 +191,6 @@ Charts.prototype.PieChart = function () {
       <h2>Pie Chart</h2>
       <Pie
         data={data}
-        width={400}
-        height={50}
         options={{
           maintainAspectRatio: false,
         }}
@@ -214,10 +220,8 @@ Charts.prototype.PolarChart = function () {
       <h2>Polar Chart</h2>
       <Polar
         data={data}
-        width={400}
-        height={50}
         options={{
-          maintainAspectRatio: false,
+          maintainAspectRatio: true,
         }}
       />
     </div>
@@ -227,25 +231,33 @@ Charts.prototype.RadarChart = function () {
   const data = {
     labels: this.labels,
     datasets: [
-      {
-        label: "My First dataset",
-        backgroundColor: "rgba(179,181,198,0.2)",
-        borderColor: "rgba(179,181,198,1)",
-        pointBackgroundColor: "rgba(179,181,198,1)",
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: "rgba(179,181,198,1)",
-        data: this.data,
-      },
-    ],
+        {
+        label: 'My First dataset',
+        backgroundColor: 'rgba(179,181,198,0.2)',
+        borderColor: 'rgba(179,181,198,1)',
+        pointBackgroundColor: 'rgba(179,181,198,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(179,181,198,1)',
+        data: this.data
+        },
+        {
+        label: 'My Second dataset',
+        backgroundColor: 'rgba(255,99,132,0.2)',
+        borderColor: 'rgba(255,99,132,1)',
+        pointBackgroundColor: 'rgba(255,99,132,1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(255,99,132,1)',
+        data: this.secondData
+        }
+    ]
   };
   return (
     <div>
       <h2>Radar Chart</h2>
       <Radar
         data={data}
-        width={400}
-        height={50}
         options={{
           maintainAspectRatio: false,
         }}
@@ -274,8 +286,6 @@ Charts.prototype.BarChart = function () {
       <h2>Bar</h2>
       <Bar
         data={data}
-        width={400}
-        height={50}
         options={{
           maintainAspectRatio: false,
         }}
