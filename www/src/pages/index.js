@@ -68,18 +68,18 @@ const Index = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <SEO title="Home" />
 
-      <section className="my-8 py-20">
+      <section className="my-4 md:my-8 py-4 md:py-16">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
-              <p className="text-2xl mt-4">🖍 Educational sandbox for Web3</p>
+              <p className="text-2xl">🖍 Educational sandbox for Web3</p>
               <p className="text-2xl mt-4">👉 Drag-and-drop programming</p>
               <p className="text-2xl mt-4">🧩 Open Source building blocks</p>
               <p className="text-2xl mt-4">🧐 Visually understand how Ethereum works</p>
 
-              <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 items-center">
+              <div className="mt-4 sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-16 items-center">
                 <p className="mt-4">
-                  <a className="btn btn-primary" href="https://sandbox.eth.build">
+                  <a className="block text-center btn btn-primary" href="https://sandbox.eth.build">
                     <span role="img" aria-label="build">
                       🔧
                     </span>{' '}
@@ -88,7 +88,7 @@ const Index = ({ data, location }) => {
                 </p>
                 <p className="mt-4">
                   <a
-                    className="inline-block text-xl bg-transparent hover:bg-blue-600 text-blue-700 font-semibold hover:text-white py-3 px-6 border border-blue-700 hover:border-transparent rounded"
+                    className="block text-center text-xl bg-transparent hover:bg-blue-600 text-blue-700 font-semibold hover:text-white py-3 px-6 border border-blue-700 hover:border-transparent rounded"
                     href="https://www.youtube.com/playlist?list=PLJz1HruEnenCXH7KW7wBCEBnBLOVkiqIi"
                   >
                     <span role="img" aria-label="learn">
