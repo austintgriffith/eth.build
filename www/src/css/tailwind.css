@@ -4,7 +4,7 @@
   @apply inline-block text-xl text-white py-3 px-6 rounded;
 }
 .btn-primary {
-  @apply bg-blue-500;
+  @apply bg-blue-600;
 }
 .btn-primary:hover {
   @apply bg-blue-700;

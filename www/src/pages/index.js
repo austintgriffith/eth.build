@@ -1,12 +1,10 @@
-import { graphql, Link } from 'gatsby';
+import { graphql } from 'gatsby';
 import React from 'react';
-import Button from '../components/Button';
 import Container from '../components/Container';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 
 //  <h1 className="text-4xl lg:text-6xl font-bold">Eth.Build</h1>
-
 
 /*
 
@@ -74,31 +72,32 @@ const Index = ({ data, location }) => {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
+              <p className="text-2xl mt-4">🖍 Educational sandbox for Web3</p>
+              <p className="text-2xl mt-4">👉 Drag-and-drop programming</p>
+              <p className="text-2xl mt-4">🧩 Open Source building blocks</p>
+              <p className="text-2xl mt-4">🧐 Visually understand how Ethereum works</p>
 
-              <p className="text-2xl mt-4">
-                🖍 Educational sandbox for Web3
-                <br/><br/>
-                👉 Drag-and-drop programming
-                <br /><br/>
-                🧩 Open Source building blocks
-                <br/><br/>
-                🧐 Visually understand how Ethereum works
-                <br /><br/>
-
-              </p>
-              <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
-                <p className="mt-4" onClick={(e)=>{
-                  window.location.href = "https://sandbox.eth.build"
-                }}>
-                  <Button>🔧  Build</Button>
+              <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 items-center">
+                <p className="mt-4">
+                  <a className="btn btn-primary" href="https://sandbox.eth.build">
+                    <span role="img" aria-label="build">
+                      🔧
+                    </span>{' '}
+                    Build
+                  </a>
                 </p>
-                <p className="mt-4" onClick={(e)=>{
-                  window.location.href = "https://www.youtube.com/playlist?list=PLJz1HruEnenCXH7KW7wBCEBnBLOVkiqIi"
-                }}>
-                  <Button>💡  Learn</Button>
+                <p className="mt-4">
+                  <a
+                    className="inline-block text-xl bg-transparent hover:bg-blue-600 text-blue-700 font-semibold hover:text-white py-3 px-6 border border-blue-700 hover:border-transparent rounded"
+                    href="https://www.youtube.com/playlist?list=PLJz1HruEnenCXH7KW7wBCEBnBLOVkiqIi"
+                  >
+                    <span role="img" aria-label="learn">
+                      💡
+                    </span>{' '}
+                    Learn
+                  </a>
                 </p>
               </div>
-
             </div>
             <div>
               <div className="relative aspect-16x9">
@@ -117,8 +116,6 @@ const Index = ({ data, location }) => {
           </div>
         </Container>
       </section>
-
-
     </Layout>
   );
 };
