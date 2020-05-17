@@ -72,10 +72,34 @@ const Index = ({ data, location }) => {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
-              <p className="text-2xl">🖍 Educational sandbox for Web3</p>
-              <p className="text-2xl mt-4">👉 Drag-and-drop programming</p>
-              <p className="text-2xl mt-4">🧩 Open Source building blocks</p>
-              <p className="text-2xl mt-4">🧐 Visually understand how Ethereum works</p>
+              <p className="flex text-lg md:text-2xl">
+                <span role="img" aria-label="Educational" className="inline-block mr-2 md:mr-3">
+                  🖍
+                </span>{' '}
+                Educational sandbox for Web3
+              </p>
+              <p className="flex text-lg md:text-2xl mt-4">
+                <span role="img" aria-label="Drag-and-drop" className="inline-block mr-2 md:mr-3">
+                  👉
+                </span>{' '}
+                Drag-and-drop programming
+              </p>
+              <p className="flex text-lg md:text-2xl mt-4">
+                <span role="img" aria-label="Open Source" className="inline-block mr-2 md:mr-3">
+                  🧩
+                </span>{' '}
+                Open Source building blocks
+              </p>
+              <p className="flex text-lg md:text-2xl mt-4">
+                <span
+                  role="img"
+                  aria-label="Visually Understand"
+                  className="inline-block mr-2 md:mr-3"
+                >
+                  🧐
+                </span>{' '}
+                Visually understand how Ethereum works
+              </p>
 
               <div className="mt-4 sm:grid sm:grid-cols-2 sm:gap-4 lg:gap-16 items-center">
                 <p className="mt-4">
