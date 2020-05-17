@@ -88,7 +88,7 @@ const Index = ({ data, location }) => {
                 <span role="img" aria-label="Open Source" className="inline-block mr-2 md:mr-3">
                   🧩
                 </span>{' '}
-                Open Source building blocks
+                Open source building blocks
               </p>
               <p className="flex text-lg md:text-2xl mt-4">
                 <span
