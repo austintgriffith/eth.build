@@ -1,6 +1,21 @@
 import { Link } from 'gatsby';
 import React from 'react';
 import Container from './Container';
+/*
+<Link
+  to="/lessons/"
+  activeClassName="bg-gray-900"
+  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+>
+  Learn
+</Link>
+<Link
+  to="/builder/"
+  activeClassName="bg-gray-900"
+  className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
+>
+  Build
+</Link>*/
 
 const Navigation = () => (
   <nav className="bg-gray-800">
@@ -31,16 +46,7 @@ const Navigation = () => (
         </div>
         <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
           <div className="flex-shrink-0">
-            <img
-              className="block lg:hidden h-8 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark-on-dark.svg"
-              alt=""
-            />
-            <img
-              className="hidden lg:block h-8 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-logo-on-dark.svg"
-              alt=""
-            />
+            <div style={{color:"#EEEEEE",fontSize:26}}>🛠 ETH.BUILD</div>
           </div>
           <div className="hidden sm:block sm:ml-6">
             <div className="flex">
@@ -51,20 +57,18 @@ const Navigation = () => (
               >
                 Home
               </Link>
-              <Link
-                to="/lessons/"
+              <a href="https://www.youtube.com/playlist?list=PLJz1HruEnenCXH7KW7wBCEBnBLOVkiqIi"
                 activeClassName="bg-gray-900"
                 className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
               >
-                Lessons
-              </Link>
-              <Link
-                to="/builder/"
+                Learn
+              </a>
+              <a href="https://sandbox.eth.build"
                 activeClassName="bg-gray-900"
                 className="ml-4 px-3 py-2 rounded-md text-sm font-medium leading-5 text-gray-300 hover:text-white hover:bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out"
               >
-                Builder
-              </Link>
+                Build!
+              </a>
             </div>
           </div>
         </div>

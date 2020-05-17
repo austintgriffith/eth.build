@@ -15,7 +15,13 @@ const Layout = ({ children }) => {
               className="text-blue-500 hover:text-blue-700"
               href="https://github.com/austintgriffith/eth.build"
             >
-              Visit Eth.Build on GitHub
+              ⚖️ MIT -
+            </a>
+            <a
+              className="text-blue-500 hover:text-blue-700"
+              href="https://twitter.com/austingriffith"
+            >
+               - @austingriffith
             </a>
           </p>
         </Container>
