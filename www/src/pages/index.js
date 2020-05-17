@@ -4,9 +4,6 @@ import Container from '../components/Container';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 
-const url = window.location.pathname;
-console.log('URL', url);
-
 //  <h1 className="text-4xl lg:text-6xl font-bold">Eth.Build</h1>
 
 /*
