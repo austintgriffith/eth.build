@@ -66,7 +66,7 @@ const Index = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <SEO title="Home" />
+      <SEO title="ETH.Build - Educational sandbox for Web3" />
 
       <section className="my-4 md:my-8 py-4 md:py-16">
         <Container>

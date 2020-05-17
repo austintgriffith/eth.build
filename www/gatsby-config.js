@@ -2,7 +2,7 @@ const tailwindcss = require('tailwindcss');
 
 module.exports = {
   siteMetadata: {
-    title: `Eth.Build`,
+    title: `ETH.Build`,
     description: `Educational sandbox for prototyping Web3. Learn Ethereum visually with drag-and-drop programming.`,
     siteUrl: `https://eth.build/`,
     social: {
