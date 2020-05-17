@@ -16,7 +16,7 @@ const NotFoundPage = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO title="404: Not Found" />
-      <div className="container my-auto">
+      <div className="container mx-auto">
         <h1 className="text-2xl py-8">Loading...</h1>
       </div>
     </Layout>
