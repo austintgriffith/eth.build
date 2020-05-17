@@ -43,7 +43,7 @@ const SEO = ({ description, lang, meta, title }) => {
         },
         {
           property: `og:title`,
-          content: title
+          content: title || site.siteMetadata.title
         },
         {
           property: `og:description`,
@@ -52,6 +52,10 @@ const SEO = ({ description, lang, meta, title }) => {
         {
           property: `og:type`,
           content: `website`
+        },
+        {
+          property: `og:image`,
+          content: `https://eth.build/title.jpg`
         },
         {
           name: `twitter:card`,
@@ -63,11 +67,15 @@ const SEO = ({ description, lang, meta, title }) => {
         },
         {
           name: `twitter:title`,
-          content: title
+          content: title || site.siteMetadata.title
         },
         {
           name: `twitter:description`,
           content: metaDescription
+        },
+        {
+          name: `twitter:image`,
+          content: `https://eth.build/title.jpg`
         }
       ].concat(meta)}
     />
