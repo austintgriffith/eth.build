@@ -3,10 +3,10 @@ const tailwindcss = require('tailwindcss');
 module.exports = {
   siteMetadata: {
     title: `Eth.Build`,
-    description: `A starter blog demonstrating what Gatsby can do.`,
+    description: `Educational sandbox for prototyping Web3. Learn Ethereum visually with drag-and-drop programming.`,
     siteUrl: `https://eth.build/`,
     social: {
-      twitter: `kylemathews`
+      twitter: `austingriffith`
     }
   },
   plugins: [
