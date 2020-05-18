@@ -23,7 +23,7 @@ function Charts() {
   this.size = [600, 532];
 
   this.properties = {
-    name: "Charts Display",
+    name: "Charts",
   };
 
   this.data = [];
@@ -31,8 +31,7 @@ function Charts() {
   this.secondData = []; // required for radar charts
 }
 
-Charts.title = "Charts Display";
-Charts.title_color = "#e91e63";
+Charts.title = "Charts";
 
 Charts.prototype.getTitle = function () {
   return this.properties.title;
