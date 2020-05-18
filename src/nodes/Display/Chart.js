@@ -23,7 +23,7 @@ function Charts() {
   this.size = [600, 532];
 
   this.properties = {
-    name: "Charts",
+    title: "Charts",
   };
 
   this.data = [];
