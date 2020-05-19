@@ -116,7 +116,7 @@ const Index = ({ data, location }) => {
             </div>
             <div>
               <h2 className="mt-4 lg:mt-0 text-4xl font-semibold">Hash Function</h2>
-              <ul className="mt-4 text-xl">
+              <ul className="list-spaced mt-4 text-md md:text-lg">
                 <li>Think of it like a fingerprint of any given input data.</li>
                 <li>Input can be any size, output is always the same size (64 hex chars).</li>
                 <li>Deterministic, you will always get the same hash for a specific input.</li>
@@ -141,7 +141,7 @@ const Index = ({ data, location }) => {
             <div>
               <h2 className="mt-4 lg:mt-0 text-4xl font-semibold">Key Pair</h2>
 
-              <ul className="mt-4 text-xl">
+              <ul className="list-spaced mt-4 text-md md:text-lg">
                 <li>Consists of a public key and private key</li>
                 <li>Your public key is derived from your private key.</li>
                 <li>Your address is derived from your public key.</li>
@@ -191,7 +191,7 @@ const Index = ({ data, location }) => {
             </div>
             <div>
               <h2 className="mt-4 lg:mt-0 text-4xl font-semibold">Distributed Ledger</h2>
-              <ul className="mt-4 text-xl">
+              <ul className="list-spaced mt-4 text-md md:text-lg">
                 <li>
                   Once we have key pairs and we can sign messages, our messages can be objects with
                   to, from, value, etc.
