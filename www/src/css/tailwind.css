@@ -20,6 +20,10 @@
   padding-bottom: 56.25%;
 }
 
+ul.list-spaced > li {
+  margin-bottom: 1rem;
+}
+
 @tailwind components;
 
 @tailwind utilities;
