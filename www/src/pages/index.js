@@ -59,6 +59,22 @@ const Index = () => {
         </div>
       </div>
 
+      <AngleShape className="hidden md:block" reverse />
+      <div className="bg-black text-white py-12">
+        <Container>
+          {/* <h2 className="inline-block bg-blue-700 text-white px-6 text-4xl font-semibold">
+            Hash Function
+          </h2> */}
+          <h2 className="text-4xl font-semibold">Hash Function</h2>
+          <p className="mt-6 md:text-lg">
+            Think of it like a fingerprint of any given input data. Input can be any size, output is
+            always the same size (64 hex chars). Deterministic, you will always get the same hash
+            for a specific input. One directional, given a hash it is impossible to guess the seed.
+          </p>
+        </Container>
+      </div>
+      <AngleShape className="hidden md:block" />
+
       {/* <section className="bg-black text-white pt-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div>
