@@ -253,7 +253,7 @@ const Index = () => {
 
       <VideoSection
         graySection
-        videoId="z11wj9OcA4U"
+        videoId="-6aYBdnJ-nM"
         content={
           <>
             <h2 className="mb-4 text-4xl font-semibold">Smart Contracts</h2>
