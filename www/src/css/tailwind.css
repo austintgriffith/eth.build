@@ -4,16 +4,16 @@
   @apply inline-block text-xl text-white py-3 px-8 border border-transparent rounded;
 }
 .btn-primary {
-  @apply bg-blue-700;
-}
-.btn-primary:hover {
   @apply bg-blue-600;
 }
+.btn-primary:hover {
+  @apply bg-blue-500;
+}
 .btn-secondary {
-  @apply bg-purple-700;
+  @apply bg-purple-600;
 }
 .btn-secondary:hover {
-  @apply bg-purple-600;
+  @apply bg-purple-500;
 }
 
 .aspect-16x9 {
@@ -21,7 +21,7 @@
 }
 
 ul.list-spaced > li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 @tailwind components;
