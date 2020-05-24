@@ -1,12 +1,13 @@
 import React from 'react';
 // import Navigation from './Navigation';
+import Container from './Container';
 
 const Layout = ({ children }) => {
   return (
     <>
       {/* <Navigation /> */}
       <main>{children}</main>
-      {/* <footer className="py-8">
+      <footer className="py-8">
         <Container>
           <p>
             <a
@@ -23,7 +24,7 @@ const Layout = ({ children }) => {
             </a>
           </p>
         </Container>
-      </footer> */}
+      </footer>
     </>
   );
 };

@@ -1,11 +1,13 @@
 import React from 'react';
 import AngleShape from '../components/AngleShape';
 
-function VideoSection({ className, videoId, videoTitle, videoFirst, content, graySection }) {
+function VideoSection({ className, videoId, videoFirst, content, graySection }) {
   return (
     <>
       {graySection && <AngleShape className="hidden md:block text-gray-200" reverse />}
-      <div className={`py-12 lg:py-24 text-gray-900 ${className}`}>
+      <div
+        className={`py-12 lg:py-24 text-gray-900 ${graySection ? 'bg-gray-200' : ''} ${className}`}
+      >
         <div
           className={`flex flex-col flex-col-reverse lg:flex-row items-center ${
             videoFirst ? '' : 'lg:flex-row-reverse'
@@ -15,7 +17,6 @@ function VideoSection({ className, videoId, videoTitle, videoFirst, content, gra
             <div className="relative aspect-16x9">
               <iframe
                 className="absolute pin"
-                title={videoTitle}
                 width="100%"
                 height="100%"
                 src={`https://www.youtube.com/embed/${videoId}`}
