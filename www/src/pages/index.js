@@ -31,7 +31,7 @@ const Index = () => {
                 <span role="img" aria-label="build" className="-ml-2 mr-2 text-base">
                   🔧
                 </span>
-                Build A Hash Function
+                Build with a Hash Function
               </a>
             </p>
           </>
@@ -45,10 +45,9 @@ const Index = () => {
           <>
             <h2 className="mb-4 text-4xl font-semibold">Key Pair</h2>
             <ul className="list-spaced mt-4 text-md md:text-lg">
-              <li>Consists of a public key and private key</li>
-              <li>Your public key is derived from your private key.</li>
-              <li>Your address is derived from your public key.</li>
-              <li>Can be used to sign and recover / encrypt and decrypt.</li>
+              <li>Consists of a public key derived from a private key.</li>
+              <li>Your address where you send value is derived from your public key.</li>
+              <li>Can be used to sign a message and anyone can recover the signer's address.</li>
               <li>
                 Anyone can generate an Ethereum account by just generating a random private key.
               </li>
@@ -61,7 +60,7 @@ const Index = () => {
                 <span role="img" aria-label="build" className="-ml-1 mr-2 text-base">
                   🔧
                 </span>
-                Build A Key Pair
+                Build with a Key Pair
               </a>
             </p>
           </>
@@ -75,7 +74,7 @@ const Index = () => {
         videoId="mhwSGYRmkEU"
         content={
           <>
-            <h2 className="mb-4 text-4xl font-semibold">Look Ahead: Transactions</h2>
+            <h2 className="mb-4 text-4xl font-semibold"><span style={{opacity:0.33}}>Look Ahead:</span> Transactions</h2>
             <ul className="list-spaced mt-4 text-md md:text-lg">
               <li>Users can sign messages that go on-chain to send and receive value.</li>
               <li>No decimals! Amounts are integers, in Wei. 1 ETH is 10^18 Wei.</li>
@@ -102,10 +101,10 @@ const Index = () => {
         videoId="LGEBqz1uG1U"
         content={
           <>
-            <h2 className="mb-4 text-4xl font-semibold">Side Quest: Encryption</h2>
+            <h2 className="mb-4 text-4xl font-semibold"><span style={{opacity:0.33}}>Side Quest:</span> Encryption</h2>
 
             <ul className="list-spaced mt-4 text-md md:text-lg">
-              <li>Asymmetric encryption with Ethereum key pairs</li>
+              <li>Asymmetric encryption with Ethereum key pairs.</li>
               <li>A small amount of data can be encrypted with a public key.</li>
               <li>The private key is used to decrypt the data.</li>
               <li>Not the best way to encrypt data!</li>
@@ -213,7 +212,7 @@ const Index = () => {
                 <span role="img" aria-label="build" className="-ml-1 mr-2 text-base">
                   🔧
                 </span>
-                Build A Blockchain
+                Build
               </a>
             </p>
           </>
@@ -229,11 +228,11 @@ const Index = () => {
             <h2 className="mb-4 text-4xl font-semibold">Transactions</h2>
 
             <ul className="list-spaced mt-4 text-md md:text-lg">
-              <li>Miners are incentivized with a fee to package transactions into blocks.</li>
-              <li>This fee is called the gas price and you 'bid' to get mined.</li>
-              <li>Send value by signing an object that goes on-chain.</li>
+              <li>Send value by signing an object with the details like 'to', 'value', 'data'.</li>
               <li>'From' address is cryptographically recovered from the signature.</li>
               <li>No decimals! Amounts are integers, in Wei. 1 ETH is 10^18 Wei.</li>
+              <li>Miners are incentivized with a fee to package transactions into blocks.</li>
+              <li>This fee is called the gas price and you 'bid' to get mined.</li>
             </ul>
 
             <p className="mt-6">
@@ -261,7 +260,7 @@ const Index = () => {
             <ul className="list-spaced mt-4 text-md md:text-lg">
               <li>Send 'machine code' as data in a transaction without a 'to' address.</li>
               <li>
-                Deployed code has an address just like an account you have with your private key.
+                Deployed code has an address just like an "externally owned account" with a private key.
               </li>
               <li>Reading data is cheap and can come from any node on the network.</li>
               <li>
@@ -282,7 +281,7 @@ const Index = () => {
                 <span role="img" aria-label="build" className="-ml-1 mr-2 text-base">
                   🔧
                 </span>
-                Build A Smart Contract
+                Build
               </a>
             </p>
           </>
