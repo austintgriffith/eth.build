@@ -1,14 +1,13 @@
 import React from 'react';
+// import Navigation from './Navigation';
 import Container from './Container';
-import Navigation from './Navigation';
 
 const Layout = ({ children }) => {
   return (
     <>
-      <header />
-      <Navigation />
+      {/* <Navigation /> */}
       <main>{children}</main>
-      <footer className="py-8 border-t border-gray-300">
+      <footer className="py-8">
         <Container>
           <p>
             <a
@@ -21,7 +20,7 @@ const Layout = ({ children }) => {
               className="text-blue-500 hover:text-blue-700"
               href="https://twitter.com/austingriffith"
             >
-               - @austingriffith
+              - @austingriffith
             </a>
           </p>
         </Container>
