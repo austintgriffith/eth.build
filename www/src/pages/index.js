@@ -1,6 +1,5 @@
 import React from 'react';
 import AngleShape from '../components/AngleShape';
-// import ColorTitle from '../components/ColorTitle';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import VideoSection from '../components/VideoSection';
@@ -90,7 +89,6 @@ const Index = () => {
         videoId="QJ010l-pBpE"
         content={
           <>
-            {/* <ColorTitle className="bg-purple-700">Hash Function</ColorTitle> */}
             <h2 className="mb-4 text-4xl font-semibold">Hash Function</h2>
             <p className="mt-3 md:text-lg">
               Think of it like a fingerprint of any given input data.
@@ -150,8 +148,9 @@ const Index = () => {
           </>
         }
       />
-      <AngleShape className="hidden md:block text-gray-200" reverse />
+
       <VideoSection
+        graySection
         className="bg-gray-200"
         videoFirst
         videoTitle="Sending and Receiving Value"
@@ -182,7 +181,6 @@ const Index = () => {
           </>
         }
       />
-      <AngleShape className="hidden md:block text-gray-200" />
     </Layout>
   );
 };
