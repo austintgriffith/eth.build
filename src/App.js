@@ -1216,7 +1216,7 @@ return (
     </div>
 
 
-    <div id="mainCanvas" style={{position:"relative",overflow:'hidden',background:"#222",width:'100%',height:"100%"}}>
+    <div id="mainCanvas" style={{overscrollBehavior:"none",position:"relative",overflow:'hidden',background:"#222",width:'100%',height:"100%"}}>
       <canvas id='main' width={Math.max(100,width)} height={Math.max(100,height)} tabIndex={10} style={{background:"#111111",outline: 'none',borderBottom:'1px solid #666666'}}></canvas>
       <div id="reactElements"></div>
     </div>
