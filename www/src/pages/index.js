@@ -320,8 +320,7 @@ const Index = () => {
           </a>
           <a
             className="btn btn-secondary block md:inline-block  mt-4 md:mt-0 mx-2"
-            href="https://www.youtube.com/playlist?list=PLJz1HruEnenCXH7KW7wBCEBnBLOVkiqIi"
-          >
+            href="https://sandbox.eth.build">
             <span role="img" aria-label="build" className="-ml-1 mr-2 text-base">
               🛠
             </span>{' '}
