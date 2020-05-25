@@ -16,9 +16,12 @@
 
 ---
 
+🛠️ETH.Build
+An Educational Sandbox For Web3... And Much More.
 
-![image](https://user-images.githubusercontent.com/2653167/82834198-a3893400-9e7d-11ea-8760-8f57747e618c.png)
-
+👉Drag-and-Drop Programming
+🧩Open Source Building Blocks
+🧐Visually Understand How Ethereum Works
 
 ---
 
