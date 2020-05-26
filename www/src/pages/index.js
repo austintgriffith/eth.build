@@ -9,11 +9,11 @@ const Index = () => {
 
 
   const [src, setSrc] = useState("")
-  useEffect(()=>{
+/*  useEffect(()=>{
     setTimeout(()=>{
       setSrc("https://sandbox.eth.build/wofCrGxhc3Rfbm9kZV9pZMONAcK8xIHEg8SFbGlua8SLxI0CPcKlxIfEiXPCl8KKwqLEjMSOwrjCpHR5cGXCq0NyxKh0by9IxINowqNwb3PCksONAgjDjMKMwqRzaXplwpJ4HsKlZsSCZ3PCgMKlb3LEiXICwqRtxIhlAMKmxJVwdXRzwpHCg8KkbmFtZcKlxZnFm8SmxKhlwq3EhHLElWcsbnVtYmVywqTElMSWxLo9wqdvxZvFmsWcxZ7FoMWiZcKkaMSzxajEqcKmxazFrsKlxbhrxLjEujnEujrCqnByb8SpcnRpZcWLwonEosSNAcK6xohlwq9EaXNwxIJ5L0Jsb2NrxpzEtcS3xLkCw5BkxL_FgcWDRjzFh8WJxYvFjcWPxbUDxZPFlcWXxabGgMWfxaHFo8KgxqQAxbfElWvGkcaVxpfGmcabxp3ChMKrYsavxrHGnFPGuzLCq8aqYWNlaG9sxZDCoMKlxpt0bGXHrHZhbHVlw5lCMHhjNmE4ZmI3ZTBlYmIzOciAOWTHvTVmNDgwMTZiMWXHvWE2NciOOTXIizY2ZciFOWM0M2TIhzdmYzlhMGNhyKgzxKHEowHCsMakwq_ErMSuxLBLZXkgUGFpcsa0xpDGt8OMw5zGusWCwoLCoTDDikNTwpnCmsKhMULGv2HFisWMxY7FkATHhsSJx4huxb_EuMeLxoPCrVvGlmnHs3RlIGvIvl3GpMaKdMWtbmfHkcW5AjrJpMWjwqhnZW7FtWHJq8akw7_Jt2vDgMW8xb7Fm3PCk8m7xKrJqMmqyazJrnnJscaLybXGjceSxZ3EujvKjsaVdcecaWPJrci-ypXJs8aMxo5zw4DKjsKnyLFkcsadc8qlybRnypjElsqaAjHHlcaYxbXHmMWLyLTGocKuxqTCq03KgmgvUmFuZG9tyYXEuQEYyYjJisWDw4zDiMWGxYjJmMeByZvFtQHJnsWWxZjJocqLxoHHjMexyoTKhsS6PMqJdMmiwpHChMaCxaPCpcezx7XGhMSnxonFscWzxbXKtcaPwpHFusaNYcW0bMOLQ8Kpw60nEWHDscOByrrHl8acc8KDwqlhxZvLjMqCyqHDgsKjbcSVAMyXYXjMgsKrw4FtZ07DiADKv8SOwrzGpMKsScuhdMatxZvEr27LjjLDjMKCy5PCksuVMsmXyZnHgsWQx5DFlMmfy6DLrMqOx47LtWXKhcaOyojFvcuryovCks2DyoTLusq3PM2OzYXCrsu3xbRyLGJvx6lly4nNkMOAzIvKvMyNwoPLsce0x7bCqGPElMaxIMuwx67HsMKmQsyvb27CpWPFvW50BMymAcK7xqTCrcanxqnGqy9XyoJjxLTEtsaQBDhuzLbDjQMxxr7LmMy7y5tyBcueyaDLrMuuy6TNhMWpx5DGjsqby77MgMKgy6rOmcuvy6XNhQDNn86hZWzCoM2hxprMjcKBx61px6_FpM6EdM6Gxp_ItcKyyLjOgMekxqxBZMquyrDLjs6Ow7zDjMOmzo0BVFDMusuax4NyBs6XzYHLos2Tzp3Lp8q4zq_KvcKDx5vHncayZcegxYLHosekx6bHqMeqxbXHrM2uZcKnz4HPg3NzzZDClsKWxLoxxI7CsALEjsKyAADPswLGkgHCuADEjsK6z7vPvTrEpNCCyLbFl8qWZ8-9O8-20InCu9CFy6jMp9CJwq4Aw7_PvT3EjtCX0IjFq8qmybXFsMWyzZfCpmfGl3Vwc8KQwqbNtm5maWfCgMKndsW1xYDNs8OLP8OZwpnQu9C7wpo")
     },500)
-  },[])
+  },[])*/
 
 
 
@@ -302,7 +302,7 @@ const Index = () => {
 
       <div className="py-24">
         <p className="text-center">
-          <iframe importance="low" width="100%" height="600" src={src}>
+          <iframe importance="low" width="100%" height="1" src={src}>
           </iframe>
         </p>
       </div>
