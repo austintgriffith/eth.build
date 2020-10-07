@@ -1,5 +1,11 @@
 import React, { useContext, useState } from "react"
-// import { Context } from "@providers/Context"
+import {
+  ModalContext,
+  LOAD_MODAL_KEY,
+  SAVE_MODAL_KEY,
+  ABOUT_MODAL_KEY,
+  QR_MODAL_KEY,
+} from "@providers/Modal"
 
 import styled from "styled-components"
 import { Drawer, Tooltip, Icon } from "@material-ui/core"
@@ -68,39 +74,26 @@ const EthBuildBarItem = ({ onClick }) => (
 )
 
 const ToolBar = () => {
-  // const [context, setContext] = useContext(Context)
-  // const { showVideoLibrary } = context
+  const [_, toggleModal] = useContext(ModalContext)
 
   const [showLibrary, setShowLibrary] = useState(false)
 
-  const onToggleSave = () => {
-    // old
-    // handleOpenSaveDialog()
-  }
   const onToggleLibrary = () => setShowLibrary(!showLibrary)
-  const onToggleAbout = async () => {
-    //old
-    // setOpenAboutDialog(true)
-  }
-  const onToggleQR = async () => {
-    // old
-    // setReadQr(!readQr)
-  }
 
   return (
     <>
       <Container>
-        <BarItem tooltipText="Save" onClick={onToggleSave}>
+        <BarItem tooltipText="Save" onClick={toggleModal(SAVE_MODAL_KEY)}>
           <Icon>save</Icon>
         </BarItem>
-        <BarItem tooltipText="Load">
+        <BarItem tooltipText="Load" onClick={toggleModal(LOAD_MODAL_KEY)}>
           <Icon>open_in_browser</Icon>
         </BarItem>
         <EthBuildBarItem onClick={onToggleLibrary} />
-        <BarItem tooltipText="About" onClick={onToggleAbout}>
+        <BarItem tooltipText="About" onClick={toggleModal(ABOUT_MODAL_KEY)}>
           <Icon>info</Icon>
         </BarItem>
-        <BarItem tooltipText="Scan" onClick={onToggleQR}>
+        <BarItem tooltipText="Scan" onClick={toggleModal(QR_MODAL_KEY)}>
           <QrIcon />
         </BarItem>
       </Container>

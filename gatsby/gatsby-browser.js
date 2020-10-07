@@ -4,12 +4,11 @@ import PropTypes from "prop-types"
 import { isBrowser } from "@utils/helpers"
 
 import { ContextProvider } from "@providers/Context"
+import { ModalProvider } from "@providers/Modal"
 import ThemeProvider from "@providers/Theme"
 
 /* eslint-disable import/prefer-default-export */
-export const wrapPageElement = ({ element, props }) => {
-  const { path, pageContext } = props
-
+export const wrapPageElement = ({ element }) => {
   const LayoutLazy = React.lazy(() => import("@components/Layout/Layout"))
 
   // Suspense is not available yet, but is needed for i18next
@@ -20,7 +19,9 @@ export const wrapPageElement = ({ element, props }) => {
         <React.Suspense fallback={<div />}>
           <ContextProvider>
             <ThemeProvider>
-              <LayoutLazy>{element}</LayoutLazy>
+              <ModalProvider>
+                <LayoutLazy>{element}</LayoutLazy>
+              </ModalProvider>
             </ThemeProvider>
           </ContextProvider>
         </React.Suspense>
