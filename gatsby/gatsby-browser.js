@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 import { isBrowser } from "@utils/helpers"
 
-import ContextProvider from "@providers/Context"
+import { ContextProvider } from "@providers/Context"
 
 /* eslint-disable import/prefer-default-export */
 export const wrapPageElement = ({ element, props }) => {

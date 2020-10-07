@@ -1226,45 +1226,6 @@ return (
     <div id="clipboarddiv" style={{position:'absolute',left:-10000,top:-10000,zIndex:-1}}></div>
 
 
-    <Drawer
-      variant="persistent"
-      anchor="bottom"
-      open={showVideoLibrary}
-      >
-      <div style={{height:height*0.6,backgroundColor:"#eeeeee"}}>
-        <div style={{margin:"auto",textAlign:"center",color:"#222222",height:barHeight+3,left:0,bottom:0,width:"100%",backgroundColor:"#DFDFDF"}}>
-          <div style={{cursor:"pointer",letterSpacing:-5,borderBottom:"1px solid #999999",borderLeft:"1px solid #999999",borderRight:"1px solid #999999",fontSize:32, fontFamily: "'Rubik Mono One', sans-serif"}}
-            onTouchStart={
-              async ()=>{
-                setShowVideoLibrary(false);global.showLibrary=false;
-                localStorage.setItem("eth.build.showLibrary",false)
-              }
-            }
-            onClick={async ()=>{
-              setShowVideoLibrary(false);global.showLibrary=false;
-              localStorage.setItem("eth.build.showLibrary",false)
-            }}>
-            <span style={{color:"#03a9f4"}}>eth</span>
-            <span style={{position:'relative',left:-5,bottom:15,color:"#f44336",marginBottom:25}}>.</span>
-            <span style={{position:'relative',left:-10,color:"#333"}}>build</span>
-            <span style={{margin:5,borderLeft:"1px solid #BBBBBB",height:barHeight}}>
-              <Tooltip title="Collapse" style={{marginLeft:10,cursor:"pointer"}}>
-                <Icon>
-                  swap_vert
-                </Icon>
-              </Tooltip>
-            </span>
-          </div>
-          <div>
-            <StackGrid columnWidth={350}>
-              {allCards}
-            </StackGrid>
-          </div>
-        </div>
-      </div>
-    </Drawer>
-
-
     <Snackbar
         anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
         key={'bottomcentersnackbar'}
