@@ -6,7 +6,7 @@ import { Drawer, Tooltip, Icon } from "@material-ui/core"
 
 import Library from "@components/Library/Library"
 
-const BarItem = styled.span`
+const Item = styled.span`
   margin: 5;
   borderleft: "1px solid #cccccc";
   height: barHeight;
@@ -39,15 +39,15 @@ const QrIcon = () => (
   </svg>
 )
 
-const ToolBarItem = ({ onClick, children, tooltipText }) => (
-  <BarItem onClick={onClick}>
+const BarItem = ({ onClick, children, tooltipText }) => (
+  <Item onClick={onClick}>
     <StyledToolTip title={tooltipText}>
       <>{children}</>
     </StyledToolTip>
-  </BarItem>
+  </Item>
 )
 
-const EthBuildToolBarItem = ({ onClick }) => (
+const EthBuildBarItem = ({ onClick }) => (
   <span onClick={onClick}>
     <span style={{ color: "#03a9f4" }}>eth</span>
     <span
@@ -90,19 +90,19 @@ const ToolBar = () => {
   return (
     <>
       <Container>
-        <ToolBarItem tooltipText="Save" onClick={onToggleSave}>
+        <BarItem tooltipText="Save" onClick={onToggleSave}>
           <Icon>save</Icon>
-        </ToolBarItem>
-        <ToolBarItem tooltipText="Load">
+        </BarItem>
+        <BarItem tooltipText="Load">
           <Icon>open_in_browser</Icon>
-        </ToolBarItem>
-        <EthBuildToolBarItem onClick={onToggleLibrary} />
-        <ToolBarItem tooltipText="About" onClick={onToggleAbout}>
+        </BarItem>
+        <EthBuildBarItem onClick={onToggleLibrary} />
+        <BarItem tooltipText="About" onClick={onToggleAbout}>
           <Icon>info</Icon>
-        </ToolBarItem>
-        <ToolBarItem tooltipText="Scan" onClick={onToggleQR}>
+        </BarItem>
+        <BarItem tooltipText="Scan" onClick={onToggleQR}>
           <QrIcon />
-        </ToolBarItem>
+        </BarItem>
       </Container>
       <Drawer variant="persistent" anchor="bottom" open={showLibrary}>
         <Library />

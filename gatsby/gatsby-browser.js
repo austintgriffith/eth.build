@@ -4,6 +4,7 @@ import PropTypes from "prop-types"
 import { isBrowser } from "@utils/helpers"
 
 import { ContextProvider } from "@providers/Context"
+import ThemeProvider from "@providers/Theme"
 
 /* eslint-disable import/prefer-default-export */
 export const wrapPageElement = ({ element, props }) => {
@@ -18,7 +19,9 @@ export const wrapPageElement = ({ element, props }) => {
       {isBrowser && (
         <React.Suspense fallback={<div />}>
           <ContextProvider>
-            <LayoutLazy>{element}</LayoutLazy>
+            <ThemeProvider>
+              <LayoutLazy>{element}</LayoutLazy>
+            </ThemeProvider>
           </ContextProvider>
         </React.Suspense>
       )}
