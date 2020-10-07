@@ -1060,7 +1060,7 @@ return (
           <span style={{margin:5,borderRight:"1px solid #cccccc",height:barHeight}} onClick={()=>{
               //console.log(liteGraph.status,playing)//cccccc.status==2
               if(playing){
-                liteGraph.start()
+                // liteGraph.start()
                 setPlaying(false)
               }else{
                 liteGraph.stop()
