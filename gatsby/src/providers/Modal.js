@@ -1,7 +1,7 @@
 import React, { useState, createContext } from "react"
 import PropTypes from "prop-types"
 
-import SaveModal from "@components/Modal/SaveModal"
+import { SaveModal } from "@components/Modal"
 
 const ModalContext = createContext()
 
@@ -13,14 +13,15 @@ export const MODAL_KEY = {
 }
 
 const MODAL_OPTIONS = {
-  [MODAL_KEY.save]: SaveModal,
+  [MODAL_KEY.save]: <SaveModal />,
   // [MODAL_KEY.load]: LoadModal,
   // [MODAL_KEY.scan]: ScanModal
   // [MODAL_KEY.about]: AboutModal,
 }
 
 const ModalProvider = ({ children }) => {
-  const [modal, setModal] = useState(null)
+  // TODO: change default to null
+  const [modal, setModal] = useState(MODAL_KEY.save)
 
   const toggleModal = key => {
     if (!Object.keys(MODAL_OPTIONS).includes(key)) return setModal(null)
@@ -30,7 +31,7 @@ const ModalProvider = ({ children }) => {
 
   return (
     <ModalContext.Provider value={[modal, toggleModal]}>
-      {modal && MODAL_OPTIONS[modal]()}
+      {modal && MODAL_OPTIONS[modal]}
       {children}
     </ModalContext.Provider>
   )

@@ -2,13 +2,7 @@ import React, { useContext, useState } from "react"
 
 import { Dialog } from "@material-ui/core"
 
-import {
-  ModalContext,
-  LOAD_MODAL_KEY,
-  SAVE_MODAL_KEY,
-  ABOUT_MODAL_KEY,
-  QR_MODAL_KEY,
-} from "@providers/Modal"
+import { ModalContext } from "@providers/Modal"
 
 import styled from "styled-components"
 import { Icon } from "@material-ui/core"
@@ -28,7 +22,8 @@ const Container = styled.div`
 
 const ModalBase = ({ children }) => {
   const [modal, toggleModal] = useContext(ModalContext)
-  const handleClose = () => {
+
+  const onCloseModal = () => {
     toggleModal(modal)
     // old
     // setOpenSaveDialog(false);
@@ -41,7 +36,7 @@ const ModalBase = ({ children }) => {
   }
 
   return (
-    <Dialog onClose={handleClose} open maxWidth="md">
+    <Dialog onClose={onCloseModal} open maxWidth="md">
       {children}
     </Dialog>
   )
