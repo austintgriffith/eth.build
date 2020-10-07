@@ -1,18 +1,12 @@
 import React, { useContext, useState } from "react"
-import {
-  ModalContext,
-  LOAD_MODAL_KEY,
-  SAVE_MODAL_KEY,
-  ABOUT_MODAL_KEY,
-  QR_MODAL_KEY,
-} from "@providers/Modal"
+import { ModalContext, MODAL_KEY } from "@providers/Modal"
 
 import styled from "styled-components"
 import { Drawer, Tooltip, Icon } from "@material-ui/core"
 
 import Library from "@components/Library/Library"
 
-const Item = styled.span`
+const Item = styled.button`
   margin: 5;
   borderleft: "1px solid #cccccc";
   height: barHeight;
@@ -83,17 +77,20 @@ const ToolBar = () => {
   return (
     <>
       <Container>
-        <BarItem tooltipText="Save" onClick={toggleModal(SAVE_MODAL_KEY)}>
+        <BarItem tooltipText="Save" onClick={() => toggleModal(MODAL_KEY.save)}>
           <Icon>save</Icon>
         </BarItem>
-        <BarItem tooltipText="Load" onClick={toggleModal(LOAD_MODAL_KEY)}>
+        <BarItem tooltipText="Load" onClick={() => toggleModal(MODAL_KEY.load)}>
           <Icon>open_in_browser</Icon>
         </BarItem>
         <EthBuildBarItem onClick={onToggleLibrary} />
-        <BarItem tooltipText="About" onClick={toggleModal(ABOUT_MODAL_KEY)}>
+        <BarItem
+          tooltipText="About"
+          onClick={() => toggleModal(MODAL_KEY.about)}
+        >
           <Icon>info</Icon>
         </BarItem>
-        <BarItem tooltipText="Scan" onClick={toggleModal(QR_MODAL_KEY)}>
+        <BarItem tooltipText="Scan" onClick={() => toggleModal(MODAL_KEY.scan)}>
           <QrIcon />
         </BarItem>
       </Container>
