@@ -47,6 +47,7 @@ module.exports = {
           "@utils": "src/utils",
           "@assets": "src/assets",
           "@providers": "src/providers",
+          "@nodes": "src/nodes",
         },
       },
     },

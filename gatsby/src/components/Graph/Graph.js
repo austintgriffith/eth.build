@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import LiteGraphJS from "litegraph.js/build/litegraph.js"
 import "litegraph.js/css/litegraph.css"
 
-import { loadCustomNodes } from "./utils/customNodes"
+import { loadCustomNode } from "./utils/node"
 import { starterExample } from "./utils/example"
 
 import { decompressLiteGraph } from "@utils/liteGraph"
@@ -55,8 +55,10 @@ const Graph = () => {
 
   const startGraph = async () => {
     const { graph, canvas } = await init()
+
     // TODO: add this back
     // loadCustomNodes(LiteGraphJS)
+
     const data = loadData()
     if (data) graph.configure(data)
     graph.canvas = canvas

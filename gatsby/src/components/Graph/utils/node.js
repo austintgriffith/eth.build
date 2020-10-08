@@ -479,7 +479,7 @@ function addHelpers(obj) {
 }
 
 const addNodes = function (LiteGraphJS, name, color, shadow) {
-  let nodeSet = require("../nodes/" + name)
+  let nodeSet = require("@nodes/" + name)
   if (!global.customNodeItems) {
     global.customNodeItems = {}
   }
@@ -533,7 +533,9 @@ global.customNodes = [
   { name: "Modules", color: "7e57c2", icon: "" },
 ]
 
-export default loadCustomNodes = LiteGraphJS => {
+export const loadCustomNode = LiteGraphJS => {
+  globalLiteGraphJS = LiteGraphJS
+
   for (let n in global.customNodes) {
     addNodes(
       LiteGraphJS,
