@@ -6,6 +6,12 @@ const compressLiteGraph = liteGraph => {
   return compressed
 }
 
+export const decompressLiteGraph = litegraph => {
+  const decompressed = codec.decompress(litegraph)
+  console.log(decompressed)
+  return decompressed
+}
+
 export const downloadLiteGraph = async liteGraph => {
   const compressed = compressLiteGraph(liteGraph)
   console.log("SAVING COMPRESSED", compressed)
