@@ -8,7 +8,7 @@ import { ThreeBoxIcon } from "@assets/icons"
 
 import { Context } from "@providers/Context"
 import { ModalContext } from "@providers/Modal"
-import { downloadLiteGraph } from "@utils/helpers"
+import { downloadLiteGraph } from "@utils/liteGraph"
 
 import ModalBase from "@components/Modal/ModalBase"
 import ModalMenu from "@components/Modal/ModalMenu"
@@ -46,24 +46,27 @@ const SaveModal = () => {
       toolTipText: "Download a local file",
       onClick: onDownload,
     },
-    // {
-    //   text: "Copy",
-    //   icon: <FileCopyIcon />,
-    //   toolTipText: "Copy via a unique URL",
-    //   onClick: onDownload,
-    // },
-    // {
-    //   text: "Share",
-    //   icon: <ShareIcon />,
-    //   toolTipText: "Save to the network and share URL",
-    //   onClick: onShare,
-    // },
-    // {
-    //   text: "Save to 3box",
-    //   icon: <ThreeBoxIcon />,
-    //   toolTipText: "Save to your 3Box space",
-    //   onClick: onClickDownload,
-    // },
+    {
+      disabled: true,
+      text: "Copy",
+      icon: <FileCopyIcon />,
+      toolTipText: "Copy via a unique URL",
+      onClick: onDownload,
+    },
+    {
+      disabled: true,
+      text: "Share",
+      icon: <ShareIcon />,
+      toolTipText: "Save to the network and share URL",
+      onClick: onDownload,
+    },
+    {
+      disabled: true,
+      text: "Save to 3box",
+      icon: <ThreeBoxIcon />,
+      toolTipText: "Save to your 3Box space",
+      onClick: onDownload,
+    },
   ]
 
   return (
