@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
+import styled from "styled-components"
+
+import { Context } from "@providers/Context"
 
 import LiteGraphJS from "litegraph.js/build/litegraph.js"
 import "litegraph.js/css/litegraph.css"
@@ -8,25 +11,39 @@ import { starterExample } from "./utils/example"
 
 import { decompressLiteGraph } from "@utils/liteGraph"
 
+const Container = styled.div`
+  overscrollbehavior: "none";
+  position: "relative";
+  overflow: "hidden";
+  background: "#222";
+  width: "100%";
+  height: "100%";
+`
+
+const Canvas = styled.canvas`
+  background: "#111111";
+  outline: "none";
+  borderbottom: "1px solid #666666";
+`
+
 const Graph = () => {
-  const [liteGraph, setLiteGraph] = useState()
-  const [liteGraphCanvas, setLiteGraphCanvas] = useState()
+  const [context, setContext] = useContext(Context)
 
   const init = () => {
-    const graph = new LiteGraphJS.LGraph()
-    const canvas = new LiteGraphJS.LGraphCanvas("#main", graph)
+    const liteGraph = new LiteGraphJS.LGraph()
+    const canvas = new LiteGraphJS.LGraphCanvas("#main", liteGraph)
     LiteGraphJS.LiteGraph.debug = true
     window.addEventListener("resize", function () {
       canvas.resize()
     })
-    graph.onAfterExecute = () => {
+    liteGraph.onAfterExecute = () => {
       canvas.draw(true)
     }
     window.onpagehide = function () {
-      var data = JSON.stringify(graph.serialize())
+      var data = JSON.stringify(liteGraph.serialize())
       localStorage.setItem("litegraph", data)
     }
-    return { graph, canvas }
+    return { liteGraph, canvas }
   }
 
   const loadFromPath = rawPath => {
@@ -54,22 +71,21 @@ const Graph = () => {
   }
 
   const startGraph = async () => {
-    const { graph, canvas } = await init()
+    const { liteGraph, canvas } = init()
 
     // TODO: add this back
     // loadCustomNodes(LiteGraphJS)
 
     const data = loadData()
-    if (data) graph.configure(data)
-    graph.canvas = canvas
+    if (data) liteGraph.configure(data)
+    liteGraph.canvas = canvas
 
-    setLiteGraph(graph)
-    setLiteGraphCanvas(canvas)
+    setContext({ ...context, liteGraph })
 
-    graph.start()
+    liteGraph.start()
     // TODO: What is this???
     setInterval(() => {
-      graph.runStep()
+      liteGraph.runStep()
     }, 250)
   }
 
@@ -77,7 +93,11 @@ const Graph = () => {
     startGraph()
   }, [])
 
-  return <></>
+  return (
+    <Container>
+      <canvas id="main" width={600} height={600}></canvas>
+    </Container>
+  )
 }
 
 export default Graph

@@ -35,6 +35,7 @@ const SaveModal = () => {
   const [state, setState] = useState(null)
 
   const onDownload = async () => {
+    console.log(liteGraph)
     await downloadLiteGraph(liteGraph)
     toggleModal(modal)
   }

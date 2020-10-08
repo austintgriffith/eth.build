@@ -21,7 +21,7 @@ const MODAL_OPTIONS = {
 
 const ModalProvider = ({ children }) => {
   // TODO: change default to null
-  const [modal, setModal] = useState(MODAL_KEY.save)
+  const [modal, setModal] = useState()
 
   const toggleModal = key => {
     if (!Object.keys(MODAL_OPTIONS).includes(key)) return setModal(null)

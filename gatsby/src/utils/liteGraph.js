@@ -1,19 +1,18 @@
 var codec = require("json-url")("lzw")
 
-const compressLiteGraph = liteGraph => {
-  const compressed = codec.compress(liteGraph.serialize())
-  console.log(compressed)
+const compressLiteGraph = async liteGraph => {
+  if (!liteGraph) return
+  const compressed = await codec.compress(liteGraph.serialize())
   return compressed
 }
 
-export const decompressLiteGraph = litegraph => {
-  const decompressed = codec.decompress(litegraph)
-  console.log(decompressed)
+export const decompressLiteGraph = async litegraph => {
+  const decompressed = await codec.decompress(litegraph)
   return decompressed
 }
 
 export const downloadLiteGraph = async liteGraph => {
-  const compressed = compressLiteGraph(liteGraph)
+  const compressed = await compressLiteGraph(liteGraph)
   console.log("SAVING COMPRESSED", compressed)
   let webfile = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

@@ -16,9 +16,11 @@ const StyledGrid = styled(Grid)`
 const Option = ({ toolTipText, onClick, text, icon, disabled }) => (
   <Grid item style={{ width: 220 }}>
     <Tooltip title={toolTipText}>
-      <StyledButton disabled={disabled} onClick={onClick} startIcon={icon}>
-        {text}
-      </StyledButton>
+      <span>
+        <StyledButton disabled={disabled} onClick={onClick} startIcon={icon}>
+          {text}
+        </StyledButton>
+      </span>
     </Tooltip>
   </Grid>
 )
