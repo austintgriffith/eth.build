@@ -284,6 +284,7 @@ function SaveDialog(props) {
       }}
       open={openSaveDialog}
       maxWidth="md"
+      style={{ zIndex: 200 }}
     >
       {/* <DialogTitle id="save-dialog" style={{ textAlign: "center" }}>
         <Icon style={{ verticalAlign: "middle" }}>save</Icon>
