@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "3box": "^1.17.1",
     "3id-connect": "^1.0.0-alpha.6",
     "@ceramicnetwork/ceramic-core": "^0.12.4",
     "@ceramicnetwork/http-client": "^0.8.8",
@@ -69,7 +68,6 @@
     "styled-components": "^4.4.0",
     "web3": "^1.2.1",
     "web3connect": "^1.0.0-beta.32",
-    "web3modal": "^1.9.2",
     "webpack": "^4.41.2",
     "winston": "^3.2.1"
   },
