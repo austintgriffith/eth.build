@@ -130,7 +130,7 @@ function App() {
 
   const handleOpenSaveDialog = async () => {
     let canvas = await html2canvas(document.body);
-    let canvasImg = canvas.toDataURL("image/png", 0.35);
+    let canvasImg = canvas.toDataURL("image/jpeg", 0.15);
     console.log({canvasImg});
     setCurrentScreenShot(canvasImg);
     setOpenSaveDialog(true);

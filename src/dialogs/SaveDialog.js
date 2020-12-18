@@ -225,7 +225,7 @@ function SaveDialog(props) {
 
   const connectToIDX = async () => {
     try {
-      let { idx } = await connectIDX(
+      let { idx, ceramic } = await connectIDX(
         web3Connect.address,
         web3Connect.provider,
         setIdxStatus
@@ -234,8 +234,8 @@ function SaveDialog(props) {
       let savedTitle = localStorage.getItem(STORAGE_IDX_DOCUMENT);
       setDocumentTitle(savedTitle ? savedTitle : "");
 
-      let documentInfo = await getDocumentInfo({ idx }, savedTitle);
-      setCurrentDocumentInfo(documentInfo.metadata ? documentInfo : null);
+      let documentInfo = await getDocumentInfo({ idx, ceramic }, savedTitle);
+      setCurrentDocumentInfo(documentInfo.document ? documentInfo : null);
 
       setSaveType("IDX_SAVE");
     } catch (error) {
@@ -245,10 +245,11 @@ function SaveDialog(props) {
 
   const updateDocumentInfo = async fileName => {
     let idx = getIDX();
-    if (idx) {
-      let documentInfo = await getDocumentInfo({ idx }, fileName);
+    let ceramic = getCeramic();
+    if (idx && ceramic) {
+      let documentInfo = await getDocumentInfo({ idx, ceramic }, fileName);
       console.log("Updated DocumentInfo: ", documentInfo);
-      setCurrentDocumentInfo(documentInfo.metadata ? documentInfo : null);
+      setCurrentDocumentInfo(documentInfo.document ? documentInfo : null);
     } else {
       console.log("NO IDX INSTANCE");
     }
@@ -612,7 +613,7 @@ function SaveDialog(props) {
             <Typography variant="caption" display="block">
               {currentDocumentInfo !== null
                 ? `Last saved ${moment
-                    .unix(currentDocumentInfo.metadata.timestamp)
+                    .unix(currentDocumentInfo.document.timestamp)
                     .fromNow()}`
                 : ""}
             </Typography>

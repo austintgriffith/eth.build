@@ -14,6 +14,7 @@ import {
   connectIDX,
   logoutIDX,
   getIDX,
+  getCeramic,
   isFetching
 } from "../utils/IdxManager";
 
@@ -112,19 +113,20 @@ function LoadDialog(props) {
 
   const changeToIdxLoadPage = async () => {
     let idx = getIDX();
+    let ceramic = getCeramic();
 
-    setDocuments(await loadDocuments({ idx }));
+    setDocuments(await loadDocuments({ idx, ceramic }));
     setLoadType("IDX_LOAD");
   };
 
   const connectToIDX = async () => {
     try {
-      let { idx } = await connectIDX(
+      let { idx, ceramic } = await connectIDX(
         web3Connect.address,
         web3Connect.provider,
         setIdxStatus
       );
-      setDocuments(await loadDocuments({ idx }));
+      setDocuments(await loadDocuments({ idx, ceramic }));
       setLoadType("IDX_LOAD");
     } catch (error) {
       setIdxStatus(error);

@@ -2,42 +2,11 @@ import Ceramic from '@ceramicnetwork/http-client'
 import { IDX } from '@ceramicstudio/idx'
 import { EthereumAuthProvider, ThreeIdConnect } from '3id-connect'
 
-import { definitions } from './file-config.json'
-
-// import { ThreeIdConnect, EthereumAuthProvider } from '3id-connect'
-// import Ceramic from '@ceramicnetwork/ceramic-core'
-// import IPFS from 'ipfs'
-
-// async function connectIdx() {
-//   const threeIdConnect = new ThreeIdConnect()
-//   // Usually the following three steps are taken when
-//   // a user choose to connect their wallet
-//   const addresses = await window.ethereum.enable()
-//   // Create 3id connect instance
-//   const authProvider = new EthereumAuthProvider(window.ethereum, addresses[0])
-//   await threeIdConnect.connect(authProvider)
-//   // create a Ceramic instance
-//   const didProvider = await threeIdConnect.getDidProvider()
-//   const ipfs = await IPFS.create()
-//   const ceramic = await Ceramic.create(ipfs, { didProvider })
-//   return ceramic
-// }
+import { definitions } from './idx-config.json'
 
 const CERAMIC_URL = 'https://ceramic-dev.3boxlabs.com'
 
 const threeID = new ThreeIdConnect()
-
-// export type NoteItem = {
-//   id: string
-//   title: string
-// }
-
-// export type NotesList = { notes: Array<NoteItem> }
-
-// export type IDXInit = NotesList & {
-//   ceramic: Ceramic
-//   idx: IDX
-// }
 
 let ceramic = null;
 let idx = null;
