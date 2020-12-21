@@ -40,6 +40,8 @@ export const connectIDX = async (
       setStatus("Creating IDX instance");
       idx = new IDX({ ceramic, aliases: definitions })
 
+      setStatus("IDX instance Created");
+
       return { ceramic, idx }
     } else {
       throw new Error("No web3 provider available");
