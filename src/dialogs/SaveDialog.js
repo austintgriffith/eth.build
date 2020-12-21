@@ -612,7 +612,7 @@ function SaveDialog(props) {
             /> */}
 
             <Typography variant="caption" display="block">
-              {currentDocumentInfo !== null
+              {currentDocumentInfo !== null && currentDocumentInfo.document !== null
                 ? `Last saved ${moment
                     .unix(currentDocumentInfo.document.timestamp)
                     .fromNow()}`

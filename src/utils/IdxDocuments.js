@@ -16,7 +16,7 @@ export const getDocumentInfo = async (auth, fileName) => {
   const documents = await readDecrtypedDocuments(idx);
   console.log('documents', documents, idx.id);
   const docId = documents[key]
-  const document = await readSingleDocument(idx, ceramic, docId);
+  const document = docId ? await readSingleDocument(idx, ceramic, docId) : null;
   console.log({ document });
   return { document };
 };
@@ -33,24 +33,16 @@ export const saveDocument = async (auth, fileName, document, screenshot) => {
       timestamp: parseInt(Date.now() / 1000),
     };
     const jwe = await idx.did.createDagJWE(documentStruct, [idx.did.id]);
-
-    console.log('before create doc', ceramic, jwe, documentStruct);
-
     const doc = await ceramic.createDocument('tile', {
       content: jwe,
       metadata: { controllers: [idx.id], schema: schemas.EncryptedFile },
     })
 
-    console.log('ceramic', ceramic, doc);
-
     // update files
     let files = await readDecrtypedDocuments(idx);
     files[key] = doc.id.toString();
-    console.log('save files', files);
-    const filesJwe = await idx.did.createDagJWE(documentStruct, [idx.did.id]);
+    const filesJwe = await idx.did.createDagJWE(files, [idx.did.id]);
     await idx.set(IDX_DEFINITION_NAME, filesJwe);
-
-    console.log('saved by', idx.id);
   } catch(e) {
     console.error('failed to save document', e);
   }
@@ -61,8 +53,6 @@ export const loadDocuments = async auth => {
   console.log("LOADING DOCUMENTS");
   // TODO: need read documents again?
   const files = await readDecrtypedDocuments(idx);
-  console.log('files', files);
-
   let documents = await Promise.all(Object.values(files).map(docId => readSingleDocument(idx, ceramic, docId)));
   documents = documents.map(file => ({
     timestampStr: moment.unix(file.timestamp).fromNow(),
@@ -79,6 +69,7 @@ const readDecrtypedDocuments = async (idx) => {
 }
 
 const readSingleDocument = async (idx, ceramic, docId) => {
-  const jwe = await ceramic.loadDocument(docId);
+  const doc = docId ? await ceramic.loadDocument(docId) : null;
+  const jwe = doc ? doc.content : null;
   return (jwe ? await idx.did.decryptDagJWE(jwe) : null) || {};
 }
