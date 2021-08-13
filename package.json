@@ -37,7 +37,7 @@
     "jsqr": "^1.2.0",
     "keccak256": "^1.0.0",
     "levelup": "^4.3.2",
-    "litegraph.js": "austintgriffith/litegraph.js#messy",
+    "litegraph.js": "github:grahamtallen/litegraph.js#bugfix-eth-build-68",
     "memdown": "^5.1.0",
     "moment": "^2.24.0",
     "opensea-js": "^0.7.1",
