@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "3box": "^1.17.1",
+    "3id-connect": "^1.0.0-alpha.6",
+    "@ceramicnetwork/ceramic-core": "^0.12.4",
+    "@ceramicnetwork/http-client": "^0.8.8",
+    "@ceramicstudio/idx": "^0.4.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.5",
