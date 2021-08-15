@@ -189,6 +189,7 @@ function LoadDialog(props) {
             id="loadjsonfile"
             type="file"
             name="file"
+            value=""
             onChange={e => {
               console.log("FILE", e.target.files[0]);
               var reader = new FileReader();
