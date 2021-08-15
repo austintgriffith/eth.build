@@ -22,7 +22,7 @@ import {
 import GetAppIcon from "@material-ui/icons/GetApp";
 import ShareIcon from "@material-ui/icons/Share";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
-import useWeb3Connect from "../utils/useWeb3Connect";
+import useWeb3Modal from "../utils/useWeb3Modal";
 import {
   open3Box,
   logout3Box,
@@ -82,12 +82,12 @@ function SaveDialog(props) {
   // const [lastCheckedTitle, setLastCheckedTitle] = React.useState(null);
   const [updateTimer, setUpdateTimer] = React.useState(null);
 
-  const web3Connect = useWeb3Connect();
+  const web3Modal = useWeb3Modal();
   // const [box, threeBoxSpace, open3Box, fetching3Box, logout3Box] = use3Box(
-  //   web3Connect.address,
-  //   web3Connect.provider
+  //   web3Modal.address,
+  //   web3Modal.provider
   // );
-  const connected = web3Connect.connected;
+  const connected = web3Modal.connected;
 
   const [threeBoxStatus, setThreeBoxStatus] = React.useState(null);
   const [threeBoxConnectionStep, setThreeBoxConnectionStep] = React.useState(0);
@@ -111,8 +111,8 @@ function SaveDialog(props) {
     }
 
     // console.log({
-    //   isLoggedIn: web3Connect.address
-    //     ? Box.isLoggedIn(web3Connect.address)
+    //   isLoggedIn: web3Modal.address
+    //     ? Box.isLoggedIn(web3Modal.address)
     //     : "n/a"
     // });
 
@@ -121,14 +121,14 @@ function SaveDialog(props) {
     let fetching = isFetching();
 
     if (
-      web3Connect.address &&
-      Box.isLoggedIn(web3Connect.address) &&
+      web3Modal.address &&
+      Box.isLoggedIn(web3Modal.address) &&
       !box &&
       !space &&
       !fetching
     ) {
       console.log("OPENING 3BOX from useEffect");
-      open3Box(web3Connect.address, web3Connect.provider, console.log);
+      open3Box(web3Modal.address, web3Modal.provider, console.log);
     }
   });
 
@@ -228,8 +228,8 @@ function SaveDialog(props) {
   const connectTo3Box = async () => {
     try {
       let { space } = await open3Box(
-        web3Connect.address,
-        web3Connect.provider,
+        web3Modal.address,
+        web3Modal.provider,
         setThreeBoxStatus
       );
 
@@ -258,7 +258,7 @@ function SaveDialog(props) {
 
   const logout = async () => {
     await logout3Box();
-    await web3Connect.resetApp();
+    await web3Modal.resetApp();
     setThreeBoxStatus(null);
     setThreeBoxConnectionStep(0);
     setSaveType("3BOX_SCREEN");
@@ -519,7 +519,7 @@ function SaveDialog(props) {
                 color="primary"
                 onClick={async () => {
                   setOpenSaveDialog(false);
-                  await web3Connect.triggerConnect();
+                  await web3Modal.triggerConnect();
                   setOpenSaveDialog(true);
                   setThreeBoxConnectionStep(1);
                 }}
@@ -530,9 +530,9 @@ function SaveDialog(props) {
             )}
             {threeBoxConnectionStep === 1 && (
               <div>
-                {web3Connect.address !== null && (
+                {web3Modal.address !== null && (
                   <ProfileHover
-                    address={web3Connect.address}
+                    address={web3Modal.address}
                     showName={true}
                     orientation="bottom"
                     displayFull={true}

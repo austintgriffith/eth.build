@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Web3 from "web3";
-import Web3Connect from "web3connect";
+import Web3Modal from "web3modal";
 
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // import Portis from "@portis/web3";
@@ -47,13 +47,13 @@ const providerOptions = {
   // }
 };
 
-const web3Connect = new Web3Connect.Core({
+const web3modal = new Web3Modal({
   // network: "mainnet", // optional
   cacheProvider: true, // optional
   providerOptions // required
 });
 
-function useWeb3Connect() {
+function useWeb3Modal() {
   const [provider, setProvider] = useState(null);
   const [web3, setWeb3] = useState(null);
 
@@ -66,7 +66,7 @@ function useWeb3Connect() {
 
   // console.log({ connected, address, chainId, networkId, fetching, error });
   const onConnect = async () => {
-    const providerInited = await web3Connect.connect();
+    const providerInited = await web3modal.connect();
 
     await subscribeProvider(providerInited);
 
@@ -101,7 +101,7 @@ function useWeb3Connect() {
   };
 
   useEffect(() => {
-    if (web3Connect.cachedProvider && !connected) {
+    if (web3modal.cachedProvider && !connected) {
       onConnect();
     }
   });
@@ -110,7 +110,7 @@ function useWeb3Connect() {
     if (web3 && web3.currentProvider && web3.currentProvider.close) {
       await web3.currentProvider.close();
     }
-    await web3Connect.clearCachedProvider();
+    await web3modal.clearCachedProvider();
     await setProvider(null);
     await setWeb3(null);
     await setConnected(false);
@@ -156,10 +156,10 @@ function useWeb3Connect() {
     fetching,
     triggerConnect: onConnect,
     web3,
-    web3Connect,
+    web3modal,
     resetApp,
     provider
   };
 }
 
-export default useWeb3Connect;
+export default useWeb3Modal;
