@@ -655,7 +655,7 @@ if(!showVideoLibrary){
         }else if(width < 1000 && global.customNodes[n].name=="Components"){
           extraTabs.push(
             <div onMouseLeave={mouseLeave} style={{position:"absolute",bottom:0,left:80,zIndex:3,cursor:"pointer",fontSize:tabFontSize, fontFamily: "'Rubik Mono One', sans-serif"}} onClick={()=>{setMenu(global.customNodes[n].name)}}>
-              <div style={{transform:"rotate(90deg)",transformOrigin:"46% 52%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
+              <div style={{transform:"rotate(90deg)",transformOrigin:"46% 76%",height:itemspace*items.length+80,position:"relative",borderRadius:"0px 0px 8px 8px",padding:6,textAlign:"center",letterSpacing:-1,color:"#888888",backgroundColor:"#222222",opacity:0.9}}>
 
                   {global.customNodes[n].name}
 
