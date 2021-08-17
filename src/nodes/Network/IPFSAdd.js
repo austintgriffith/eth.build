@@ -15,7 +15,7 @@ IPFSAdd.prototype.onAdded = async function() {
   this.title_color = "#dddddd";
   this.ipfs = await IPFS.create({
     EXPERIMENTAL: {
-     pubsub: true
+     pubsub: true,
    },
    repo: 'ipfs-' + Math.random(),
    config: {
