@@ -16,7 +16,7 @@ IPFSSub.title = "IPFSSubscribe";
 
 IPFSSub.prototype.onReceiveMsg = async function(msg) {
   console.log(msg)
-  this.message = msg.data.toString()
+  this.message = Buffer.from(msg.data).toString('utf-8')
   console.log("this.message is now",this.message)
   this.trigger("received",this.message)
 }
