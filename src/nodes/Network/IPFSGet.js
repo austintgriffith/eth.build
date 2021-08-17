@@ -22,12 +22,13 @@ IPFSGet.prototype.onAdded = async function() {
    config: {
      Addresses: {
        Swarm: ['/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star']
-     }
+     },
+     Bootstrap: []
    }
   })
   console.log('IPFS (get) node is ready')
-  //const { id, agentVersion, protocolVersion } = await this.ipfs.id()
-  //console.log("IPFS FOR GET!",id, agentVersion, protocolVersion)
+  const { id, agentVersion, protocolVersion } = await this.ipfs.id()
+  console.log("IPFS FOR GET!",id, agentVersion, protocolVersion)
   this.title_color = "#eeee44";
 };
 
