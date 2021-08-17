@@ -22,8 +22,7 @@ IPFSGet.prototype.onAdded = async function() {
    config: {
      Addresses: {
        Swarm: ['/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-       '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
-       '/ip4/127.0.0.1/tcp/13579/wss/p2p-webrtc-star']
+       '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star']
      },
      Bootstrap: []
    }
