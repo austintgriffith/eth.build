@@ -1,72 +1,93 @@
-const { exec } = require('child_process')
-const fs = require("fs")
-const awsCreds = JSON.parse(fs.readFileSync("aws.json").toString().trim())
-const s3 = require('s3');
-const winston = require('winston')
-const AWS = require('aws-sdk')
-let site = "sandbox.eth.build"
-let cloudfrontDistro = "ELRHIIIOM3P69"
+// eslint-disable-next-line import/no-extraneous-dependencies
+const s3FolderUpload = require("s3-folder-upload");
+const fs = require("fs");
 
-const localDir = "build"
+const directoryName = "build";
 
-//Setup
-var client = s3.createClient({
-  s3Options: awsCreds,
-});
-uploadParams = buildS3Params(site)
-
-//Prep index
-//let index = fs.readFileSync("build/index.html").toString();
-//index = index.split("\"\/").join("\"");
-//winston.debug(index);
-//fs.writeFileSync("build/index.html",index);
-
-//Upload
-fs.readdir( localDir+"/" , function( err, files ) {
-  if( err ) {
-    console.error( "Could not list the directory.", err );
-    process.exit( 1 );
-  }
-
-  var uploader = client.uploadDir(uploadParams);
-  uploader.on('error', function(err) {
-    console.error("unable to sync:", err.stack);
-  });
-  uploader.on('progress', function() {
-    console.log("progress", uploader.progressAmount, uploader.progressTotal);
-  });
-  uploader.on('end', function() {
-    console.log("done uploading "+site);
-    var cloudfront = new AWS.CloudFront(new AWS.Config(awsCreds));
-    var cfparams = {
-      DistributionId: cloudfrontDistro,
-      InvalidationBatch: {
-        CallerReference: ''+(new Date()),
-        Paths: {
-          Quantity: 1,
-          Items: ["/*"]
-        }
-      }
-    };
-    cloudfront.createInvalidation(cfparams, function(err, data) {
-      if (err) reject(err, err.stack); // an error occurred
-      else     console.log(data);           // successful response
-    });
-  });
-})
+const BUCKETNAME = "sandbox.eth.build"; // <<---- SET YOUR BUCKET NAME AND CREATE aws.json ** see below vvvvvvvvvv
 
 
-function buildS3Params(site) {
-  site = site.toLowerCase()
+ const invalidation = {
+  awsDistributionId: "ELRHIIIOM3P69",
+  awsInvalidationPath: "/*"
+ }
 
-  var uploadParams = {
-    localDir: localDir,
-    s3Params: {
-      Bucket: site,
-      Prefix: "",
-      ACL: "public-read"
-    }
-  }
 
-  return uploadParams
+if (!BUCKETNAME) {
+  console.log("☢️   Enter a bucket name in packages/react-app/scripts/s3.js ");
+  process.exit(1);
 }
+
+let credentials = {};
+try {
+  credentials = JSON.parse(fs.readFileSync("aws.json"));
+} catch (e) {
+  console.log(e);
+  console.log(
+    '☢️   Create an aws.json credentials file in packages/react-app/ like { "accessKeyId": "xxx", "secretAccessKey": "xxx", "region": "xxx" } ',
+  );
+  process.exit(1);
+}
+
+credentials.bucket = BUCKETNAME;
+
+// optional options to be passed as parameter to the method
+const options = {
+  useFoldersForFileTypes: false,
+  useIAMRoleCredentials: false,
+};
+
+/// //////////
+/// ////////// First, let's automatically create the bucket if it doesn't exist...
+/// //////////
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const AWS = require("aws-sdk");
+// Load credentials and set Region from JSON file
+AWS.config.loadFromPath("./aws.json");
+
+// Create S3 service object
+s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+
+// Create params JSON for S3.createBucket
+const bucketParams = {
+  Bucket: BUCKETNAME,
+  ACL: "public-read",
+};
+
+// Create params JSON for S3.setBucketWebsite
+const staticHostParams = {
+  Bucket: BUCKETNAME,
+  WebsiteConfiguration: {
+    ErrorDocument: {
+      Key: "index.html",
+    },
+    IndexDocument: {
+      Suffix: "index.html",
+    },
+  },
+};
+
+// Call S3 to create the bucket
+s3.createBucket(bucketParams, function (err, data) {
+  if (err) {
+    console.log("Error", err);
+  } else {
+    console.log("Bucket URL is ", data.Location);
+    // Set the new policy on the newly created bucket
+    s3.putBucketWebsite(staticHostParams, function (err, data) {
+      if (err) {
+        // Display error message
+        console.log("Error", err);
+      } else {
+        // Update the displayed policy for the selected bucket
+        console.log("Success... UPLOADING!", data);
+
+        ///
+        /// After the bucket is created, we upload to it:
+        ///
+        s3FolderUpload(directoryName, credentials, options  , invalidation );
+      }
+    });
+  }
+});
