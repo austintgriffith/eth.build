@@ -1273,9 +1273,8 @@ Uniswap.prototype.onExecute = async function() {
       let tokenContract = new this.web3.eth.Contract(erc20abi,tokenAddress)
       let tokenBalance = await (tokenContract.methods.balanceOf(this.address)).call()
       let ethBalance = await this.web3.eth.getBalance(this.address)
-      let outputPrice = await (thisContract.methods.getTokenToEthOutputPrice(10000000)).call()
       try{
-        return ((outputPrice/10000000)+(tokenBalance/ethBalance))/2
+        return (tokenBalance/ethBalance)
       }catch(e){
         return false
       }
