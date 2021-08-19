@@ -34,7 +34,6 @@ IPFSGet.prototype.onAdded = async function() {
 
 IPFSGet.prototype.onAction = async function() {
   let path = this.getInputData(0)
-  console.log(path)
   if(typeof path !== "undefined" && path != null) {
     try{
         const results = []
