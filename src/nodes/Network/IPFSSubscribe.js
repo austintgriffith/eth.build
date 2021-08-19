@@ -36,7 +36,6 @@ IPFSSub.prototype.onAdded = async function() {
      Bootstrap: []
    }
   })
-  console.log('IPFS (subscribe) node is ready')
   const { id, agentVersion, protocolVersion } = await this.ipfs.id()
   console.log("IPFS FOR SUBSCRIBE!", id, agentVersion, protocolVersion)
   console.log("IPFS SUBSCRIBING TO ",this.properties.channel)
@@ -52,14 +51,6 @@ IPFSSub.prototype.onExecute = function() {
       this.onPropertyChanged("channel",channel)
   }
   this.setOutputData(0,this.message)
-  if(this.ipfs && this.ipfs.isOnline() && this.ipfs.pubsub && typeof this.ipfs.pubsub.peers === "function"){
-    const peerCount = this.ipfs.pubsub.peers(this.properties.channel)
-    if( peerCount>0){
-      this.status = peerCount+" peers"
-      this.title_color = "#ee4444";
-    }
-  }
-
 }
 
 IPFSSub.prototype.onDrawBackground = function(ctx) {
@@ -82,10 +73,6 @@ IPFSSub.prototype.onDrawBackground = function(ctx) {
 IPFSSub.prototype.onPropertyChanged = function(name, value) {
   console.log("PROP CHANGE",name,value)
   this.properties[name] = value;
-  if (name === "channel" && this.ipfs) {
-    console.log("RE INIT CHANNEL")
-    //await this.ipfs.pubsub.subscribe(this.properties.channel, this.onReceiveMsg.bind(this))
-  }
   return true;
 };
 
