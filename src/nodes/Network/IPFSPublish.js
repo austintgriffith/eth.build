@@ -1,7 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom'
 
-const IPFS = require('ipfs')
+const IPFS = require('ipfs-core')
 
 function IPFSPub() {
   this.addInput("[channel]","string")
@@ -15,18 +14,19 @@ IPFSPub.title = "IPFSPublish";
 
 IPFSPub.prototype.onAdded = async function() {
   this.title_color = "#dddddd";
-  this.ipfs = new IPFS({
+  this.ipfs = await IPFS.create({
     EXPERIMENTAL: {
-     pubsub: true
+     pubsub: true,
    },
    repo: 'ipfs-' + Math.random(),
    config: {
      Addresses: {
-       Swarm: ['/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star']
-     }
+       Swarm: ['/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
+       '/dns4/wrtc-star2.sjc.dwebops.pub/tcp/443/wss/p2p-webrtc-star']
+     },
+     Bootstrap: []
    }
   })
-  await this.ipfs.ready
   console.log('IPFS (publish) node is ready')
   const { id, agentVersion, protocolVersion } = await this.ipfs.id()
   console.log("IPFS FOR PUBLISH!",id, agentVersion, protocolVersion)
@@ -35,7 +35,7 @@ IPFSPub.prototype.onAdded = async function() {
 
 IPFSPub.prototype.onExecute = async function() {
   let channel = this.getInputData(0)
-  if(channel && this.properties.channel!=channel){
+  if(channel && this.properties.channel!==channel){
       this.properties.channel = channel
 
   }
@@ -43,7 +43,7 @@ IPFSPub.prototype.onExecute = async function() {
 
 IPFSPub.prototype.onAction = async function() {
   let data = this.getInputData(1)
-  if(typeof data != "undefined" && data != null){
+  if(typeof data !== "undefined" && data != null){
     try{
       console.log("publishing",data,"to",this.properties.channel)
       this.ipfs.pubsub.publish(this.properties.channel, data)
