@@ -31,7 +31,9 @@ Number.prototype.getTitle = function() {
 
 Number.prototype.handle = function(e) {
     //console.log("CHANGE",e)
-    this.properties.value = e.target.value
+    let val = e.target.value
+    val = (val).toLocaleString('fullwide', { useGrouping: false })
+    this.properties.value = val;
     this.setOutputData(0,this.properties.value);
     //console.log(this.properties.value)
     //console.log("this.properties.value:",this.properties.value,this.id)
@@ -47,6 +49,7 @@ Number.prototype.onDrawBackground = function(ctx) {
     )*/
     this.destory()///SHOULD WE DESTORY THE ELEMENT FROM THE DOM OR
   }else{
+    console.log("value: ", this.properties.value)
     this.render(
       <div>
         <form className={"SOMECONTAINERCLASS"} noValidate autoComplete="off">
