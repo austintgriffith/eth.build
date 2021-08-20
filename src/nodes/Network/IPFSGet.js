@@ -18,6 +18,7 @@ IPFSGet.prototype.onAdded = async function() {
     EXPERIMENTAL: {
      pubsub: true,
    },
+   repo: 'ipfs-' + Math.random(),
    config: {
      Addresses: {
        Swarm: ['/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star',
