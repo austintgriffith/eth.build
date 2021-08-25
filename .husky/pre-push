@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo 'running linting now before allowing a push. If you are in a hurry, just add the --no-verify flag'
