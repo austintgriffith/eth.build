@@ -9,6 +9,7 @@
     "@fortawesome/react-fontawesome": "^0.1.5",
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
+    "@metamask/detect-provider": "^1.2.0",
     "@portis/web3": "^2.0.0-beta.54",
     "@toruslabs/torus-embed": "^1.0.0",
     "@walletconnect/web3-provider": "^1.0.0-beta.47",

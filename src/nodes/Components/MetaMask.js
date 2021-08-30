@@ -1,3 +1,4 @@
+import detectEthereumProvider from '@metamask/detect-provider';
 var Web3 = require('web3');
 
 function MetaMask() {
@@ -21,35 +22,31 @@ MetaMask.prototype.onAdded = async function() {
 }
 
 MetaMask.prototype.onAction = async function() {
-  try{
-    console.log("CALLING ENABLE ON METAMASK!!!")
-    this.accounts = await window.ethereum.enable()
-  }catch(e){
-    console.log(e)
-  }
+  this.connectWeb3()
 }
 
-MetaMask.prototype.connectWeb3 = function() {
-   if (typeof window.web3 !== 'undefined'){
-     this.web3 = window.web3
-      console.log('MetaMask is installed',this.web3)
-   }
-   else{
-      console.log('MetaMask is not installed')
-   }
+MetaMask.prototype.connectWeb3 = async function() {
+  const provider = detectEthereumProvider
+  if (provider) {
+    try {
+      this.accounts = this.accounts ? this.accounts : await window.ethereum.request({ method: 'eth_requestAccounts' })
+    } catch (error) {
+        if (error.code === 4001) {
+          console.log('Please connect to MetaMask!')
+        } else {
+          console.error(error)
+        }
+    }
+  } else {
+    console.log('Please install MetaMask!')
+  }
 }
 
 MetaMask.prototype.onExecute = async function() {
 
-  if(window.web3 && window.web3.eth && typeof window.web3.eth.getAccounts == "function"){
-    window.web3.eth.getAccounts((error,accounts)=>{
-      this.accounts = accounts
-    })
-  }
-  if(this.accounts){
-    this.setOutputData(0,this.accounts[0])
-  }
 
+  this.connectWeb3()
+  this.setOutputData(0, this.accounts[0])
 
   this.setOutputData(1,{
     name:"balance",
@@ -57,33 +54,35 @@ MetaMask.prototype.onExecute = async function() {
     function:async (args)=>{
       try{
         this.onAction()
-        let currentWeb3 = new Web3(window.web3)
-        let balance = await currentWeb3.eth.getBalance(args.address)
-        return balance
+        this.Web3 = new Web3(window.ethereum)
+        let balance = await this.Web3.eth.getBalance(this.accounts[0])
+        let eth_balance = this.Web3.utils.fromWei(balance)
+        return eth_balance
       }catch(e){
         console.log(e)
       }
     }
   })
+
+
   this.setOutputData(2,{
     name:"sign",
     args:[{name:"message",type:"string"}],
     function:async (args)=>{
       return new Promise((resolve, reject) => {
         this.onAction()
-        let currentWeb3 = new Web3(window.web3)
-        window.ethereum.sendAsync({
+        window.ethereum.request({
           method: 'personal_sign',
-          params: [args.message, window.ethereum.selectedAddress],
-          from: window.ethereum.selectedAddress,
-        }, (error,result)=>{
+          params: [args.message, this.accounts[0]],
+          from: this.accounts[0],
+        }, (error, result)=>{
 
           console.log("SEND MM CALLBACK",error,result)
-          if(error&&error.message){
+          if(error && error.message){
             global.setSnackbar({msg:error.message})
             console.log("REJECT",result)
             reject(error)
-          }else{
+          } else {
             console.log("RESOLVE",result)
             resolve(result.result)
           }
@@ -98,49 +97,49 @@ MetaMask.prototype.onExecute = async function() {
     function:async (args)=>{
       return new Promise((resolve, reject) => {
         this.onAction()
-        let currentWeb3 = new Web3(window.web3)
+        let currentWeb3 = new Web3(window.ethereum)
 
         const transactionParameters = {
           //gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
           //gas: '0x2710',  // customizable by user during MetaMask confirmation.
           //to: args.to, // Required except during contract publications.
-          from: window.ethereum.selectedAddress, // must match user's active address.
+          from: this.accounts[0], // must match user's active address.
           //value: ""+args.value, // Only required to send ether to the recipient from the initiating external account.
           //data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057', // Optional, but used for defining smart contract creation and interaction.
           //chainId: 3 // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
         }
 
-        if(typeof args.to != "undefined" && args.to!=null ){
+        if(typeof args.to !== "undefined" && args.to!=null ){
           transactionParameters.to = args.to
         }
 
-        if(typeof args.value != "undefined" && args.value!=null ){
+        if(typeof args.value !== "undefined" && args.value!=null ){
           transactionParameters.value = ""+currentWeb3.utils.toHex(args.value)
         }
 
-        if(typeof args.data != "undefined" && args.data!=null ){
+        if(typeof args.data !== "undefined" && args.data!=null ){
           transactionParameters.data = args.data
         }
 
-        if(typeof args.gasLimit != "undefined" && args.gasLimit!=null ){
+        if(typeof args.gasLimit !== "undefined" && args.gasLimit!=null ){
           transactionParameters.gas = ""+currentWeb3.utils.toHex(args.gasLimit)
         }
 
-        if(typeof args.gasPrice != "undefined" && args.gasPrice!=null ){
+        if(typeof args.gasPrice !== "undefined" && args.gasPrice!=null ){
           transactionParameters.gasPrice = ""+currentWeb3.utils.toHex(args.gasPrice)
         }
 
         console.log("transactionParameters",transactionParameters)
 
-        window.ethereum.sendAsync({
+        window.ethereum.request({
           method: 'eth_sendTransaction',
           params: [transactionParameters],
-          from: window.ethereum.selectedAddress,
+          from: this.accounts[0],
         }, (error,result)=>{
 
           console.log("SEND MM CALLBACK",error,result)
-          if(error&&error.message){
-            global.setSnackbar({msg:error.message})
+          if(error && error.message){
+            global.setSnackbar({ msg: error.message })
           }
           if(result && result.result){
             resolve(result.result)
@@ -160,12 +159,11 @@ MetaMask.prototype.onExecute = async function() {
     function:async (args)=>{
       return new Promise((resolve, reject) => {
         this.onAction()
-        let currentWeb3 = new Web3(window.web3)
-        window.ethereum.sendAsync({
+        window.ethereum.request({
           id: 1,
           method: "eth_signTypedData_v3",
-          params: [window.ethereum.selectedAddress, JSON.stringify(args.typedData)],
-          from: window.ethereum.selectedAddress
+          params: [this.accounts[0], JSON.stringify(args.typedData)],
+          from: this.accounts[0] 
         }, (error,result)=>{
           console.log("SEND MM CALLBACK",error,result)
           if(error&&error.message){
@@ -188,7 +186,7 @@ MetaMask.prototype.onExecute = async function() {
 
 MetaMask.prototype.onPropertyChanged = async function(name, value){
     this.properties[name] = value;
-    if(name=="provider"){
+    if(name === "provider"){
       this.connectWeb3()
     }
   return true;
