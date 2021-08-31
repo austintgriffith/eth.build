@@ -5,7 +5,7 @@ var sigUtil = require('eth-sig-util')
 function MetaMask() {
   this.addInput("unlock",-1)
   this.addOutput("address","")
-  this.addOutput("balance","function")
+  this.addOutput("balance()","function")
   this.addOutput("sign()","function")
   this.addOutput("send()","function")
   this.addOutput("signedTypedData()","function")
@@ -49,8 +49,7 @@ MetaMask.prototype.onExecute = async function() {
 
   this.setOutputData(1,{
     name:"balance",
-    args:[{name:"address",type:"string"}],
-    function:async (args)=>{
+    function:async ()=>{
       try{
         this.onAction()
         console.log(this.accounts[0])
@@ -106,7 +105,7 @@ MetaMask.prototype.onExecute = async function() {
     name:"send",
     args:[{name:"to",type:"string"},{name:"value",type:"number"},{name:"data",type:"string"},{name:"gasLimit",type:"number"},{name:"gasPrice",type:"number"}],
     function:async (args)=>{
-      return new Promise((resolve, reject) => {
+      await new Promise((resolve, reject) => {
         this.onAction()
         let currentWeb3 = new Web3(window.ethereum)
 
@@ -125,7 +124,8 @@ MetaMask.prototype.onExecute = async function() {
         }
 
         if(typeof args.value !== "undefined" && args.value!=null ){
-          transactionParameters.value = ""+currentWeb3.utils.toHex(args.value)
+          let value = currentWeb3.utils.toWei(args.value.toString(), 'ether')
+          transactionParameters.value = ""+currentWeb3.utils.toHex(value)
         }
 
         if(typeof args.data !== "undefined" && args.data!=null ){
@@ -140,24 +140,16 @@ MetaMask.prototype.onExecute = async function() {
           transactionParameters.gasPrice = ""+currentWeb3.utils.toHex(args.gasPrice)
         }
 
-        console.log("transactionParameters",transactionParameters)
-
         window.ethereum.request({
           method: 'eth_sendTransaction',
           params: [transactionParameters],
           from: this.accounts[0],
-        }, (error,result)=>{
-
-          console.log("SEND MM CALLBACK",error,result)
-          if(error && error.message){
-            global.setSnackbar({ msg: error.message })
-          }
-          if(result && result.result){
-            resolve(result.result)
-          }else{
-            resolve(result)
-          }
-
+        })
+        .then((result) => {
+          resolve(console.log(result))
+        })
+        .catch((error) => {
+          return console.error(error)
         })
 
       });
