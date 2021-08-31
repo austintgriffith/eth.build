@@ -80,8 +80,7 @@ Wallet.prototype.onExecute = async function () {
         this.onAction();
         let currentWeb3 = new Web3(window.web3);
         let balance = await currentWeb3.eth.getBalance(args.address);
-        let eth_balance = currentWeb3.utils.fromWei(balance)
-        return eth_balance;
+        return balance
       } catch (e) {
         console.log(e);
       }
@@ -92,8 +91,8 @@ Wallet.prototype.onExecute = async function () {
     args: [{ name: "message", type: "string" }],
     function: async (args) => {
       return new Promise((resolve, reject) => {
-        let currentWeb3 = new Web3(window.web3);
         this.onAction();
+        let currentWeb3 = new Web3(window.web3);
         window.ethereum.sendAsync(
           {
             method: "personal_sign",
