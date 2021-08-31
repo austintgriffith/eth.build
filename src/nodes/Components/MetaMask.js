@@ -1,10 +1,11 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 var Web3 = require('web3');
+var sigUtil = require('eth-sig-util')
 
 function MetaMask() {
   this.addInput("unlock",-1)
   this.addOutput("address","")
-  this.addOutput("balance()","function")
+  this.addOutput("balance","function")
   this.addOutput("sign()","function")
   this.addOutput("send()","function")
   this.addOutput("signedTypedData()","function")
@@ -54,6 +55,7 @@ MetaMask.prototype.onExecute = async function() {
     function:async (args)=>{
       try{
         this.onAction()
+        console.log(this.accounts[0])
         this.Web3 = new Web3(window.ethereum)
         let balance = await this.Web3.eth.getBalance(this.accounts[0])
         let eth_balance = this.Web3.utils.fromWei(balance)
@@ -69,28 +71,66 @@ MetaMask.prototype.onExecute = async function() {
     name:"sign",
     args:[{name:"message",type:"string"}],
     function:async (args)=>{
-      return new Promise((resolve, reject) => {
+      await new Promise ((resolve, reject) => {
         this.onAction()
+        this.Web3 = new Web3(window.ethereum)
+        const from = this.accounts[0]
         window.ethereum.request({
           method: 'personal_sign',
-          params: [args.message, this.accounts[0]],
-          from: this.accounts[0],
-        }, (error, result)=>{
-
-          console.log("SEND MM CALLBACK",error,result)
-          if(error && error.message){
-            global.setSnackbar({msg:error.message})
-            console.log("REJECT",result)
-            reject(error)
-          } else {
-            console.log("RESOLVE",result)
-            resolve(result.result)
-          }
-
+          params: [args.message, from],
+          from: from,
         })
-      });
-    }
-  })
+        .then((result) => {
+          console.dir(result)
+          console.log('PERSONAL SIGNED: ' + JSON.stringify(result))
+          console.log('recovering...')
+
+          const msgParams = { data: args.message, sig: result }
+          console.log(from.length)
+          const recovered = sigUtil.recoverPersonalSignature(msgParams)
+          console.dir({ recovered })
+
+          if (recovered === from ) {
+            console.log('SigUtil Successfully verified signer as ' + from)
+            resolve(window.alert('SigUtil Successfully verified signer as ' + from))
+          } else {
+            console.dir(recovered)
+            console.log('SigUtil Failed to verify signer when comparing ' + recovered.result + ' to ' + from)
+            reject(console.log('Failed, comparing %s to %s', recovered, from))
+          } 
+        }).catch((error) => {
+          return console.error(error)
+        })
+      //   window.ethereum.sendAsync({
+      //     method: 'personal_sign',
+      //     params: [args.message, from],
+      //     from: from,
+      //   }, function (error, result) { 
+          // if (error) return console.error(error)
+          // if (result.error) return console.error(result.error)
+          // console.dir(result)
+          // console.log('PERSONAL SIGNED: ' + JSON.stringify(result.result))
+          // console.log('recovering...')
+          // const msgParams = { data: args.message }
+          // msgParams.sig = result.result
+          // const recovered = sigUtil.recoverPersonalSignature(msgParams)
+          // console.dir({ recovered })
+
+          // if (recovered === from ) {
+          //   console.log('SigUtil Successfully verified signer as ' + from)
+          //   resolve(window.alert('SigUtil Successfully verified signer as ' + from))
+          // } else {
+          //   console.dir(recovered)
+          //   console.log('SigUtil Failed to verify signer when comparing ' + recovered.result + ' to ' + from)
+          //   reject(console.log('Failed, comparing %s to %s', recovered, from))
+          // }
+      //   })
+      // }) 
+    
+    })
+  }})
+
+
   this.setOutputData(3,{
     name:"send",
     args:[{name:"to",type:"string"},{name:"value",type:"number"},{name:"data",type:"string"},{name:"gasLimit",type:"number"},{name:"gasPrice",type:"number"}],
