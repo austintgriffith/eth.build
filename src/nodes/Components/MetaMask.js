@@ -101,32 +101,6 @@ MetaMask.prototype.onExecute = async function() {
         }).catch((error) => {
           return console.error(error)
         })
-      //   window.ethereum.sendAsync({
-      //     method: 'personal_sign',
-      //     params: [args.message, from],
-      //     from: from,
-      //   }, function (error, result) { 
-          // if (error) return console.error(error)
-          // if (result.error) return console.error(result.error)
-          // console.dir(result)
-          // console.log('PERSONAL SIGNED: ' + JSON.stringify(result.result))
-          // console.log('recovering...')
-          // const msgParams = { data: args.message }
-          // msgParams.sig = result.result
-          // const recovered = sigUtil.recoverPersonalSignature(msgParams)
-          // console.dir({ recovered })
-
-          // if (recovered === from ) {
-          //   console.log('SigUtil Successfully verified signer as ' + from)
-          //   resolve(window.alert('SigUtil Successfully verified signer as ' + from))
-          // } else {
-          //   console.dir(recovered)
-          //   console.log('SigUtil Failed to verify signer when comparing ' + recovered.result + ' to ' + from)
-          //   reject(console.log('Failed, comparing %s to %s', recovered, from))
-          // }
-      //   })
-      // }) 
-    
     })
   }})
 
