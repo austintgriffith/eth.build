@@ -78,9 +78,10 @@ Wallet.prototype.onExecute = async function () {
     function: async (args) => {
       try {
         this.onAction();
-        let currentWeb3 = new Web3(window.ethereum);
+        let currentWeb3 = new Web3(window.web3);
         let balance = await currentWeb3.eth.getBalance(args.address);
-        return balance;
+        let eth_balance = currentWeb3.utils.fromWei(balance)
+        return eth_balance;
       } catch (e) {
         console.log(e);
       }
@@ -91,6 +92,7 @@ Wallet.prototype.onExecute = async function () {
     args: [{ name: "message", type: "string" }],
     function: async (args) => {
       return new Promise((resolve, reject) => {
+        let currentWeb3 = new Web3(window.web3);
         this.onAction();
         window.ethereum.sendAsync(
           {
@@ -125,7 +127,7 @@ Wallet.prototype.onExecute = async function () {
     function: async (args) => {
       return new Promise((resolve, reject) => {
         this.onAction();
-        let currentWeb3 = new Web3(window.ethereum);
+        let currentWeb3 = new Web3(window.web3);
 
         const transactionParameters = {
           //gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
