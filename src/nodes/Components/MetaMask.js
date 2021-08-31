@@ -30,7 +30,8 @@ MetaMask.prototype.connectWeb3 = async function() {
   const provider = detectEthereumProvider
   if (provider) {
     try {
-      this.accounts = this.accounts ? this.accounts : await window.ethereum.request({ method: 'eth_requestAccounts' })
+      this.accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+      this.setOutputData(0, this.accounts[0])
     } catch (error) {
         if (error.code === 4001) {
           console.log('Please connect to MetaMask!')
