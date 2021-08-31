@@ -152,7 +152,7 @@ MetaMask.prototype.onExecute = async function() {
           return console.error(error)
         })
 
-      });
+      })
     }
   })
 
@@ -160,28 +160,22 @@ MetaMask.prototype.onExecute = async function() {
     name:"signedTypedData",
     args:[{name:"typedData",type:"object"}],
     function:async (args)=>{
-      return new Promise((resolve, reject) => {
+      await new Promise((resolve, reject) => {
         this.onAction()
         window.ethereum.request({
           id: 1,
           method: "eth_signTypedData_v3",
           params: [this.accounts[0], JSON.stringify(args.typedData)],
           from: this.accounts[0] 
-        }, (error,result)=>{
-          console.log("SEND MM CALLBACK",error,result)
-          if(error&&error.message){
-            global.setSnackbar({msg:error.message})
-            console.log("REJECT",result)
-            reject(error)
-          }else{
-            console.log("RESOLVE",result)
-            const r = result.result.slice(0,66)
-            const s = '0x' + result.result.slice(66,130)
-            const v = Number('0x' + result.result.slice(130,132))
-            resolve(result.result)
-          }
         })
-      });
+        .then((result) => {
+          resolve(console.log(result))
+        })
+        .catch((error) => {
+          reject(console.error(error))
+        })
+      })
+      
     }
   })
 
