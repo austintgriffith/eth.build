@@ -45,10 +45,7 @@ MetaMask.prototype.connectWeb3 = async function() {
 }
 
 MetaMask.prototype.onExecute = async function() {
-
-
   this.connectWeb3()
-  this.setOutputData(0, this.accounts[0])
 
   this.setOutputData(1,{
     name:"balance",
@@ -74,7 +71,6 @@ MetaMask.prototype.onExecute = async function() {
     function:async (args)=>{
       await new Promise ((resolve, reject) => {
         this.onAction()
-        this.Web3 = new Web3(window.ethereum)
         const from = this.accounts[0]
         window.ethereum.request({
           method: 'personal_sign',
