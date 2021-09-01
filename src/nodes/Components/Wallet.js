@@ -80,7 +80,7 @@ Wallet.prototype.onExecute = async function () {
         this.onAction();
         let currentWeb3 = new Web3(window.web3);
         let balance = await currentWeb3.eth.getBalance(args.address);
-        return balance;
+        return balance
       } catch (e) {
         console.log(e);
       }
