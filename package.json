@@ -14,7 +14,7 @@
     "@toruslabs/torus-embed": "^1.0.0",
     "@walletconnect/web3-provider": "^1.0.0-beta.47",
     "ace-builds": "^1.4.7",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "base64url": "^3.0.1",
     "bip39": "^3.0.2",
     "burner-provider": "^1.0.6",
