@@ -68,10 +68,9 @@ MetaMask.prototype.onExecute = async function() {
     name:"sign",
     args:[{name:"message",type:"string"}],
     function:async (args)=>{
-      await new Promise ((resolve, reject) => {
         this.onAction()
         const from = this.accounts[0]
-        window.ethereum.request({
+        return window.ethereum.request({
           method: 'personal_sign',
           params: [args.message, from],
           from: from,
@@ -87,17 +86,15 @@ MetaMask.prototype.onExecute = async function() {
           console.dir({ recovered })
 
           if (recovered === from ) {
-            console.log('SigUtil Successfully verified signer as ' + from)
-            resolve(window.alert('SigUtil Successfully verified signer as ' + from))
+            return result
           } else {
             console.dir(recovered)
             console.log('SigUtil Failed to verify signer when comparing ' + recovered.result + ' to ' + from)
-            reject(console.log('Failed, comparing %s to %s', recovered, from))
+            return console.log('Failed, comparing %s to %s', recovered, from)
           } 
         }).catch((error) => {
           return console.error(error)
         })
-    })
   }})
 
 
@@ -105,7 +102,6 @@ MetaMask.prototype.onExecute = async function() {
     name:"send",
     args:[{name:"to",type:"string"},{name:"value",type:"number"},{name:"data",type:"string"},{name:"gasLimit",type:"number"},{name:"gasPrice",type:"number"}],
     function:async (args)=>{
-      await new Promise((resolve, reject) => {
         this.onAction()
         let currentWeb3 = new Web3(window.ethereum)
 
@@ -140,19 +136,18 @@ MetaMask.prototype.onExecute = async function() {
           transactionParameters.gasPrice = ""+currentWeb3.utils.toHex(args.gasPrice)
         }
 
-        window.ethereum.request({
+        return window.ethereum.request({
           method: 'eth_sendTransaction',
           params: [transactionParameters],
           from: this.accounts[0],
         })
         .then((result) => {
-          resolve(console.log(result))
+          return result
         })
         .catch((error) => {
           return console.error(error)
         })
 
-      })
     }
   })
 
@@ -160,21 +155,19 @@ MetaMask.prototype.onExecute = async function() {
     name:"signedTypedData",
     args:[{name:"typedData",type:"object"}],
     function:async (args)=>{
-      await new Promise((resolve, reject) => {
         this.onAction()
-        window.ethereum.request({
+        return window.ethereum.request({
           id: 1,
           method: "eth_signTypedData_v3",
           params: [this.accounts[0], JSON.stringify(args.typedData)],
           from: this.accounts[0] 
         })
         .then((result) => {
-          resolve(console.log(result))
+          return result
         })
         .catch((error) => {
-          reject(console.error(error))
+          return console.error(error)
         })
-      })
       
     }
   })
