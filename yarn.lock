@@ -18961,9 +18961,9 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-"litegraph.js@github:grahamtallen/litegraph.js#bugfix-eth-build-68":
+"litegraph.js@github:austintgriffith/litegraph.js#messy":
   version "0.7.0"
-  resolved "https://codeload.github.com/grahamtallen/litegraph.js/tar.gz/f58c101dc69a158f5057c5090ecf6799845d9cc6"
+  resolved "https://codeload.github.com/austintgriffith/litegraph.js/tar.gz/e0b627eca57921c2b3f26735a31bfb9a99118123"
   dependencies:
     node-redis-pubsub "^4.0.0"
     socket.io "^2.3.0"
