@@ -143,7 +143,7 @@ function useWeb3Modal() {
     })
 
     provider.on("disconnect", error => {
-      console.log(error);
+      console.log(error)
     })
   }
 
