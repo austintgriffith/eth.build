@@ -133,15 +133,12 @@ function useWeb3Modal() {
       setAddress(accounts[0]);
     });
 
-    provider.on("chainChanged", async chainId => {
-      const networkId = await web3.eth.net.getId();
-      setChainId(networkId);
-      setNetwork(getNetworkByChainId(networkId));
+    provider.on("chainChanged", chainId => {
+      setChainId(chainId);
+      setNetwork(getNetworkByChainId(chainId));
     });
 
-    provider.on("networkChanged", async networkId => {
-      const chainId = await web3.eth.chainId();
-      setChainId(chainId);
+    provider.on("networkChanged", networkId => {
       setNetworkId(networkId);
       setNetwork(getNetworkByChainId(networkId));
     });
