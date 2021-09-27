@@ -2,6 +2,9 @@
   "name": "eth.build",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=0.12"
+  },
   "dependencies": {
     "3box": "^1.17.1",
     "@fortawesome/react-fontawesome": "^0.1.5",

@@ -1,0 +1,39 @@
+Unused dependencies
+* @fortawesome/fontawesome-svg-core
+* @fortawesome/free-solid-svg-icons
+* @fortawesome/react-fontawesome
+* @portis/web3
+* @toruslabs/torus-embed
+* bip39
+* ethashjs
+* ethereumjs-block
+* fortmatic
+* jsqr
+* levelup
+* memdown
+* opensea-js
+* polished
+* react-dnd-touch-backend
+* require-directory
+* s3
+* styled-components
+* webpack
+* winston
+Missing dependencies
+* aws-sdk: ./deploySandbox.js
+* eslint-config-react-app: ./package.json
+* @typescript-eslint/parser: ./package.json
+* eslint-plugin-import: ./package.json
+* eslint-plugin-flowtype: ./package.json
+* eslint-plugin-jsx-a11y: ./package.json
+* eslint-plugin-react-hooks: ./package.json
+* @typescript-eslint/eslint-plugin: ./package.json
+* babel-eslint: ./package.json
+* eslint-plugin-react: ./package.json
+* express: ./server.js
+* react-qr-reader: ./src/App.js
+* bignumber.js: ./src/CustomNodes.js
+* ethereumjs-tx: ./src/nodes/Web3/Transaction.js
+* ethers: ./src/nodes/Components/WispBootstrap.js
+* http-proxy: ./proxy/index.js
+* cors: ./proxy/index.js
