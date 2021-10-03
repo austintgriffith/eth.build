@@ -220,6 +220,16 @@ ERC20Token.prototype.connectWeb3 = function() {
 
 ERC20Token.prototype.onExecute = async function() {
 
+  let optionalProvider = this.getInputData(0)
+  if(typeof optionalProvider != "undefined" && optionalProvider!=this.properties.provider){
+    this.onPropertyChanged("provider",optionalProvider)
+  }else if(typeof optionalProvider == "undefined"){
+    if(this.properties.provider!=defaultProvider){
+//      console.log("SET BACK TO DEFAULT!!!")
+      this.onPropertyChanged("provider",defaultProvider)
+    }
+  }
+
     let changed = false
 
   let symbol = this.getInputData(1)
@@ -321,6 +331,14 @@ ERC20Token.prototype.onExecute = async function() {
 
 
 
+};
+
+ERC20Token.prototype.onPropertyChanged = async function(name, value){
+  this.properties[name] = value;
+  if(name=="provider"){
+    this.connectWeb3()
+  }
+  return true;
 };
 
 ERC20Token.prototype.parseContract = function() {
