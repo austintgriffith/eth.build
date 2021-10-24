@@ -84,3 +84,81 @@ Storage and execution are relatively expensive. All nodes have to run and store 
 Call a function on a contract by sending it a transaction with the function args in the data.
 
 ![image](https://user-images.githubusercontent.com/2653167/67598285-64013a80-f72a-11e9-916b-491687d3b6ca.png)
+
+
+---
+
+## ⚙ Components in eth.build
+Components in eth.build generally accept one or more inputs, and most provide one or more outputs
+### 🟦 INPUT components
+
+#### 🟦 Button (Input/Button)
+##### accepts:
+* 🔲 event/action
+##### emits:
+* 🔲 event/action
+* ⚪ the integer value of the button's `count` property
+##### usage:
+* each time the button is clicked, its `count` property is incremented by one (visible under its 🖱 Properties)
+* you can change the initial `click me` inner text of the button via its 🖱 Properties 
+
+#### 🟦 Number (Input/Number)
+##### accepts:
+* ⚪ number
+##### emits:
+* ⚪ number
+##### usage:
+* if you send it a non-numerical value (like the letter "a"), the Number component will simply have no value
+* use this component to "hardcode" a numerical value in your test builds
+
+#### 🟦 Text (Input/Text)
+##### accepts:
+* ⚪ anything
+##### emits:
+* ⚪ text (string)
+##### usage:
+* generally accepts anything as an input
+* use this component to "hardcode" a string/text value in your test builds
+
+#### 🟦 Upload (Input/Upload)
+##### accepts:
+* NOTHING
+##### emits:
+* ⚪ the binary data of the uploaded file
+##### usage:
+* use this component to "hardcode" a string that simulates a mnemonic for hashing into key/pair generation
+* use this component to include a file in the data input for a Transaction component
+
+#### 🟦 Password (Input/Password)
+##### accepts:
+* TBD
+##### emits:
+* ⚪ TBD
+##### usage:
+* TBD
+
+#### 🟦 PIN (Input/PIN)
+##### accepts:
+* TBD
+##### emits:
+* ⚪ TBD
+##### usage:
+* TBD
+
+#### 🟦 QR (Input/QR)
+##### accepts:
+* TBD
+##### emits:
+* ⚪ TBD
+##### usage:
+* TBD
+
+#### 🟦 Code (Input/Code)
+##### accepts:
+* ⚪ text (string)
+##### emits:
+* ⚪ text (string) of the code
+##### usage:
+* Used to define the code for publishing a smart contact
+
+### 🟩 DISPLAY components
