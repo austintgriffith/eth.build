@@ -1,14 +1,14 @@
 function StringReplace() {
     this.addInput("string", "string");
-    this.addInput("pattern", "string");
+    this.addInput("substring", "string");
     this.addInput("replacement", "string");
     this.addOutput("output", "strings")
     this.size = [140, 70];
   }
   
   StringReplace.title = "Replace";
-  StringReplace.description = "replace a pattern or substring"
-  
+  StringReplace.description = "replace a substring"
+  //TODO: Add regex functionality
   StringReplace.prototype.onExecute = function() {
     if ((this.inputs[0] && this.getInputData(0) && typeof this.getInputData(0) == "string") &&
         (this.inputs[1] && this.getInputData(1) && typeof this.getInputData(1) == "string") &&
