@@ -40,7 +40,7 @@
     "levelup": "^4.3.2",
     "litegraph.js": "github:grahamtallen/litegraph.js#master",
     "memdown": "^5.1.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "opensea-js": "^0.7.1",
     "polished": "^3.4.1",
     "profile-hover": "^1.1.1",
