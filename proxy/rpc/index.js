@@ -23,7 +23,7 @@ app.use(cors())
 var proxy = httpProxy.createProxyServer();
 
 proxy.on('error', function (err, req, res) {
-  console.log(err)
+  //console.log("ERROR")
   res.writeHead(500, {
     'Content-Type': 'text/plain'
   });
@@ -32,36 +32,36 @@ proxy.on('error', function (err, req, res) {
 
 app.post('/', (req, res) => {
   try{
-    //console.log("hit!")
+    console.log(" POST / hit!")
     proxy.web(req, res, {
         //target: 'http://10.0.0.237:8545'
         target: 'http://0.0.0.0:46235'
         //target: 'http://10.0.0.188:8545'
       });
-      console.log("served POST!")
+      //console.log("served POST!",req)
   }catch(e){
-    console.log(e)
+    console.log("ERROR1")
   }
 })
 
 app.get('/', (req, res) => {
   try{
-    //console.log("hit!")
+    console.log("get / hit!")
     proxy.web(req, res, {
         //target: 'http://10.0.0.237:8545'
         target: 'http://0.0.0.0:46235'
         //target: 'http://10.0.0.188:8545'
       });
-      console.log("served GET!")
+      //console.log("served GET!")
   }catch(e){
-    console.log(e)
+    console.log("ERROR2")
   }
 
 })
 
 app.get('/faucet', (req, res) => {
   console.log("faucet")
-  console.log(req.query)
+  console.log("QUERY")
 
 /*
   const txParams = {
@@ -82,7 +82,7 @@ app.get('/faucet', (req, res) => {
 
   web3.eth.getTransactionCount(address, function (err, nonce) {
 
-    console.log("nonce:",nonce)
+    //console.log("nonce:",nonce)
     var tx =  new EthereumTx({
       nonce: nonce,
       gasPrice: web3.utils.toHex(web3.utils.toWei('20', 'gwei')),
@@ -94,8 +94,23 @@ app.get('/faucet', (req, res) => {
     tx.sign(Buffer.from(privateKey, 'hex'));
 
     var raw = '0x' + tx.serialize().toString('hex');
+
+    let previous = ""
+    try{
+      previous = fs.readFileSync("../../faucetActivity.txt")
+    }catch(e){
+      console.log("E3")
+    }
+    previous = previous+""+req.query.address+"\n"
+    try{
+      fs.writeFileSync("../../faucetActivity.txt",previous)
+    }catch(e){
+      console.log("E4")
+    }
+
     web3.eth.sendSignedTransaction(raw, function (err, transactionHash) {
-      console.log(transactionHash);
+      if(err) console.log("FAUCET ERROR",err)
+      console.log("transactionHash",transactionHash)
       res.send(transactionHash)
     });
   });

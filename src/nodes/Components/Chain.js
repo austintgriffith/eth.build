@@ -18,9 +18,11 @@ const availableChains = [
   { label: "Rinkeby Test Chain", value: `https://rinkeby.infura.io/v3/${INFURA_KEY}` },
   { label: "Goerli Test Chain", value: `https://goerli.infura.io/v3/${INFURA_KEY}` },
   { label: "xDai Chain", value: "https://dai.poa.network" },
-  { label: "Test Chain", value: "https://rpc.eth.build:46234" },
   { label: "Sokol Test Chain (POA)", value: "https://sokol.poa.network" },
-  { label: "Custom Chain", value: "CUSTOM" }
+  { label: "Ethbuild Testnet", value: "https://rpc.eth.build:46234" },
+  { label: "Ethbuild Mainnet", value: `https://rpc.eth.build:48544` },
+  { label: "Localhost", value: `https://localhost:8545` },
+  { label: "Custom Chain", value: "https://0.0.0.0:8545" }
 ];
 
 function Text() {
