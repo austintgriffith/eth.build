@@ -5342,9 +5342,9 @@ async-eventemitter@^0.2.2:
   dependencies:
     async "^2.4.0"
 
-"async-eventemitter@github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c":
+async-eventemitter@^0.2.2:
   version "0.2.3"
-  resolved "https://codeload.github.com/ahultgren/async-eventemitter/tar.gz/fa06e39e56786ba541c180061dbf2c0a5bbf951c"
+  resolved "https://registry.yarnpkg.com/async-eventemitter/-/async-eventemitter-0.2.4.tgz#f5e7c8ca7d3e46aab9ec40a292baf686a0bafaca"
   dependencies:
     async "^2.4.0"
 
@@ -8287,9 +8287,9 @@ concat-stream@^1.5.0, concat-stream@^1.5.1, concat-stream@^1.6.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-"concat-stream@github:hugomrdias/concat-stream#feat/smaller":
+"concat-stream@github:max-mapper/concat-stream#feat/smaller":
   version "2.0.0"
-  resolved "https://codeload.github.com/hugomrdias/concat-stream/tar.gz/057bc7b5d6d8df26c8cf00a3f151b6721a0a8034"
+  resolved "https://codeload.github.com/max-mapper/concat-stream/tar.gz/057bc7b5d6d8df26c8cf00a3f151b6721a0a8034"
   dependencies:
     inherits "^2.0.3"
     readable-stream "^3.0.2"
@@ -10794,7 +10794,7 @@ eth-block-tracker@^2.2.2:
   resolved "https://registry.yarnpkg.com/eth-block-tracker/-/eth-block-tracker-2.3.1.tgz#ab6d177e5b50128fa06d7ae9e0489c7484bac95e"
   integrity sha512-NamWuMBIl8kmkJFVj8WzGatySTzQPQag4Xr677yFxdVtIxACFbL/dQowk0MzEqIKk93U1TwY3MjVU6mOcwZnKA==
   dependencies:
-    async-eventemitter ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c
+    async-eventemitter ahultgren/async-eventemitter#f5e7c8ca7d3e46aab9ec40a292baf686a0bafaca
     eth-query "^2.1.0"
     ethereumjs-tx "^1.3.3"
     ethereumjs-util "^5.1.3"
@@ -14096,7 +14096,7 @@ ipfs-http-client@^33.1.0:
     bs58 "^4.0.1"
     buffer "^5.2.1"
     cids "~0.7.1"
-    concat-stream "github:hugomrdias/concat-stream#feat/smaller"
+    concat-stream "github:max-mapper/concat-stream#feat/smaller"
     debug "^4.1.0"
     detect-node "^2.0.4"
     end-of-stream "^1.4.1"
@@ -14151,7 +14151,7 @@ ipfs-http-client@^39.0.2:
     buffer "^5.4.2"
     callbackify "^1.1.0"
     cids "~0.7.1"
-    concat-stream "github:hugomrdias/concat-stream#feat/smaller"
+    concat-stream "github:max-mapper/concat-stream#feat/smaller"
     debug "^4.1.0"
     delay "^4.3.0"
     detect-node "^2.0.4"
